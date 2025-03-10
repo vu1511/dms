@@ -1,9 +1,11 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
-import { TextInput, TextInputProps } from 'react-native'
-import { addSignPrefixAndSuffix, formatNumber } from './utils'
+import { NativeSyntheticEvent, TextInput, TextInputFocusEventData, TextInputProps } from 'react-native'
+import { addSignPrefixAndSuffix, formatNumber, removePrefixAndSuffix } from './utils'
 
-export interface NumericInputProps extends Omit<TextInputProps, 'value' | 'onChangeText' | 'onChange'> {
-  onChangeValue?(value: number | null): void
+export type NumericInputProps = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeText' | 'onChange'> & {
+  onMinValueReached?(value: number): void
+  onMaxValueReached?(value: number): void
+  onChangeValue(value: number | null): void
   renderTextInput?: (props: TextInputProps) => JSX.Element
   delimiter?: string
   maxValue?: number
@@ -19,14 +21,17 @@ export interface NumericInputProps extends Omit<TextInputProps, 'value' | 'onCha
 
 const NumericInput = forwardRef<TextInput, NumericInputProps>((props, ref) => {
   const {
-    renderTextInput,
-    value,
+    onBlur,
     onChangeValue,
-    separator,
+    renderTextInput,
+    onMinValueReached,
+    onMaxValueReached,
+    value,
+    separator = '.',
     delimiter = ',',
     prefix = '',
     suffix = '',
-    precision = 0,
+    precision = 3,
     maxValue = 999999999999,
     minValue,
     signPosition = 'afterPrefix',
@@ -35,6 +40,7 @@ const NumericInput = forwardRef<TextInput, NumericInputProps>((props, ref) => {
   } = props
 
   const [startingWithSign, setStartingWithSign] = useState<'-' | '+'>()
+  const [currentDecimals, setCurrentDecimals] = useState('')
 
   const noNegativeValues = typeof minValue === 'number' && minValue >= 0
   const noPositiveValues = typeof maxValue === 'number' && maxValue <= 0
@@ -49,69 +55,96 @@ const NumericInput = forwardRef<TextInput, NumericInputProps>((props, ref) => {
         delimiter,
         ignoreNegative: noNegativeValues,
         signPosition,
+        currentDecimals,
         showPositiveSign,
       })
     } else {
       return ''
     }
-  }, [value, separator, prefix, suffix, precision, delimiter, noNegativeValues, signPosition, showPositiveSign])
+  }, [
+    value,
+    separator,
+    prefix,
+    suffix,
+    precision,
+    delimiter,
+    noNegativeValues,
+    signPosition,
+    showPositiveSign,
+    currentDecimals,
+  ])
 
   const handleChangeText = useCallback(
     (text: string) => {
-      let textWithoutPrefix = text
+      let cleanedText = removePrefixAndSuffix(text, { prefix, suffix })
 
-      if (prefix) {
-        textWithoutPrefix = text.replace(prefix, '')
-        if (textWithoutPrefix === text) {
-          textWithoutPrefix = text.replace(prefix.slice(0, -1), '')
-        }
-      }
-
-      let textWithoutPrefixAndSufix = textWithoutPrefix
-      if (suffix) {
-        const suffixRegex = new RegExp(`${suffix}([^${suffix}]*)$`)
-        textWithoutPrefixAndSufix = textWithoutPrefix.replace(suffixRegex, '')
-
-        if (textWithoutPrefixAndSufix === textWithoutPrefix) {
-          textWithoutPrefixAndSufix = textWithoutPrefix.replace(suffix.slice(1), '')
-        }
-      }
-
-      // Starting with a minus or plus sign
-      if (/^(-|-0)$/.test(text) && !noNegativeValues) {
+      if (/^-$/.test(text) && !noNegativeValues) {
         setStartingWithSign('-')
-        return
-      } else if (/^(\+|\+0)$/.test(text) && !noPositiveValues) {
+      } else if (/^\+$/.test(text) && !noPositiveValues) {
         setStartingWithSign('+')
       } else {
         setStartingWithSign(undefined)
       }
 
-      const isNegativeValue = textWithoutPrefixAndSufix.includes('-')
+      if (precision > 0) {
+        const lastChar = cleanedText?.[cleanedText?.length - 1]
 
-      const textNumericValue = textWithoutPrefixAndSufix.replace(/\D+/g, '')
+        if (lastChar === ',' || lastChar === '.') {
+          cleanedText = cleanedText.slice(0, -1) + separator
+        }
 
+        const cleanedTextParts = cleanedText.split(separator)
+
+        if (cleanedTextParts.length > 2) {
+          return
+        }
+
+        if (cleanedText.length > 1 && cleanedTextParts.length === 2) {
+          const [integers, decimals] = cleanedTextParts
+          const textNumericDecimals = decimals.replace(/\D/g, '')
+
+          if (!textNumericDecimals) {
+            setCurrentDecimals(`${separator}`)
+            return
+          }
+
+          const tempValue = Number(`${integers}.${textNumericDecimals}`)
+
+          if (typeof maxValue === 'number' && tempValue > maxValue) {
+            onMaxValueReached?.(maxValue)
+            return
+          }
+
+          if (textNumericDecimals.length > precision) {
+            return
+          }
+
+          setCurrentDecimals(`${separator}${textNumericDecimals}`)
+        } else {
+          setCurrentDecimals('')
+        }
+      }
+
+      const isNegativeValue = cleanedText.includes('-')
+      const textNumericValueRegex = new RegExp(`[^0-9\\${separator}]`, 'g')
+      const textNumericValue = cleanedText.replace(textNumericValueRegex, '').replace(separator, '.')
       const numberValue = Number(textNumericValue) * (isNegativeValue ? -1 : 1)
 
-      const zerosOnValue = textNumericValue.replace(/[^0]/g, '').length
+      let newValue: number | null = numberValue
 
-      let newValue: number | null
-
-      if (!textNumericValue || (!numberValue && zerosOnValue === precision)) {
-        // Allow to clean the value instead of beign 0
+      if (!textNumericValue || Number.isNaN(numberValue)) {
         newValue = null
-      } else {
-        newValue = numberValue / 10 ** precision
       }
 
-      if (newValue && maxValue && newValue > maxValue) {
-        onChangeValue && onChangeValue(maxValue)
+      if (typeof newValue === 'number' && typeof maxValue === 'number' && newValue > maxValue) {
+        onMaxValueReached?.(maxValue)
         return
-      } else if (newValue && minValue && newValue < minValue) {
+      } else if (typeof newValue === 'number' && typeof minValue === 'number' && newValue < minValue) {
+        onMinValueReached?.(minValue)
         return
       }
 
-      onChangeValue && onChangeValue(newValue)
+      onChangeValue?.(newValue)
     },
     [
       suffix,
@@ -120,11 +153,21 @@ const NumericInput = forwardRef<TextInput, NumericInputProps>((props, ref) => {
       noPositiveValues,
       precision,
       maxValue,
+      separator,
       minValue,
       onChangeValue,
-      formattedValue,
-      signPosition,
+      onMaxValueReached,
+      onMinValueReached,
     ]
+  )
+
+  const handleBlur = useCallback(
+    (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setCurrentDecimals('')
+      setStartingWithSign(undefined)
+      onBlur?.(e)
+    },
+    [onBlur]
   )
 
   const textInputValue = useMemo(() => {
@@ -138,22 +181,24 @@ const NumericInput = forwardRef<TextInput, NumericInputProps>((props, ref) => {
       : formattedValue
   }, [formattedValue, prefix, signPosition, startingWithSign, suffix])
 
-  const nextProps = useMemo(() => {
-    return {
-      ref: ref,
-      keyboardType: 'numeric' as const,
+  const nextProps = useMemo<TextInputProps>(
+    () => ({
+      keyboardType: 'numeric',
       selection: suffix ? { start: Math.max(textInputValue.length - suffix.length, 0) } : props?.selection,
       ...rest,
+      ref: ref,
       value: textInputValue,
+      onBlur: handleBlur,
       onChangeText: handleChangeText,
-    }
-  }, [handleChangeText, props?.selection, ref, rest, suffix, textInputValue])
+    }),
+    [handleChangeText, handleBlur, props?.selection, ref, rest, suffix, textInputValue]
+  )
 
   if (renderTextInput) {
     return renderTextInput(nextProps)
   }
 
-  return <TextInput {...nextProps} />
+  return <TextInput testID="numeric-input" {...nextProps} />
 })
 
 export default NumericInput

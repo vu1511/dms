@@ -1,8 +1,8 @@
 import { BaseStyles, Colors } from '@/theme'
 import { useEffect, useState } from 'react'
-import { ActivityIndicator } from 'react-native'
 import { Portal } from 'react-native-portalize'
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import ActivityIndicator from '../activityIndicator'
 
 export type BackdropProps = {
   isVisible?: boolean
@@ -33,7 +33,7 @@ const Backdrop = ({ isVisible, ...rest }: BackdropProps) => {
   return (
     <Portal>
       <Animated.View style={[{ flex: 1, backgroundColor: Colors.black50, ...BaseStyles.flexCenter }, animatedStyle]}>
-        <ActivityIndicator size="large" color={Colors.white} {...rest} />
+        <ActivityIndicator size={32} color={Colors.white} {...rest} />
       </Animated.View>
     </Portal>
   )

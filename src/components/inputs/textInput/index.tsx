@@ -152,7 +152,7 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
             {right && <View style={styles.inputRight}>{right}</View>}
           </Animated.View>
         </Pressable>
-        <Text style={styles.errorMsg}>{errorMsg}</Text>
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
       </View>
     )
   }
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
     rowGap: 4,
   },
   content: {
-    flex: 1,
     borderRadius: Spacings.sm,
     minHeight: MIN_HEIGHT,
     overflow: 'hidden',

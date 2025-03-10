@@ -1,6 +1,7 @@
 import { Colors, Spacings, Typography } from '@/theme'
-import { LegacyRef, forwardRef, useMemo } from 'react'
+import { forwardRef, memo, useMemo } from 'react'
 import {
+  Insets,
   Platform,
   StyleProp,
   StyleSheet,
@@ -15,64 +16,72 @@ import ActivityIndicator from '../activityIndicator'
 
 export type ButtonProps = {
   onPress?: () => void
-  hitSlop?: number
+  type?: 'button' | 'text'
   loading?: boolean
   disabled?: boolean
-  numberOfLines?: number
+  readOnly?: boolean
   title?: string | React.ReactElement
-  prefixIcon?: React.ReactElement
-  suffixIcon?: React.ReactElement
+  left?: React.ReactElement
+  right?: React.ReactElement
   style?: StyleProp<ViewStyle>
   textStyle?: StyleProp<TextStyle>
-  allowPressWhenDisabled?: boolean
+  hitSlop?: null | Insets | number | undefined
 }
 
 const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
-const Button = forwardRef(
-  (
-    {
-      title,
-      onPress,
-      style,
-      textStyle,
-      prefixIcon,
-      suffixIcon,
-      disabled,
-      loading,
-      hitSlop,
-      numberOfLines = 1,
-      allowPressWhenDisabled = false,
-    }: ButtonProps,
-    ref: LegacyRef<React.ElementRef<typeof View>>
-  ) => {
-    const isDisabled = disabled || loading
+const Button = memo(
+  forwardRef<View, ButtonProps>(
+    (
+      {
+        type = 'button',
+        title,
+        onPress,
+        style,
+        textStyle,
+        left,
+        right,
+        loading,
+        hitSlop,
+        disabled = false,
+        readOnly = false,
+      },
+      ref
+    ) => {
+      const btnStyles = useMemo<ViewStyle>(() => {
+        return StyleSheet.flatten([type === 'button' ? styles.btn : styles.textBtn, style, disabled && styles.disabled])
+      }, [type, style])
 
-    const textStyles = useMemo<TextStyle>(() => {
-      return StyleSheet.flatten([styles.btnText, textStyle])
-    }, [textStyle])
+      const textStyles = useMemo<TextStyle>(() => {
+        return StyleSheet.flatten([type === 'button' ? styles.btnLabel : styles.textBtnLabel, textStyle])
+      }, [type, textStyle])
 
-    return (
-      <Touchable
-        hitSlop={hitSlop}
-        activeOpacity={0.5}
-        onPress={() => onPress?.()}
-        disabled={!allowPressWhenDisabled ? isDisabled : undefined}
-      >
-        <View ref={ref} style={[styles.btn, style, disabled && styles.disabled]}>
-          {loading ? <ActivityIndicator size={16} color={textStyles.color as string} /> : prefixIcon}
-          {typeof title === 'string' ? (
-            <Text numberOfLines={numberOfLines} style={textStyles}>
-              {title}
-            </Text>
-          ) : (
-            title
-          )}
-          {suffixIcon}
-        </View>
-      </Touchable>
-    )
-  }
+      const Loading = useMemo(() => {
+        return <ActivityIndicator size={textStyles.lineHeight as number} color={textStyles.color as string} />
+      }, [textStyles])
+
+      return (
+        <Touchable
+          hitSlop={hitSlop}
+          activeOpacity={0.5}
+          onPress={() => onPress?.()}
+          disabled={disabled || loading || readOnly || !onPress}
+        >
+          <View ref={ref} style={btnStyles}>
+            {left && (loading ? Loading : left)}
+            {typeof title === 'string' ? (
+              <Text numberOfLines={1} style={textStyles}>
+                {title}
+              </Text>
+            ) : (
+              title
+            )}
+            {loading && !left ? Loading : right}
+          </View>
+        </Touchable>
+      )
+    }
+  )
 )
 
 export default Button
@@ -82,17 +91,31 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   btn: {
-    backgroundColor: Colors.primary,
-    borderRadius: Spacings.sm,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: 48,
     columnGap: 8,
-    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 24,
+    borderRadius: Spacings.sm,
+    backgroundColor: Colors.primary,
   },
-  btnText: {
+  btnLabel: {
+    flexShrink: 1,
     ...Typography.body16SemiBold,
     color: Colors.white,
+  },
+  textBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
+    columnGap: 4,
+    flexShrink: 1,
+  },
+  textBtnLabel: {
+    flexShrink: 1,
+    ...Typography.body16Medium,
+    color: Colors.primary,
   },
 })

@@ -5,8 +5,25 @@ interface FormatNumberOptions {
   ignoreNegative?: boolean
   prefix?: string
   suffix?: string
+  currentDecimals?: string
   showPositiveSign?: boolean
   signPosition?: 'beforePrefix' | 'afterPrefix'
+}
+
+export const removePrefixAndSuffix = (text: string, { prefix, suffix }: { prefix?: string; suffix?: string }) => {
+  let result = text
+
+  if (prefix) {
+    const prefixRegex = new RegExp('^' + prefix.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$'))
+    result = text.replace(prefixRegex, '')
+  }
+
+  if (suffix) {
+    const suffixRegex = new RegExp(suffix.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$') + '$')
+    result = result.replace(suffixRegex, '')
+  }
+
+  return result
 }
 
 interface AddSignPrefixAndSuffixProps {
@@ -30,20 +47,19 @@ export const addSignPrefixAndSuffix = (value: any, options: AddSignPrefixAndSuff
 export const formatNumber = (input: number, options?: FormatNumberOptions) => {
   const {
     precision,
-    separator = ',',
-    delimiter = '.',
+    separator = '.',
+    delimiter = ',',
     prefix = '',
     suffix = '',
     ignoreNegative,
+    currentDecimals,
     showPositiveSign,
     signPosition = 'afterPrefix',
   } = options || {}
 
-  const negative = ignoreNegative ? false : input < 0
+  const negative = ignoreNegative ? false : Object.is(input, -0) || input < 0
   const sign = negative ? '-' : showPositiveSign ? '+' : ''
-
-  const string = Math.abs(input).toFixed(precision)
-
+  const string = Math.abs(input).toString()
   const parts = string.split('.')
   const buffer: string[] = []
 
@@ -55,9 +71,10 @@ export const formatNumber = (input: number, options?: FormatNumberOptions) => {
 
   let formattedNumber = ''
   formattedNumber = buffer.join(delimiter)
-
   const decimals = parts[1]
-  if (!!precision && decimals) {
+  if (currentDecimals) {
+    formattedNumber += currentDecimals
+  } else if (!!precision && decimals) {
     formattedNumber += separator + decimals
   }
 

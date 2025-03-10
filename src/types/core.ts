@@ -115,7 +115,7 @@ export type VisibleAction = {
   open: () => void
 }
 
-export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Pick<T, TRequired>
+export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Required<Pick<T, TRequired>>
 
 export type RequiredExceptFor<T, TOptional extends keyof T> = Required<Omit<T, TOptional>> & Partial<Pick<T, TOptional>>
 

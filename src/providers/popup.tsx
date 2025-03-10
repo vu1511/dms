@@ -28,6 +28,11 @@ const Popup = () => {
     closePopup()
   }
 
+  const handleCancel = () => {
+    onCancel?.()
+    closePopup()
+  }
+
   return (
     <Portal>
       <PopupComponent
@@ -37,11 +42,8 @@ const Popup = () => {
         cancelBtnText={cancelBtnText}
         confirmBtnText={confirmBtnText}
         onDismiss={clearPopup}
-        onCancel={() => {
-          onCancel?.()
-          closePopup()
-        }}
-        onConfirm={isAsyncConfirmFunction ? confirmAsync : confirmSync}
+        onCancel={onCancel ? handleCancel : undefined}
+        onConfirm={onConfirm ? (isAsyncConfirmFunction ? confirmAsync : confirmSync) : undefined}
       />
     </Portal>
   )
