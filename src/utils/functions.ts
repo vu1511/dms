@@ -72,3 +72,7 @@ export const getRandomColor = (text: string) => {
   }
   return bgColor
 }
+
+export const isNumber = (value: unknown): value is number => {
+  return typeof value === 'number' && !isNaN(Number(value))
+}

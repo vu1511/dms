@@ -1,6 +1,8 @@
-import { render, screen, userEvent } from '@testing-library/react-native'
+import { fireEvent, render, screen, userEvent } from '@testing-library/react-native'
 import { useState } from 'react'
-import NumericInput, { NumericInputProps } from './numericInput'
+import NumericInput from './numericInput'
+import { NumericInputProps } from './types'
+import { Text, TouchableOpacity } from 'react-native'
 
 const user = userEvent.setup({
   delay: 50,
@@ -147,6 +149,12 @@ describe('numericInput', () => {
       expect(mockOnMaxValueReached).toHaveBeenCalledWith(2)
     })
 
+    it('should truncate extra decimal places based on precision when initializing value', async () => {
+      render(<Render precision={0} value={12.345678} />)
+      const input = screen.getByTestId('numeric-input')
+      expect(input.props.value).toBe('12')
+    })
+
     it('should prevent negative value', async () => {
       render(<Render minValue={0} />)
       const input = screen.getByTestId('numeric-input')
@@ -254,6 +262,12 @@ describe('numericInput', () => {
       expect(input.props.value).toBe('10.12345')
     })
 
+    it('should truncate extra decimal places based on precision when initializing value', async () => {
+      render(<Render precision={5} value={12.345678} />)
+      const input = screen.getByTestId('numeric-input')
+      expect(input.props.value).toBe('12.34567')
+    })
+
     it('should ignore non-numeric characters while typing after separator', async () => {
       render(<Render />)
       const input = screen.getByTestId('numeric-input')
@@ -353,6 +367,46 @@ describe('numericInput', () => {
 
       await user.type(input, '0000', { skipBlur: false })
       expect(input.props.value).toBe('0.1')
+    })
+
+    it('Should keep the rendered text input value in sync with the prop value.', async () => {
+      const Render = () => {
+        const [value, setValue] = useState<number | null>(null)
+        return (
+          <>
+            <NumericInput value={value} onChangeValue={setValue} />
+            <TouchableOpacity testID="btn-reset-integer" onPress={() => setValue(1)}>
+              <Text>reset to integer</Text>
+            </TouchableOpacity>
+            <TouchableOpacity testID="btn-reset-decimal" onPress={() => setValue(0.123)}>
+              <Text>reset to decimal</Text>
+            </TouchableOpacity>
+          </>
+        )
+      }
+
+      render(<Render />)
+      const input = screen.getByTestId('numeric-input')
+      await user.type(input, '0.123', { skipBlur: true })
+      expect(input.props.value).toBe('0.123')
+      const btnResetInteger = screen.getByTestId('btn-reset-integer')
+      fireEvent(btnResetInteger, 'press')
+      expect(input.props.value).toBe('1')
+
+      await user.clear(input)
+
+      await user.type(input, '1', { skipBlur: true })
+      expect(input.props.value).toBe('1')
+      const btnResetDecimal = screen.getByTestId('btn-reset-decimal')
+      fireEvent(btnResetDecimal, 'press')
+      expect(input.props.value).toBe('0.123')
+
+      await user.clear(input)
+
+      await user.type(input, '0.99', { skipBlur: true })
+      expect(input.props.value).toBe('0.99')
+      fireEvent(btnResetDecimal, 'press')
+      expect(input.props.value).toBe('0.123')
     })
 
     it('should trigger onChangeValue correctly', async () => {

@@ -1,42 +1,65 @@
-import { NumericInput, TextInput } from '@/components'
+import { Button, NumericInput, QuantityInput, TextInput } from '@/components'
 import { useState } from 'react'
 import { ScrollView } from 'react-native'
-import CurrencyInput from 'react-native-currency-input'
+import RNQuantityInput from 'react-native-numeric-input'
 import 'react-native-reanimated'
 
 export const Example = () => {
   const [keyword, setKeyword] = useState('')
   const [value, setValue] = useState<number | null>(null)
+  const [qty, setQty] = useState(0)
 
+  console.log({ qty })
   return (
     <ScrollView
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={{ padding: 16, rowGap: 24, paddingTop: 100 }}
     >
+      {/* <RNQuantityInput
+        valueType="real"
+        type="up-down"
+        value={qty}
+        onChange={(value) => {
+          setQty(value)
+          console.log('onChangeQty: ', value)
+        }}
+        validateOnBlur
+        step={1.5}
+        maxValue={10}
+      /> */}
+
       <NumericInput
-        precision={5}
-        onMinValueReached={(val) => console.log('callback onMinValueReached: ', val)}
-        onMaxValueReached={(val) => console.log('callback onMaxValueReached: ', val)}
-        renderTextInput={({ style, ...props }) => <TextInput label="Nhập số tiền" {...props} />}
         value={value}
         onChangeValue={(value) => {
-          console.log('onChangeValue: ', value)
           setValue(value)
+          console.log('onChangeValue: ', value)
+        }}
+        renderTextInput={({ style, ...props }) => <TextInput {...props} label="Nhập số" />}
+      />
+      <Button title="reset" onPress={() => setValue(Math.random() * 100)} />
+
+      <QuantityInput
+        value={qty}
+        minValue={1}
+        maxValue={10}
+        precision={10}
+        onChangeValue={(value) => {
+          setQty(value)
+          console.log('onChangeQty: ', value)
         }}
       />
-      <CurrencyInput
-        // prefix="$ "
-        // suffix=" $"
-        // minValue={1.99}
-        precision={0}
-        showPositiveSign
-        renderTextInput={({ style, ...props }) => <TextInput label="Nhập số tiền" {...props} />}
-        value={value}
-        separator=","
-        onChangeValue={(value) => {
-          setValue(value)
-          console.log('onChangeValue:', value)
+
+      <RNQuantityInput
+        rounded
+        value={qty}
+        type="up-down"
+        minValue={1}
+        maxValue={10}
+        valueType="real"
+        onChange={(value) => {
+          setQty(value)
+          console.log('onChangeQty: ', value)
         }}
       />
     </ScrollView>

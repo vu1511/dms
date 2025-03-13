@@ -1,14 +1,4 @@
-interface FormatNumberOptions {
-  precision?: number
-  separator?: string
-  delimiter?: string
-  ignoreNegative?: boolean
-  prefix?: string
-  suffix?: string
-  currentDecimals?: string
-  showPositiveSign?: boolean
-  signPosition?: 'beforePrefix' | 'afterPrefix'
-}
+import { AddSignPrefixAndSuffixOptions, FormatNumberOptions } from './types'
 
 export const removePrefixAndSuffix = (text: string, { prefix, suffix }: { prefix?: string; suffix?: string }) => {
   let result = text
@@ -26,14 +16,7 @@ export const removePrefixAndSuffix = (text: string, { prefix, suffix }: { prefix
   return result
 }
 
-interface AddSignPrefixAndSuffixProps {
-  sign?: '+' | '-' | ''
-  prefix?: string
-  suffix?: string
-  signPosition: 'beforePrefix' | 'afterPrefix'
-}
-
-export const addSignPrefixAndSuffix = (value: any, options: AddSignPrefixAndSuffixProps) => {
+export const addSignPrefixAndSuffix = (value: string, options: AddSignPrefixAndSuffixOptions) => {
   const { prefix, sign, suffix, signPosition } = options
 
   switch (signPosition) {
@@ -46,7 +29,7 @@ export const addSignPrefixAndSuffix = (value: any, options: AddSignPrefixAndSuff
 
 export const formatNumber = (input: number, options?: FormatNumberOptions) => {
   const {
-    precision,
+    precision = 0,
     separator = '.',
     delimiter = ',',
     prefix = '',
@@ -65,17 +48,18 @@ export const formatNumber = (input: number, options?: FormatNumberOptions) => {
 
   let number = parts[0]
   while (number.length > 0) {
-    buffer.unshift(number.substr(Math.max(0, number.length - 3), 3))
-    number = number.substr(0, number.length - 3)
+    buffer.unshift(number.slice(Math.max(0, number.length - 3)))
+    number = number.slice(0, -3)
   }
 
   let formattedNumber = ''
   formattedNumber = buffer.join(delimiter)
   const decimals = parts[1]
+
   if (currentDecimals) {
     formattedNumber += currentDecimals
   } else if (!!precision && decimals) {
-    formattedNumber += separator + decimals
+    formattedNumber += separator + decimals.slice(0, precision)
   }
 
   return addSignPrefixAndSuffix(formattedNumber, {
