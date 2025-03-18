@@ -1,6 +1,5 @@
 import { VisibleAction } from '@/types'
-import { RefObject, useCallback, useRef } from 'react'
-import { Keyboard } from 'react-native'
+import { RefObject, useCallback, useMemo, useRef } from 'react'
 
 export type UseVisibleRef = {
   ref: RefObject<VisibleAction>
@@ -8,22 +7,23 @@ export type UseVisibleRef = {
   onOpen: () => void
 }
 
-export const useVisibleRef = (shouldDismissKeyboard = true): UseVisibleRef => {
+export const useVisibleRef = (): UseVisibleRef => {
   const ref = useRef<VisibleAction>(null)
 
   const onClose = useCallback(() => {
-    shouldDismissKeyboard && Keyboard.dismiss()
     ref.current?.close()
-  }, [shouldDismissKeyboard])
+  }, [])
 
   const onOpen = useCallback(() => {
-    shouldDismissKeyboard && Keyboard.dismiss()
     ref.current?.open()
-  }, [shouldDismissKeyboard])
+  }, [])
 
-  return {
-    ref,
-    onClose,
-    onOpen,
-  }
+  return useMemo(
+    () => ({
+      ref,
+      onClose,
+      onOpen,
+    }),
+    [ref, onClose, onOpen]
+  )
 }

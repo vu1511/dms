@@ -1,7 +1,3 @@
-export function isAsyncFunction(fn: unknown): boolean {
-  return typeof fn === 'function' && fn() instanceof Promise
-}
-
 export const sleep = (delay: number): Promise<void> =>
   new Promise((resolve) =>
     setTimeout(() => {
@@ -75,4 +71,33 @@ export const getRandomColor = (text: string) => {
 
 export const isNumber = (value: unknown): value is number => {
   return typeof value === 'number' && !isNaN(Number(value))
+}
+
+export const isUnknownDataTruethy = (data: any): boolean => {
+  if (isArray(data)) {
+    return data?.length > 0
+  } else if (isObject(data)) {
+    return Object.keys(data || {})?.length > 0
+  }
+
+  return !!data
+}
+
+export function isArray<T>(value: unknown): value is T[] {
+  return Array.isArray(value)
+}
+
+export function isObject<T extends object>(value: unknown): value is T {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+export function formatMoneyVND(num: number | string, prefix = ' ₫'): string {
+  if (typeof num === 'number') {
+    num = Math.floor(num)
+    return `${num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}${prefix ? `${prefix}` : ''}`
+  } else if (typeof num === 'string') {
+    return `${num.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}${prefix ? ` ${prefix}` : ''}`
+  }
+
+  return num
 }

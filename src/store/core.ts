@@ -1,4 +1,5 @@
-import { PopupState } from '@/types'
+import { PopupState } from '@/types/core'
+import { WritableDraft } from 'immer'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -25,7 +26,7 @@ export const useCoreSlice = create<State, [['zustand/devtools', never], ['zustan
         }),
       setPopup: (params) =>
         set((state) => {
-          state.popup = params
+          state.popup = params as WritableDraft<PopupState>
         }),
       setIsUploadingImage: (params) =>
         set((state) => {

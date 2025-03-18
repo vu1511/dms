@@ -2,6 +2,17 @@ import { IdAndName } from './core'
 import { QueryList } from './http'
 
 export type AccountType = 'th' | 'nvkd' | 'npp' | 'gsbh' | 'asm' | 'rsm' | 'manager'
+
+export const AccountTypeNames = {
+  nvkd: 'Nhân viên kinh doanh',
+  npp: 'Nhà phân phối',
+  th: 'Cửa hàng bán lẻ',
+  asm: 'Giám sát khu vực',
+  rsm: 'Giám sát khu vực',
+  gsbh: 'Giám sát bán hàng',
+  manager: 'Quản lý',
+} as const
+
 export type CustomerType = 'internal' | 'collaborators'
 
 export interface ShippingAddress {
@@ -432,4 +443,20 @@ export type AttendanceCheckinV2Req = {
   location_name: string
   os_name: string
   store_status?: 'close' | 'open'
+}
+
+export interface CompanyRes {
+  id: number
+  work_address_id: number
+  address: string
+  phone: string
+  email: string
+  website: string
+  time_work: string
+  latitude: string
+  longitude: string
+  name: string
+  industry_id: number[]
+  banner_img: string[]
+  image: string
 }

@@ -28,7 +28,7 @@ export type TextInputProps = Omit<RNTextInputProps, 'style'> & {
 }
 
 const LABEL_HEIGHT = 16
-const MIN_HEIGHT = 56
+const HEIGHT = 56
 
 const TextInput = forwardRef<RNTextInput, TextInputProps>(
   (
@@ -54,7 +54,6 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
     },
     ref
   ) => {
-    const inputHeight = MIN_HEIGHT
     const isControlled = externalValue !== undefined
 
     const [isFocused, setIsFocused] = useState(false)
@@ -62,16 +61,16 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
     const value = isControlled ? externalValue : text
 
     const isLabelOnTop = isFocused || value
-    const labelPosition = useSharedValue(isLabelOnTop ? 8 : (inputHeight - LABEL_HEIGHT) / 2)
+    const labelPosition = useSharedValue(isLabelOnTop ? 8 : (HEIGHT - LABEL_HEIGHT) / 2)
     const labelFontSize = useSharedValue(isLabelOnTop ? 12 : 16)
-    const border = useSharedValue(error ? Colors.danger : isFocused ? Colors.active : Colors.gray20)
+    const border = useSharedValue(error ? Colors.danger : isFocused ? Colors.active : Colors.inputBg)
 
     useEffect(() => {
-      border.value = error ? Colors.danger : isFocused ? Colors.active : Colors.gray20
+      border.value = error ? Colors.danger : isFocused ? Colors.active : Colors.inputBg
     }, [error, isFocused])
 
     useEffect(() => {
-      labelPosition.value = isLabelOnTop ? 8 : (inputHeight - LABEL_HEIGHT) / 2
+      labelPosition.value = isLabelOnTop ? 8 : (HEIGHT - LABEL_HEIGHT) / 2
       labelFontSize.value = isLabelOnTop ? 12 : 16
     }, [isLabelOnTop])
 
@@ -111,9 +110,8 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
 
     const handleChangeText = useCallback(
       (text: string) => {
-        if (isControlled) {
-          onChangeText?.(text)
-        } else {
+        onChangeText?.(text)
+        if (!isControlled) {
           setText(text)
         }
       },
@@ -164,10 +162,10 @@ const styles = StyleSheet.create({
   },
   content: {
     borderRadius: Spacings.sm,
-    minHeight: MIN_HEIGHT,
+    height: HEIGHT,
     overflow: 'hidden',
-    backgroundColor: Colors.gray20,
-    borderColor: Colors.gray20,
+    backgroundColor: Colors.inputBg,
+    borderColor: Colors.inputBg,
     borderWidth: 1.5,
     flexDirection: 'row',
   },

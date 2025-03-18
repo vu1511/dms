@@ -4,8 +4,8 @@ import Svg, { Path } from 'react-native-svg'
 
 export const ArrowDownIcon = ({ size = 24, fill = Colors.gray50 }: IconProps) => {
   return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <Path d="M7 10L12 14L17 10" stroke={fill} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <Svg stroke={fill} fill={fill} stroke-width="0" viewBox="0 0 512 512" width={size} height={size}>
+      <Path d="M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z"></Path>
     </Svg>
   )
 }

@@ -1,5 +1,5 @@
-import { ToastProps } from '@/components'
 import { type KeyedMutator } from 'swr'
+import { ToastProps } from './core'
 
 export type HTTPResponse<T> = {
   jsonrpc: '2.0'
@@ -61,7 +61,6 @@ export type HTTPConfig = Partial<ToastProps> & {
   successMsg?: string
   showErrorMsg?: boolean
   showSuccessMsg?: boolean
-  requiredToken?: boolean
   method?: HTTPMethod
   shouldNavigateToLoginIfNoTokenFound?: boolean
   shouldSetLoadingState?: boolean
@@ -76,7 +75,6 @@ export type AsyncHandlerFetcher<Response = any> =
 export interface AsyncHandler<Response> {
   fetcher: AsyncHandlerFetcher<Response>
   onSuccess?: (params: Response) => Promise<void> | void
-  onMissingToken?: () => void
   onError?: (data: any) => Promise<void> | void
   config?: HTTPConfig
 }

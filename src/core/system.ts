@@ -17,12 +17,7 @@ class System {
   static showPopup(params: Omit<PopupState, 'visible'>) {
     useCoreSlice.getState().setPopup({
       visible: true,
-      message: params.message,
-      description: params.description,
-      cancelBtnText: params.cancelBtnText,
-      confirmBtnText: params.confirmBtnText,
-      onCancel: params.onCancel,
-      onConfirm: params.onConfirm,
+      ...params,
     })
   }
 

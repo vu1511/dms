@@ -65,5 +65,5 @@ export const Colors = Object.freeze({
   cyan: '#00BCD3',
   yellow: '#FFEB4F',
 
-  inputBg: '#f0f0f0',
+  inputBg: 'rgba(22, 161, 253, 0.04)',
 })

@@ -94,12 +94,6 @@ export type AttachmentType =
   | 'application/octet-stream'
   | 'application/x-zip-compressed'
 
-export type RatingAttachmentReq = { file: string; type: AttachmentType }
-
-export interface CreateAttachmentReq {
-  attachments: RatingAttachmentReq[]
-}
-
 export type ImageCloudStorage = {
   data_type: string
   id: number
@@ -119,9 +113,20 @@ export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Requi
 
 export type RequiredExceptFor<T, TOptional extends keyof T> = Required<Omit<T, TOptional>> & Partial<Pick<T, TOptional>>
 
-export type PopupState = Pick<
-  PopupProps,
-  'visible' | 'message' | 'description' | 'cancelBtnText' | 'confirmBtnText' | 'onCancel' | 'onConfirm'
+export type PopupState = OptionalExceptFor<
+  Pick<
+    PopupProps,
+    | 'visible'
+    | 'message'
+    | 'description'
+    | 'cancelBtnText'
+    | 'confirmBtnText'
+    | 'onCancel'
+    | 'onConfirm'
+    | 'cancelBtnProps'
+    | 'confirmBtnProps'
+  >,
+  'visible'
 >
 
 export type ToastProps = {
@@ -133,3 +138,69 @@ export type ToastProps = {
 }
 
 export type ToastState = OptionalExceptFor<Required<ToastProps>, 'message'>
+
+export enum ETimePeriod {
+  All = 'all',
+  Today = 'today',
+  Yesterday = 'yesterday',
+  ThisWeek = 'this_week',
+  LastWeek = 'last_week',
+  ThisMonth = 'this_month',
+  LastMonth = 'last_month',
+  ThisQuarter = 'this_quarter',
+  LastQuarter = 'last_quarter',
+  ThisYear = 'this_year',
+  LastYear = 'last_year',
+}
+
+export const DefaultMonthTime: Option<ETimePeriod> = {
+  label: 'Tháng này',
+  value: ETimePeriod.ThisMonth,
+} as const
+
+export const timePeriodOptions: Option<ETimePeriod>[] = [
+  {
+    label: 'Tất cả',
+    value: ETimePeriod.All,
+  },
+  {
+    label: 'Hôm nay',
+    value: ETimePeriod.Today,
+  },
+  {
+    label: 'Hôm qua',
+    value: ETimePeriod.Yesterday,
+  },
+  {
+    label: 'Tuần này',
+    value: ETimePeriod.ThisWeek,
+  },
+  {
+    label: 'Tuần trước',
+    value: ETimePeriod.LastWeek,
+  },
+  {
+    label: 'Tháng này',
+    value: ETimePeriod.ThisMonth,
+  },
+  {
+    label: 'Tháng trước',
+    value: ETimePeriod.LastMonth,
+  },
+  {
+    label: 'Quý này',
+    value: ETimePeriod.ThisQuarter,
+  },
+  {
+    label: 'Quý trước',
+    value: ETimePeriod.LastQuarter,
+  },
+  {
+    label: 'Năm này',
+    value: ETimePeriod.ThisYear,
+  },
+  {
+    label: 'Năm trước',
+    value: ETimePeriod.LastYear,
+  },
+] as const

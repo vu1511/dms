@@ -1,5 +1,5 @@
-import { COLORS, COMMON_STYLES, TYPOGRAPHY } from '@/common'
 import { ScreenHeight } from '@/constants'
+import { BaseStyles, Colors, Typography } from '@/theme'
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
@@ -12,26 +12,26 @@ export const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     height: ScreenHeight,
-    backgroundColor: COLORS.white,
+    backgroundColor: Colors.white,
   },
   loading: {
     paddingTop: 72,
-    ...COMMON_STYLES.flexCenter,
+    ...BaseStyles.flexCenter,
   },
   emptyContainer: {
     flexGrow: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: Colors.white,
   },
   empty: {
     paddingTop: 72,
   },
   emptyLabel: {
-    ...TYPOGRAPHY.body18SemiBold,
+    ...Typography.body18SemiBold,
     textAlign: 'center',
   },
   emptyDesc: {
-    ...TYPOGRAPHY.body16Normal,
-    color: COLORS.gray70,
+    ...Typography.body16Normal,
+    color: Colors.gray70,
     textAlign: 'center',
   },
   emptyImage: {
@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
     height: 100,
   },
   bottom: {
-    backgroundColor: COLORS.white,
+    backgroundColor: Colors.white,
   },
   loadingMore: {
     paddingVertical: 16,

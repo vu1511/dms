@@ -1,9 +1,8 @@
 import { BaseStyles, Colors, Typography } from '@/theme'
-import { isAsyncFunction } from '@/utils'
 import React, { ReactNode, useState } from 'react'
-import { StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import Modal from 'react-native-modal'
-import { Button } from '../button'
+import { Button, ButtonProps } from '../button'
 
 export type PopupProps = {
   visible: boolean
@@ -11,8 +10,9 @@ export type PopupProps = {
   description?: string | ReactNode
   cancelBtnText?: string
   confirmBtnText?: string
-  confirmBtnStyle?: StyleProp<ViewStyle>
-  confirmBtnTextStyle?: StyleProp<TextStyle>
+  cancelBtnProps?: Partial<ButtonProps>
+  confirmBtnProps?: Partial<ButtonProps>
+  onClose?(): void
   onDismiss?(): void
   onCancel?(): void
   onConfirm?(): void | Promise<void>
@@ -24,26 +24,35 @@ const Popup = ({
   visible,
   cancelBtnText = 'Đóng',
   confirmBtnText = 'Xác nhận',
-  confirmBtnStyle,
-  confirmBtnTextStyle,
+  cancelBtnProps,
+  confirmBtnProps,
+  onClose,
   onCancel,
   onConfirm,
   onDismiss,
 }: PopupProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
+  const handleCancel = () => {
+    onCancel?.()
+    onClose?.()
+  }
+
   const handleConfirm = async () => {
     if (!onConfirm) return
 
-    if (isAsyncFunction(onConfirm)) {
+    const instance = onConfirm()
+
+    if (instance instanceof Promise) {
       try {
         setIsLoading(true)
-        await onConfirm()
+        await instance
       } finally {
+        onClose?.()
         setIsLoading(false)
       }
     } else {
-      onConfirm()
+      onClose?.()
     }
   }
 
@@ -76,20 +85,16 @@ const Popup = ({
         <View style={styles.footer}>
           {onCancel ? (
             <Button
+              readOnly={isLoading}
               title={cancelBtnText}
-              onPress={onCancel}
+              onPress={handleCancel}
               style={styles.cancelBtn}
               textStyle={styles.cancelBtnText}
+              {...cancelBtnProps}
             />
           ) : null}
           {onConfirm ? (
-            <Button
-              loading={isLoading}
-              title={confirmBtnText}
-              onPress={handleConfirm}
-              style={confirmBtnStyle}
-              textStyle={confirmBtnTextStyle}
-            />
+            <Button loading={isLoading} title={confirmBtnText} onPress={handleConfirm} {...confirmBtnProps} />
           ) : null}
         </View>
       </View>

@@ -4,8 +4,8 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     ...BaseStyles.flexRowSpaceBetween,
     columnGap: 8,
     alignItems: 'flex-start',

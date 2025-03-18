@@ -30,7 +30,7 @@ const BottomSheetModal = forwardRef<VisibleAction, BottomSheetModalProps>(
       children,
       containerStyle,
       bottomInset = 0,
-      enableDynamicSizing,
+      enableDynamicSizing = false,
       snapPoints: externalSnapPoints,
       showBottomSpacing = true,
       dynamicSizingWithBottomSheetView = true,

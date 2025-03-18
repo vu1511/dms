@@ -9,9 +9,10 @@ import { Host } from 'react-native-portalize'
 import 'react-native-reanimated'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { SWRConfig } from 'swr'
-import { Example } from './example'
 import { Providers } from './providers'
+import { AppNavigator } from './routes'
 import { BaseStyles, Colors } from './theme'
+import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 if (__DEV__) {
   require('../ReactotronConfig')
@@ -69,9 +70,10 @@ export default function App() {
         <GestureHandlerRootView style={BaseStyles.flex1}>
           <BottomSheetModalProvider>
             <Host>
-              <Providers />
-              <Example />
-              {/* <AppNavigator /> */}
+              <KeyboardProvider statusBarTranslucent>
+                <Providers />
+                <AppNavigator />
+              </KeyboardProvider>
             </Host>
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
