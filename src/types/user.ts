@@ -1,4 +1,4 @@
-import { IdAndName } from './core'
+import { IdAndName, ImagePickerResult } from './core'
 import { QueryList } from './http'
 
 export type AccountType = 'th' | 'nvkd' | 'npp' | 'gsbh' | 'asm' | 'rsm' | 'manager'
@@ -322,9 +322,15 @@ export interface CreateAccountReq {
   hcategory_id?: number
 }
 
-export type CreateAccountForm = Omit<CreateAccountReq, 'address' | 'hcategory_id'> & {
+export type CreateAccountForm = Omit<
+  CreateAccountReq,
+  'address' | 'hcategory_id' | 'birth_day' | 'route_sale_id' | 'image'
+> & {
+  birth_day?: Date
   address: CreateAddressForm
   hcategory_id?: IdAndName
+  route_sale_id?: IdAndName
+  image: ImagePickerResult
 }
 
 export type UpdateAccountReq = Partial<CreateAccountReq>

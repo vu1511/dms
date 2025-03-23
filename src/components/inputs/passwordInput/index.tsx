@@ -2,6 +2,7 @@ import { EyeCloseIcon, EyeOpenIcon } from '@/assets'
 import { forwardRef, useState } from 'react'
 import { Pressable, TextInput as RTextInput } from 'react-native'
 import TextInput, { TextInputProps } from '../textInput'
+import { Colors } from '@/theme'
 
 export type PasswordInputProps = TextInputProps
 
@@ -15,7 +16,11 @@ const PasswordInput = forwardRef<RTextInput, PasswordInputProps>((attributes, re
       secureTextEntry={secureText}
       right={
         <Pressable hitSlop={8} onPress={() => setSecureText(!secureText)}>
-          {!secureText ? <EyeOpenIcon /> : <EyeCloseIcon />}
+          {!secureText ? (
+            <EyeOpenIcon size={20} fill={Colors.gray80} />
+          ) : (
+            <EyeCloseIcon size={20} fill={Colors.gray80} />
+          )}
         </Pressable>
       }
     />

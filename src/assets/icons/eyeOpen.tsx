@@ -1,7 +1,8 @@
 import { Colors } from '@/theme'
+import { IconProps } from '@/types'
 import Svg, { Path } from 'react-native-svg'
 
-export const EyeOpenIcon = ({ size = 20, fill = Colors.gray50 }) => {
+export const EyeOpenIcon = ({ size = 20, fill = Colors.gray50 }: IconProps) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 25 24" fill="none">
       <Path

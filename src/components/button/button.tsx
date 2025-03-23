@@ -50,7 +50,7 @@ const Button = memo(
     ) => {
       const btnStyles = useMemo<ViewStyle>(() => {
         return StyleSheet.flatten([type === 'button' ? styles.btn : styles.textBtn, style, disabled && styles.disabled])
-      }, [type, style])
+      }, [type, style, disabled])
 
       const textStyles = useMemo<TextStyle>(() => {
         return StyleSheet.flatten([type === 'button' ? styles.btnLabel : styles.textBtnLabel, textStyle])

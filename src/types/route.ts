@@ -15,6 +15,17 @@ export interface RouteRes {
   number_total: number
 }
 
+export type UpdateRouteReq = {
+  name?: string
+  code?: string
+  date_sale?: string
+  number_total?: number
+  description?: string
+  partner_ids: number[]
+  hierarchy_id: number
+  delete_partner_ids: number[]
+}
+
 export interface RouteDetailReq extends QueryList {
   account_type?: AccountType | 'all'
   keyword?: string

@@ -29,7 +29,13 @@ module.exports = {
         foregroundImage: './src/assets/images/adaptive-icon.png',
         backgroundColor: '#ffffff'
       },
-      permissions: ['android.permission.ACCESS_FINE_LOCATION', 'android.permission.POST_NOTIFICATIONS'],
+      permissions: [
+        'android.permission.ACCESS_FINE_LOCATION',
+        'android.permission.POST_NOTIFICATIONS',
+        'android.permission.CAMERA',
+        'android.permission.READ_MEDIA_IMAGES',
+        'android.permission.READ_EXTERNAL_STORAGE'
+      ],
       package: 'com.satavan.dms',
       config: {
         googleMaps: {

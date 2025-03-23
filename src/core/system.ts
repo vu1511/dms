@@ -1,9 +1,9 @@
 import { useCoreSlice } from '@/store'
-import { PopupState, ToastState } from '@/types'
+import { PopupState, ToastOptions } from '@/types'
 import { showMessage } from 'react-native-flash-message'
 
 class System {
-  static showToast(params: ToastState) {
+  static showToast(params: ToastOptions) {
     showMessage({
       autoHide: true,
       message: params.message,

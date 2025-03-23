@@ -26,7 +26,6 @@ export const SwrKey = {
   get_report: 'get_report',
   get_report_user: (id: number) => `get_report_${id}`,
   home_category: 'home_category',
-  customer_route: 'customer_route',
   accounts: 'accounts',
   products: 'products',
   fitler_products: 'fitler_products',

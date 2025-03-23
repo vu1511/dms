@@ -11,10 +11,9 @@ import {
   WorkIcon,
 } from '@/assets'
 import { BottomTabs } from '@/components'
-import { Tabs as RouteTabs } from '@/routes'
+import { RouteData, Tabs as RouteTabs } from '@/routes'
 import { Account, Home } from '@/screens'
 // import { AccountsForCheckin, History, Home, MoreAccount, Product } from '@/screens'
-import { RouteData } from '@/types'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 const Tab = createBottomTabNavigator()

@@ -1,22 +1,16 @@
-import { AttachmentUrlRes } from '@/types'
+import { AttachmentUrlRes, ImagePickerResult } from '@/types'
 import * as Yup from 'yup'
 import { Regex } from './regex'
 
-export const idAndNameSchema = Yup.object()
-  .shape({
-    id: Yup.number().required(),
-    name: Yup.string().required(),
-  })
-  .required('Vui lòng nhập trường này')
-  .typeError('Vui lòng nhập trường này')
+export const idAndNameSchema = Yup.object().shape({
+  id: Yup.number(),
+  name: Yup.string(),
+})
 
-export const idAndUrlSchema = Yup.object()
-  .shape({
-    id: Yup.number().required(),
-    url: Yup.string().required(),
-  })
-  .required('Vui lòng nhập trường này')
-  .typeError('Vui lòng nhập trường này')
+export const idAndUrlSchema = Yup.object().shape({
+  id: Yup.number(),
+  url: Yup.string(),
+})
 
 export const emailSchema = Yup.string()
   .required('Vui lòng nhập email')
@@ -38,3 +32,12 @@ export const loginPasswordSchema = Yup.string()
   .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
 
 export const ratingStarSchema = Yup.string().oneOf(['1', '2', '3', '4', '5']).required()
+
+export const imagePickerSchema: Yup.ObjectSchema<ImagePickerResult> = Yup.object().shape({
+  uri: Yup.string(),
+  base64: Yup.string(),
+  size: Yup.number(),
+  height: Yup.number(),
+  width: Yup.number(),
+  mime: Yup.string(),
+})

@@ -1,5 +1,5 @@
 import { removeEmptyValueFromObject } from '@/utils'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import useSWRInfinite from 'swr/infinite'
 import { GetKeyResult, PreviousData, UseQueryInfiniteListProps, UseQueryInfiniteListRes } from './types'
 
@@ -25,7 +25,6 @@ const useQueryInfiniteList = <
   Data
 > => {
   const [params, setParams] = useState<FilterParams>(initialParams)
-  const paramsRef = useRef<FilterParams>(params)
   const [revalidatedAll, setRevalidatedAll] = useState<boolean>(false)
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
 
@@ -117,7 +116,6 @@ const useQueryInfiniteList = <
     async (resetParams = false) => {
       if (resetParams) {
         setParams(initialParams)
-        paramsRef.current = initialParams
       } else {
         setRevalidatedAll(false)
       }
@@ -133,9 +131,7 @@ const useQueryInfiniteList = <
   const filter = useCallback(async (filterParams: Partial<FilterParams>) => {
     onFilter?.()
     setRevalidatedAll(false)
-    const nextParams = removeEmptyValueFromObject({ ...paramsRef.current, ...filterParams })
-    setParams(nextParams)
-    paramsRef.current = nextParams
+    setParams((prevParams) => removeEmptyValueFromObject({ ...prevParams, filterParams }))
   }, [])
 
   return useMemo(

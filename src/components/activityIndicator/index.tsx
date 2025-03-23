@@ -1,6 +1,6 @@
-import { Colors } from '@/theme'
+import { Colors, BaseStyles } from '@/theme'
 import React, { memo, useEffect } from 'react'
-import { StyleProp, ViewStyle } from 'react-native'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated'
 import Svg, { Path } from 'react-native-svg'
 
@@ -23,16 +23,18 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = memo(
     }, [rotation])
 
     return (
-      <Animated.View style={[{ width: size, height: size }, style, animatedStyles]}>
-        <Svg fill="none" viewBox="0 0 24 24" width={size} height={size}>
-          <Path
-            fill={color}
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M12 5a7 7 0 0 0-5.218 11.666A1 1 0 0 1 5.292 18a9 9 0 1 1 13.416 0 1 1 0 1 1-1.49-1.334A7 7 0 0 0 12 5Z"
-          />
-        </Svg>
-      </Animated.View>
+      <View style={[BaseStyles.flexCenter, style]}>
+        <Animated.View style={[{ width: size, height: size }, animatedStyles]}>
+          <Svg fill="none" viewBox="0 0 24 24" width={size} height={size}>
+            <Path
+              fill={color}
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M12 5a7 7 0 0 0-5.218 11.666A1 1 0 0 1 5.292 18a9 9 0 1 1 13.416 0 1 1 0 1 1-1.49-1.334A7 7 0 0 0 12 5Z"
+            />
+          </Svg>
+        </Animated.View>
+      </View>
     )
   }
 )

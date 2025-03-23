@@ -42,7 +42,7 @@ const BottomSheetModal = forwardRef<VisibleAction, BottomSheetModalProps>(
     const bottomSheetRef = useRef<RNBottomSheetModal>(null)
     const animationConfigs = useBottomSheetTimingConfigs({ duration: 500 })
     const snapPoints = useMemo(
-      () => (enableDynamicSizing ? undefined : externalSnapPoints || ['50%', '90%']),
+      () => (enableDynamicSizing ? undefined : externalSnapPoints || ['60%', '90%']),
       [externalSnapPoints, enableDynamicSizing]
     )
 

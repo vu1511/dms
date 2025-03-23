@@ -5,10 +5,8 @@ import { Colors } from '@/theme'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { KeyboardStickyView } from 'react-native-keyboard-controller'
+import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-// import { ButtonBottom, Container, PasswordField } from '../../components'
 import * as Yup from 'yup'
 
 type ChangePasswordForm = {
@@ -56,6 +54,7 @@ const ChangePassword = () => {
         showsVerticalScrollIndicator={false}
         style={{ flex: 1, padding: 16, rowGap: 24 }}
         contentContainerStyle={{ rowGap: 24 }}
+        bottomOffset={64 + Math.max(bottom, 16) + 12}
       >
         <PasswordField
           required

@@ -1,4 +1,8 @@
 export { default as Account } from './account'
 export { default as ChangePassword } from './changePassword'
+export { default as CreateCustomer } from './createCustomer'
 export { default as Home } from './home'
 export { default as Login } from './login'
+export { default as RouteList } from './routeList'
+export { default as UpdateRoute } from './updateRoute'
+export { default as CreateAddress } from './createAddress'

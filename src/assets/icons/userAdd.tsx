@@ -28,8 +28,8 @@ export const UserAddIcon = ({ size = 24, fill = Colors.gray50 }: IconProps) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <Path d="M18 16V20" stroke={fill} strokeWidth="1.5" stroke-linecap="round" />
-      <Path d="M20 18L16 18" stroke={fill} strokeWidth="1.5" stroke-linecap="round" />
+      <Path d="M18 16V20" stroke={fill} strokeWidth="1.5" strokeLinecap="round" />
+      <Path d="M20 18L16 18" stroke={fill} strokeWidth="1.5" strokeLinecap="round" />
     </Svg>
   )
 }

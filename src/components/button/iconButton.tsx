@@ -1,3 +1,4 @@
+import { isAndroid, isIOS } from '@/constants'
 import { Colors } from '@/theme'
 import { IconProps } from '@/types'
 import { forwardRef, memo, useMemo } from 'react'
@@ -26,38 +27,50 @@ export type IconButtonProps = {
 
 const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight
 
+const SIZE_INCREASE = 12
+
 const IconButton = memo(
   forwardRef<View, IconButtonProps>(
     (
       { onPress, style, icon, size = 24, color = Colors.primary, loading, hitSlop, disabled, readOnly = false },
       ref
     ) => {
-      const btnIconStyles = useMemo(() => {
-        const btnSize = size + 12
+      const btnIconStyles = useMemo<StyleProp<ViewStyle>>(() => {
+        const btnSize = size + SIZE_INCREASE
         return [
           {
             borderRadius: btnSize / 2,
             width: btnSize,
             height: btnSize,
           },
+          isAndroid && { position: 'absolute', left: -SIZE_INCREASE / 2, top: -SIZE_INCREASE / 2 },
           styles.btnIcon,
           style,
         ]
       }, [size, style])
 
+      const btnStyles = useMemo<StyleProp<ViewStyle>>(() => {
+        return [styles.btn, isIOS && { position: 'absolute', top: -SIZE_INCREASE / 2, left: -SIZE_INCREASE / 2 }]
+      }, [size])
+
+      const wrapperStyle = useMemo<StyleProp<ViewStyle>>(() => {
+        return { height: size, width: size }
+      }, [size])
+
       return (
-        <Touchable
-          hitSlop={hitSlop}
-          style={styles.btn}
-          onPress={() => onPress?.()}
-          underlayColor={Colors.gray20}
-          disabled={disabled || loading || readOnly || !onPress}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless(size - 4)}
-        >
-          <View ref={ref} style={btnIconStyles}>
-            {typeof icon === 'function' ? icon({ fill: color, size: size }) : icon}
-          </View>
-        </Touchable>
+        <View style={wrapperStyle}>
+          <Touchable
+            hitSlop={hitSlop}
+            style={btnStyles}
+            onPress={() => onPress?.()}
+            underlayColor={Colors.gray20}
+            disabled={disabled || loading || readOnly || !onPress}
+          >
+            <View ref={ref} style={btnIconStyles}>
+              {typeof icon === 'function' ? icon({ fill: color, size: size }) : icon}
+            </View>
+          </Touchable>
+        </View>
       )
     }
   )

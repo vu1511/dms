@@ -8,8 +8,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1.5,
     borderRadius: Spacings.sm,
-    backgroundColor: Colors.inputBg,
-    borderColor: Colors.transparent,
+    backgroundColor: Colors.gray20,
+    borderColor: Colors.gray20,
     paddingHorizontal: 12,
   },
   inputText: {

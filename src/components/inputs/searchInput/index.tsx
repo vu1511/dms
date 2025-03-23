@@ -69,7 +69,7 @@ export type SearchInputProps = Omit<TextInputProps, 'onChangeText' | 'onChange'>
    *   meaning it will not capture the latest state updates within its closure.
    * - If `delay` is not provided, `onChangeText` behaves normally without debounce.
    */
-  onChangeText?: (val: string) => void
+  onChange?: (val: string) => void
 }
 
 const SearchInput = forwardRef<TextInput, SearchInputProps>(
@@ -86,7 +86,7 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
       searchIconColor = Colors.gray50,
       searchIconSize = 16,
       clearIconSize = 18,
-      onChangeText: externalOnChange,
+      onChange: externalOnChange,
       onClearValue,
       onFocus,
       onBlur,
@@ -100,7 +100,7 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
     const isFocused = useSharedValue(false)
 
     const borderAnimatedStyle = useAnimatedStyle(() => ({
-      borderColor: withTiming(isFocused.value ? Colors.active : Colors.gray20, { duration: 200 }),
+      borderColor: withTiming(isFocused.value ? Colors.active : Colors.transparent, { duration: 200 }),
     }))
 
     useEffect(() => {

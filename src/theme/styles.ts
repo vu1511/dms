@@ -17,6 +17,9 @@ export const BaseStyles = StyleSheet.create({
   mt24: {
     marginTop: 24,
   },
+  pb0: {
+    paddingBottom: 0,
+  },
   pb8: {
     paddingBottom: 8,
   },
@@ -68,10 +71,19 @@ export const BaseStyles = StyleSheet.create({
   cGap16: {
     columnGap: 16,
   },
+  cGap24: {
+    columnGap: 24,
+  },
+  cGap32: {
+    columnGap: 32,
+  },
 
   // Flexbox
   flex1: {
     flex: 1,
+  },
+  grow1: {
+    flexGrow: 1,
   },
   shrink1: {
     flexShrink: 1,
@@ -109,9 +121,11 @@ export const BaseStyles = StyleSheet.create({
   opacity50: {
     opacity: 0.5,
   },
-
   bgTransparent: {
     backgroundColor: Colors.transparent,
+  },
+  bgWhite: {
+    backgroundColor: Colors.white,
   },
 
   // Border
@@ -138,7 +152,7 @@ export const BaseStyles = StyleSheet.create({
 
   // Shadow
   shadowSm: {
-    shadowColor: Colors.gray30,
+    shadowColor: Colors.gray50,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -148,7 +162,7 @@ export const BaseStyles = StyleSheet.create({
     elevation: 2,
   },
   shadowMd: {
-    shadowColor: Colors.gray40,
+    shadowColor: Colors.gray50,
     shadowOffset: {
       width: 0,
       height: 3,
@@ -168,7 +182,7 @@ export const BaseStyles = StyleSheet.create({
     elevation: 8,
   },
   shadowXl: {
-    shadowColor: Colors.gray60,
+    shadowColor: Colors.gray50,
     shadowOffset: {
       width: 0,
       height: 10,

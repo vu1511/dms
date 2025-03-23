@@ -2,7 +2,8 @@ import { Images } from '@/assets'
 import { BaseStyles, Colors } from '@/theme'
 import { Image as ExpoImage, ImageProps as ExpoImageProps, ImageSource, useImage } from 'expo-image'
 import { memo, useMemo, useState } from 'react'
-import { ActivityIndicator, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import ActivityIndicator from '../activityIndicator'
 
 type Source = ImageSource | string
 
@@ -10,7 +11,6 @@ export type ImageProps = Pick<ExpoImageProps, 'recyclingKey' | 'contentFit'> & {
   height?: number
   width?: number
   borderRadius?: number
-  loadingIconSize?: number
   style?: StyleProp<ViewStyle>
   errorComponent?: React.ReactElement
   source: Source
@@ -23,7 +23,6 @@ const Image = memo(
     defaultSource = Images.blank,
     style,
     recyclingKey,
-    loadingIconSize = 20,
     contentFit = 'cover',
     borderRadius,
     width = 100,
@@ -51,7 +50,7 @@ const Image = memo(
       <View style={[{ width, height, borderRadius, overflow: 'hidden' }, style]}>
         {!image && !isError ? (
           <View style={styles.loadingView}>
-            <ActivityIndicator size={loadingIconSize} color={Colors.gray50} />
+            <ActivityIndicator size={Math.max(width, height) / 2} color={Colors.gray50} />
           </View>
         ) : null}
 

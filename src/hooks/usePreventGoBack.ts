@@ -1,8 +1,6 @@
 import { System } from '@/core'
-import { Navigation } from '@/types'
 import { useNavigation } from '@react-navigation/native'
 import { useEffect } from 'react'
-import { Alert } from 'react-native'
 
 export type UsePreventGoBackProps = {
   title?: string
@@ -12,7 +10,7 @@ export type UsePreventGoBackProps = {
 }
 
 export const usePreventGoBack = (props?: UsePreventGoBackProps) => {
-  const navigation = useNavigation<Navigation>()
+  const navigation = useNavigation()
 
   const {
     title = 'Bạn có muốn thoát?',
@@ -30,14 +28,13 @@ export const usePreventGoBack = (props?: UsePreventGoBackProps) => {
         System.showPopup({
           message: title,
           description: desc,
-          cancelBtnText: 'Ở lại',
-          confirmBtnText: 'Rời khỏi',
-          onConfirm: () => navigation.dispatch(e.data.action),
+          confirmBtnText: 'Ở lại',
+          cancelBtnText: 'Rời khỏi',
+          onConfirm: () => {
+            onConfirm?.()
+          },
+          onCancel: () => navigation.dispatch(e.data.action),
         })
-        Alert.alert(title, desc, [
-          { text: 'Ở lại', onPress: onConfirm, style: 'cancel' },
-          { text: 'Rời khỏi', onPress: () => navigation.dispatch(e.data.action) },
-        ])
       }),
     [navigation, hasUnsavedChanges]
   )

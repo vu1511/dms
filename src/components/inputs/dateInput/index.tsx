@@ -1,83 +1,91 @@
-import moment from 'moment'
-import { useMemo, useState } from 'react'
-import DateTimePicker, { DateTimePickerProps } from 'react-native-modal-datetime-picker'
-import TextInput, { TextInputProps } from '../textInput'
 import { CalendarIcon } from '@/assets'
 import { Colors } from '@/theme'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import moment from 'moment'
+import { forwardRef, useMemo, useState } from 'react'
+import { TextInput as RNTextInput } from 'react-native'
+import DateTimePicker, { DateTimePickerProps } from 'react-native-modal-datetime-picker'
+import TextInput, { TextInputProps } from '../textInput'
 
-export type DateInputProps = Pick<DateTimePickerProps, 'minimumDate' | 'maximumDate' | 'date' | 'mode'> &
-  Omit<TextInputProps, 'defaultValue' | 'onChange' | 'mode'> & {
-    defaultValue?: Date
-    onChange?: (date: Date) => void
+export type DateInputProps = Pick<DateTimePickerProps, 'minimumDate' | 'maximumDate' | 'mode'> &
+  Omit<TextInputProps, 'defaultValue' | 'onChange' | 'mode' | 'value' | 'onChangeText' | 'onChange'> & {
+    value?: Date | null
+    defaultValue?: Date | null
+    onChange?: (date: Date | null) => void
   }
 
-const DateInput = ({
-  mode = 'date',
-  date,
-  minimumDate,
-  maximumDate,
-  defaultValue = new Date(),
-  onChange,
-  ...attributes
-}: DateInputProps) => {
-  const { bottom } = useSafeAreaInsets()
-  const [visible, setVisible] = useState(false)
-  const [value, setValue] = useState<Date>(defaultValue)
+const DateInput = forwardRef<RNTextInput, DateInputProps>(
+  ({ value: externalValue, mode = 'date', minimumDate, maximumDate, defaultValue, onChange, ...attributes }, ref) => {
+    const [visible, setVisible] = useState(false)
+    const [internalValue, setInternalValue] = useState<Date | undefined | null>(defaultValue)
 
-  const valueDisplay = useMemo<string | undefined>(() => {
-    if (!value) return undefined
+    const isControlled = typeof externalValue !== 'undefined'
+    const value = isControlled ? externalValue : internalValue
 
-    if (mode === 'date') return moment(value).format('DD/MM/YYYY')
-    if (mode === 'datetime') return moment(value).format('HH:mm DD/MM/YYYY')
-    if (mode === 'time') return moment(value).format('HH:mm')
+    const valueDisplay = useMemo<string | undefined>(() => {
+      if (!value) return undefined
 
-    return undefined
-  }, [value, mode])
+      if (mode === 'date') {
+        return moment(value).format('DD/MM/YYYY')
+      }
 
-  const onClose = () => {
-    setVisible(false)
-  }
+      if (mode === 'datetime') {
+        return moment(value).format('HH:mm DD/MM/YYYY')
+      }
 
-  const onOpen = () => {
-    setVisible(true)
-  }
+      if (mode === 'time') {
+        return moment(value).format('HH:mm')
+      }
 
-  const handleConfirm = (val: Date) => {
-    onClose()
-    setValue(val)
-    onChange?.(val)
-  }
+      return undefined
+    }, [value, mode])
 
-  return (
-    <>
-      <TextInput
-        {...attributes}
-        readOnly
-        onPress={onOpen}
-        editable={false}
-        pointerEvents="none"
-        value={valueDisplay}
-        right={<CalendarIcon fill={Colors.gray80} size={24} />}
-      />
+    const onClose = () => {
+      setVisible(false)
+    }
 
-      {visible ? (
+    const onOpen = () => {
+      setVisible(true)
+    }
+
+    const handleConfirm = (val: Date | null) => {
+      onClose()
+      onChange?.(val)
+      if (!isControlled) {
+        setInternalValue(val)
+      }
+    }
+
+    return (
+      <>
+        <TextInput
+          {...attributes}
+          ref={ref}
+          readOnly
+          editable={false}
+          pointerEvents="none"
+          onPress={onOpen}
+          value={valueDisplay}
+          onClearValue={() => handleConfirm(null)}
+          right={<CalendarIcon fill={Colors.gray80} size={20} />}
+        />
+
         <DateTimePicker
-          title="Chọn ngày"
-          isVisible={visible}
-          onConfirm={handleConfirm}
-          onCancel={onClose}
-          date={value ? new Date(value) : undefined}
           mode={mode}
+          locale="vi"
+          display="inline"
+          themeVariant="light"
+          isVisible={visible}
           maximumDate={maximumDate}
           minimumDate={minimumDate}
-          // {...attributes}
-          modalStyleIOS={{ paddingBottom: bottom }}
-          locale="vi"
+          accentColor={Colors.primary}
+          buttonTextColorIOS={Colors.primary}
+          date={value ? new Date(value) : undefined}
+          onCancel={onClose}
+          onConfirm={handleConfirm}
         />
-      ) : null}
-    </>
-  )
-}
+      </>
+    )
+  }
+)
 
 export default DateInput

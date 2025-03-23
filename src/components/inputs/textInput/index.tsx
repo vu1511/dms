@@ -1,3 +1,5 @@
+import { CloseIcon } from '@/assets'
+import { IconButton } from '@/components/button'
 import { Colors, Spacings, Typography } from '@/theme'
 import { forwardRef, ReactNode, useCallback, useEffect, useState } from 'react'
 import {
@@ -16,6 +18,7 @@ import {
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 export type TextInputProps = Omit<RNTextInputProps, 'style'> & {
+  onClearValue?(): void
   error?: boolean
   errorMsg?: string
   label?: string
@@ -27,7 +30,7 @@ export type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   inputStyle?: StyleProp<TextStyle>
 }
 
-const LABEL_HEIGHT = 16
+const LABEL_HEIGHT = 18
 const HEIGHT = 56
 
 const TextInput = forwardRef<RNTextInput, TextInputProps>(
@@ -49,6 +52,7 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
       onFocus,
       onBlur,
       onPress,
+      onClearValue,
       onChangeText,
       ...rest
     },
@@ -147,10 +151,17 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
                 {...rest}
               />
             </View>
-            {right && <View style={styles.inputRight}>{right}</View>}
+            {!!(onClearValue || right) && (
+              <View style={styles.inputRight}>
+                {!!(value && onClearValue) && (
+                  <IconButton icon={CloseIcon} size={16} color={Colors.gray60} onPress={onClearValue} />
+                )}
+                {right}
+              </View>
+            )}
           </Animated.View>
         </Pressable>
-        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+        {error && !!errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
       </View>
     )
   }
@@ -182,10 +193,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputRight: {
-    paddingRight: 12,
-    height: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingRight: 12,
+    columnGap: 24,
+    height: '100%',
   },
   input: {
     ...Typography.body16Normal,

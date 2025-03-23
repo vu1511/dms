@@ -1,5 +1,5 @@
+import { RouteData } from '@/routes'
 import { Colors } from '@/theme'
-import { RouteData } from '@/types'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'

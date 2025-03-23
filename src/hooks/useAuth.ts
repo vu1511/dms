@@ -12,7 +12,6 @@ export const useAuth = () => {
   const setUserInfo = useUserSlice((state) => state.setUserInfo)
   const setToken = useUserSlice((state) => state.setToken)
   const onLogout = useUserSlice((state) => state.logout)
-  const getCompanies = useUserSlice((state) => state.getCompanies)
   const setLogout = useOrderSlice((state) => state.setLogOut)
   const device_id = useUserSlice((state) => state.deviceId)
 
@@ -36,7 +35,6 @@ export const useAuth = () => {
       if (user?.id) {
         setUserInfo(user)
         setToken({ refresh_token, token })
-        getCompanies()
       }
     } catch (error) {}
   }

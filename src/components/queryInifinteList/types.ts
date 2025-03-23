@@ -71,7 +71,7 @@ type UseQueryInfiniteListRes<
   isRefreshing: boolean
   getMore(): Promise<void>
   refresh(resetParams?: boolean): Promise<void>
-  mutate: KeyedMutator<PreviousData<Data>[]>
+  mutate: KeyedMutator<PreviousData<Data extends any[] ? Data : Data[]>[]>
   filter(nextParams: Partial<FilterParams>): Promise<void>
 }
 

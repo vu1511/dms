@@ -3,12 +3,11 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.white,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
     ...BaseStyles.flexRowSpaceBetween,
+    backgroundColor: Colors.white,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
     columnGap: 8,
-    alignItems: 'flex-start',
   },
   disabled: {
     opacity: 0.5,
@@ -19,7 +18,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   textActive: {
-    ...Typography.body16SemiBold,
+    ...Typography.body16Medium,
     lineHeight: 24,
   },
 })

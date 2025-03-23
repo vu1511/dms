@@ -1,6 +1,6 @@
+import { System } from '@/core'
 import { openAppSettings } from '@/utils'
 import { useEffect, useState } from 'react'
-import { Alert } from 'react-native'
 import { Permission, RESULTS, request } from 'react-native-permissions'
 
 export type useRequestPermissionProps = {
@@ -21,18 +21,22 @@ export const useRequestPermission = ({
 
   useEffect(() => {
     if (requestOnMount) {
-      requestCameraPermission()
+      requestPermission()
     }
   }, [])
 
-  const showPopupRequirePermission = () => {
-    Alert.alert(title, desc, [
-      { text: 'Quay lại', style: 'cancel' },
-      { text: 'Cài đặt', onPress: openAppSettings },
-    ])
+  const showPopupPermission = () => {
+    System.showPopup({
+      message: title,
+      description: desc,
+      cancelBtnText: 'Đóng',
+      confirmBtnText: 'Xác nhận',
+      onCancel: () => {},
+      onConfirm: openAppSettings,
+    })
   }
 
-  async function requestCameraPermission(): Promise<boolean> {
+  async function requestPermission(): Promise<boolean> {
     setIsLoading(true)
     try {
       const result = await request(permission)
@@ -40,11 +44,11 @@ export const useRequestPermission = ({
         setHasPermission(true)
       } else {
         setHasPermission(false)
-        showPopupRequirePermission()
+        showPopupPermission()
       }
       return result === RESULTS.GRANTED
     } catch (error) {
-      showPopupRequirePermission()
+      showPopupPermission()
       setHasPermission(false)
       return false
     } finally {
@@ -53,10 +57,10 @@ export const useRequestPermission = ({
   }
 
   return {
-    hasPermission,
     isLoading,
+    hasPermission,
     openAppSettings,
-    requestCameraPermission,
-    showPopupRequirePermission,
+    requestPermission,
+    showPopupPermission,
   }
 }

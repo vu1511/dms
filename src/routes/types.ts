@@ -1,7 +1,15 @@
+import { CreateAddressForm, IconProps, IdAndName, UpdateRouteReq } from '@/types'
+import { type RouteProp as RNRouteProp } from '@react-navigation/native'
+import { type NativeStackNavigationProp } from '@react-navigation/native-stack'
+
 export enum Routes {
   Home = 'Home',
   Login = 'Login',
+  RouteList = 'RouteList',
   ChangePassword = 'ChangePassword',
+  UpdateRoute = 'UpdateRoute',
+  CreateCustomer = 'CreateCustomer',
+  CreateAddress = 'CreateAddress',
   // History = 'History',
   // PrinterConfig = 'PrinterConfig',
   // CreateReturn = 'CreateReturn',
@@ -79,4 +87,38 @@ export const Tabs = {
   HistoryTab: 'HistoryTab',
   AccountTab: 'AccountTab',
   AuthTab: 'AuthTab',
+}
+
+export type StackParamsList = {
+  Home: undefined
+  Login: undefined
+  RouteList: undefined
+  ChangePassword: undefined
+  UpdateRoute: {
+    data: Required<Omit<UpdateRouteReq, 'delete_partner_ids' | 'partner_ids'>>
+    onSuccess?: () => void
+  }
+  CreateCustomer: {
+    route?: IdAndName
+    showRoute?: boolean
+    onSuccess?: () => void
+  }
+  CreateAddress: {
+    defaultValues?: CreateAddressForm
+    onSubmit?: (data: CreateAddressForm) => void | Promise<void>
+  }
+}
+
+export type StackParamsListKey = keyof StackParamsList
+
+export type Navigation = NativeStackNavigationProp<StackParamsList, StackParamsListKey>
+
+export type RouteProp<RouteName extends keyof StackParamsList> = RNRouteProp<StackParamsList, RouteName>
+
+export interface RouteData {
+  route: string
+  label: string
+  Component: () => JSX.Element | null
+  Icon: (props: IconProps) => JSX.Element
+  IconActive: (props: IconProps) => JSX.Element
 }

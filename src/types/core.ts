@@ -137,7 +137,7 @@ export type ToastProps = {
   description?: string
 }
 
-export type ToastState = OptionalExceptFor<Required<ToastProps>, 'message'>
+export type ToastOptions = OptionalExceptFor<Required<ToastProps>, 'message'>
 
 export enum ETimePeriod {
   All = 'all',
@@ -204,3 +204,21 @@ export const timePeriodOptions: Option<ETimePeriod>[] = [
     value: ETimePeriod.LastYear,
   },
 ] as const
+
+export type ImagePickerResult = {
+  uri: string
+  base64: string
+  size: number
+  width: number
+  height: number
+  mime: string
+}
+
+export type ImagePickerOptions = {
+  cropping?: boolean
+  multiple?: boolean
+  selectionLimit?: number
+  includeBase64?: boolean
+  cropperToolbarTitle?: string
+  compressImageQuality?: 0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1
+}
