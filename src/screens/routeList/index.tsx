@@ -1,38 +1,46 @@
 import { Container, CustomersLoading, Empty, ListItemSeparator } from '@/components'
 import { SwrKey } from '@/constants'
+import { usePreviousRoute } from '@/hooks'
 import { Navigation, Routes } from '@/routes'
 import { routeAPI } from '@/services'
 import { RouteRes } from '@/types'
 import { useNavigation } from '@react-navigation/native'
 import { useCallback } from 'react'
 import { FlatList, ListRenderItem, StyleSheet, View } from 'react-native'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
 import { RouteItem } from './item'
 
 const RouteList = () => {
-  const { mutate: mutateRemote } = useSWRConfig()
   const navigation = useNavigation<Navigation>()
 
-  const { data, isLoading, mutate } = useSWR(SwrKey.routes, () =>
-    routeAPI.getRoutes().then((res) => res.result?.data || [])
+  const fetcherHandler = useCallback(async () => {
+    try {
+      const res = await routeAPI.getRoutes()
+      return res.result?.data || []
+    } catch (error) {
+      return []
+    }
+  }, [])
+
+  const { data, isLoading, mutate } = useSWR(SwrKey.routes, fetcherHandler)
+
+  usePreviousRoute(() => mutate())
+
+  const updateTempRoutes = useCallback(
+    (item: RouteRes) => {
+      navigation.navigate(Routes.UpdateRoute, {
+        data: { ...item, hierarchy_id: item.id, description: '' },
+      })
+    },
+    [navigation]
   )
 
-  const updateTempRoutes = (item: RouteRes) => {
-    navigation.navigate(Routes.UpdateRoute, {
-      data: {
-        ...item,
-        hierarchy_id: item.id,
-        description: '',
-      },
-      onSuccess: () => {
-        // mutate(SwrKey.routes)
-      },
-    })
-  }
-
-  const renderItem: ListRenderItem<RouteRes> = useCallback(({ item }) => {
-    return <RouteItem key={item.id} onPress={updateTempRoutes} data={item} />
-  }, [])
+  const renderItem: ListRenderItem<RouteRes> = useCallback(
+    ({ item }) => {
+      return <RouteItem key={item.id} onPress={updateTempRoutes} data={item} />
+    },
+    [updateTempRoutes]
+  )
 
   return (
     <Container title="Tuyến (MCP)">

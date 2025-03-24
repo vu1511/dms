@@ -4,7 +4,7 @@ import { Colors } from '@/theme'
 import { ImagePickerOptions, ImagePickerResult } from '@/types'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { Image, openCamera } from 'react-native-image-crop-picker'
-import { launchImageLibrary as onLaunchImageLibrary } from 'react-native-image-picker'
+import { type ImagePickerResponse, launchImageLibrary as onLaunchImageLibrary } from 'react-native-image-picker'
 import { styles } from './style'
 
 export type ImagePickerProps = ImagePickerOptions & {
@@ -23,12 +23,12 @@ const ImagePicker = ({ setLoading, onChange, onBlur, ...options }: ImagePickerPr
       requestOnMount: false,
     })
 
-  const launchImageLibrary = async () => {
+  const launchImageLibrary = async (): Promise<ImagePickerResponse | null> => {
     if (!hasPhotoLibraryPermission) {
       const isGranted = await requestPhotoLibraryPermission()
 
       if (!isGranted) {
-        return
+        return null
       }
     }
 
@@ -40,12 +40,12 @@ const ImagePicker = ({ setLoading, onChange, onBlur, ...options }: ImagePickerPr
     })
   }
 
-  const launchCamera = async (): Promise<Image | undefined> => {
+  const launchCamera = async (): Promise<Image | null> => {
     if (!hasCameraPermisson) {
       const isGranted = await requestCameraPermission()
 
       if (!isGranted) {
-        return
+        return null
       }
     }
 

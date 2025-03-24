@@ -25,9 +25,15 @@ export const createCustomerSchema: Yup.ObjectSchema<CreateAccountForm> = Yup.obj
     district_name: Yup.string().required('Vui lòng nhập trường này'),
     ward_name: Yup.string().required('Vui lòng nhập trường này'),
   }),
-  // longitude: Yup.string().required('Vui lòng nhập trường này'),
-  // latitude: Yup.string().required('Vui lòng nhập trường này'),
   birth_day: Yup.date().nullable(),
-  hcategory_id: idAndNameSchema.nullable(),
-  route_sale_id: idAndNameSchema.nullable(),
+  hcategory_id: idAndNameSchema.nullable().optional(),
+  route_sale_id: idAndNameSchema.nullable().optional(),
 })
+
+export interface CreateAccountAddress {
+  ward_id: number
+  district_id: number
+  state_id: number
+  country_id: number
+  street: string
+}

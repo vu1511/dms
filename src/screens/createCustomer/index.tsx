@@ -39,10 +39,8 @@ const CreateCustomer = () => {
 
   const {
     control,
-    reset,
     handleSubmit,
     setFocus,
-    getValues,
     formState: { isDirty, isSubmitSuccessful },
   } = useForm<CreateAccountForm>({
     resolver: yupResolver(createCustomerSchema),
@@ -51,7 +49,7 @@ const CreateCustomer = () => {
       route_sale_id: defaultRoute,
     },
   })
-  console.log(defaultRoute)
+
   usePreventGoBack({
     hasUnsavedChanges: isDirty && !isSubmitSuccessful,
   })
@@ -65,7 +63,6 @@ const CreateCustomer = () => {
           fetcher: userAPI.createAccount(params),
           onSuccess: () => {
             System.closeBackdrop()
-            navigation.goBack()
             onSuccess?.()
           },
           onError: () => System.closeBackdrop(),
@@ -85,7 +82,7 @@ const CreateCustomer = () => {
       createAccount(
         removeEmptyValueFromObject({
           ...params,
-          image: params.image?.base64,
+          image: params.image?.base64 as string,
           hcategory_id: params.hcategory_id?.id,
           longitude: (location?.longitude ?? 0).toString(),
           latitude: (location?.latitude ?? 0).toString(),
@@ -109,36 +106,44 @@ const CreateCustomer = () => {
         <Controller
           control={control}
           name="image"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AvatarPicker onBlur={onBlur} onChange={onChange} uri={value?.uri} />
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
+            <AvatarPicker
+              onBlur={onBlur}
+              onChange={onChange}
+              uri={value?.uri}
+              errorMsg={error ? 'Vui lòng chọn ảnh đại diện' : undefined}
+            />
           )}
         />
         <TextField
           required
-          keyboardType="number-pad"
-          onSubmitEditing={() => setFocus('name')}
-          label="Số điện thoại"
-          control={control}
           name="phone"
-        />
-        <TextField
-          required
-          onSubmitEditing={() => setFocus('customer_name')}
-          label="Tên cửa hàng"
           control={control}
-          name="name"
+          label="Số điện thoại"
+          keyboardType="number-pad"
+          returnKeyType="next"
+          onSubmitEditing={() => setFocus('name')}
         />
         <TextField
           required
-          onSubmitEditing={() => setFocus('password')}
-          label="Tên khách hàng"
+          name="name"
+          control={control}
+          label="Tên cửa hàng"
+          returnKeyType="next"
+          onSubmitEditing={() => setFocus('customer_name')}
+        />
+        <TextField
+          required
           control={control}
           name="customer_name"
+          label="Tên khách hàng"
+          returnKeyType="next"
+          onSubmitEditing={() => setFocus('password')}
         />
         <DateField mode="date" maximumDate={new Date()} label="Chọn ngày sinh" control={control} name="birth_day" />
         <Controller
-          control={control}
           name="address"
+          control={control}
           render={({ field: { onChange, value }, fieldState: { error } }) => {
             const navigateToAddress = () => {
               navigation.navigate(Routes.CreateAddress, {
@@ -155,11 +160,11 @@ const CreateCustomer = () => {
                 required
                 readOnly
                 editable={false}
-                pointerEvents="none"
                 error={!!error}
+                pointerEvents="none"
+                label="Địa chỉ"
                 errorMsg="Vui lòng nhập địa chỉ"
                 value={getAddressFormLabel(value)}
-                label="Địa chỉ"
                 onPress={navigateToAddress}
                 right={<ArrowRightIcon size={20} fill={Colors.gray80} />}
               />
@@ -167,19 +172,23 @@ const CreateCustomer = () => {
           }}
         />
         {showRoute ? <RouteField control={control} /> : null}
+        <CustomerGroupField control={control} />
         <PasswordField
           control={control}
           name="password"
           label="Mật khẩu"
+          textContentType="oneTimeCode"
+          returnKeyType="next"
           onSubmitEditing={() => setFocus('confirm_password')}
         />
         <PasswordField
-          onSubmitEditing={onSubmitHandler}
-          label="Xác nhận mật khẩu"
           control={control}
+          textContentType="oneTimeCode"
+          label="Xác nhận mật khẩu"
           name="confirm_password"
+          returnKeyType="send"
+          onSubmitEditing={onSubmitHandler}
         />
-        <CustomerGroupField control={control} />
       </KeyboardAwareScrollView>
 
       <KeyboardStickyView offset={{ opened: Math.max(bottom - 16, 0) }}>

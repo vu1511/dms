@@ -20,7 +20,7 @@ import { BaseStyles, Colors } from '@/theme'
 import { PartnerRes } from '@/types'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { produce, WritableDraft } from 'immer'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 import { FlatList, ListRenderItem, NativeScrollEvent, NativeSyntheticEvent, Text, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -35,28 +35,22 @@ const MIN_OFFSET_Y = 16
 const UpdateRoute = () => {
   const navigation = useNavigation<Navigation>()
   const { params } = useRoute<RouteProp<Routes.UpdateRoute>>()
-  const { data, onSuccess } = params
+  const { data } = params
   const { bottom } = useSafeAreaInsets()
 
-  const isUpdated = useRef(false)
   const { onClose, onOpen, ref } = useVisibleRef()
 
   const animatedValue = useSharedValue(0)
 
   const headerAnimatedStyle = useAnimatedStyle(() => ({
-    ...BaseStyles.shadowMd,
-    elevation: animatedValue.value === 1 ? 1 : 0,
+    elevation: animatedValue.value === 1 ? 6 : 0,
     shadowColor: animatedValue.value === 1 ? Colors.gray50 : Colors.transparent,
+    borderBottomWidth: animatedValue.value === 1 ? 1 : 0,
   }))
 
-  const { trigger } = useAsyncV2({
-    fetcher: routeAPI.updateRoute,
+  const { trigger } = useAsyncV2(routeAPI.updateRoute, {
     showBackdrop: false,
-    successMsg: 'Cập nhật tuyến thành công',
     errorMsg: 'Cập nhật tuyến không thành công',
-    onSuccess: () => {
-      isUpdated.current = true
-    },
   })
 
   const {
@@ -70,63 +64,58 @@ const UpdateRoute = () => {
       .catch(() => [])
   )
 
-  useEffect(() => {
-    return () => {
-      if (isUpdated.current) {
-        onSuccess?.()
-      }
-    }
-  }, [])
+  const deleteCustomer = useCallback(
+    (customerId: number) => {
+      if (!customers?.length) return
 
-  const deleteCustomer = (customerId: number) => {
-    if (!customers?.length) return
+      System.showPopup({
+        confirmBtnText: 'Xoá khách hàng',
+        message: 'Bạn có chắc muốn xoá khách hàng này?',
+        confirmBtnProps: { style: { backgroundColor: Colors.danger } },
+        onCancel: () => {},
+        onConfirm: () => {
+          let customer: PartnerRes | undefined
+          let customerIndex = -1
 
-    System.showPopup({
-      confirmBtnText: 'Xoá khách hàng',
-      message: 'Bạn có chắc muốn xoá khách hàng này?',
-      confirmBtnProps: { style: { backgroundColor: Colors.danger } },
-      onCancel: () => {},
-      onConfirm: () => {
-        let customer: PartnerRes | undefined
-        let customerIndex = -1
-
-        mutate(
-          (customers) =>
-            produce(customers, (draft) => {
-              if (customers?.length && draft?.length) {
-                const index = customers.findIndex((item) => item.id === customerId)
-                if (index !== -1) {
-                  customerIndex = index
-                  customer = customers[index]
-                  draft.splice(index, 1)
-                }
-              }
-            }),
-          false
-        )
-
-        const partner_ids = customers.filter((item) => item.id !== customerId).map((item) => item.id)
-
-        trigger({
-          partner_ids,
-          delete_partner_ids: [customerId],
-          hierarchy_id: data.hierarchy_id,
-        }).then(({ isSuccess }) => {
-          if (!isSuccess && customerIndex > -1 && customer) {
-            mutate(
-              (customers) =>
-                produce(customers, (draft) => {
-                  if (draft?.length) {
-                    draft.splice(customerIndex, 0, customer as WritableDraft<PartnerRes>)
+          mutate(
+            (customers) =>
+              produce(customers, (draft) => {
+                if (customers?.length && draft?.length) {
+                  const index = customers.findIndex((item) => item.id === customerId)
+                  if (index !== -1) {
+                    customerIndex = index
+                    customer = customers[index]
+                    draft.splice(index, 1)
                   }
-                }),
-              false
-            )
-          }
-        })
-      },
-    })
-  }
+                }
+              }),
+            false
+          )
+
+          const partner_ids = customers.filter((item) => item.id !== customerId).map((item) => item.id)
+
+          trigger({
+            partner_ids,
+            delete_partner_ids: [customerId],
+            hierarchy_id: data.hierarchy_id,
+          }).then(({ isSuccess }) => {
+            if (!isSuccess && customerIndex > -1 && customer) {
+              mutate(
+                (customers) =>
+                  produce(customers, (draft) => {
+                    if (draft?.length) {
+                      draft.splice(customerIndex, 0, customer as WritableDraft<PartnerRes>)
+                    }
+                  }),
+                false
+              )
+            }
+          })
+        },
+      })
+    },
+    [customers, data.hierarchy_id, mutate, trigger]
+  )
 
   const addCustomers = async (partners: PartnerRes[]) => {
     const nextCustomers = [...(customers || []), ...partners]
@@ -199,7 +188,7 @@ const UpdateRoute = () => {
         renderItem={renderItem}
         ItemSeparatorComponent={ListItemSeparator}
         ListHeaderComponent={
-          <Animated.View style={[styles.header, headerAnimatedStyle]}>
+          <Animated.View style={[styles.header, headerAnimatedStyle, { shadowOffset: { width: 0, height: 3 } }]}>
             <View style={[BaseStyles.flexRowItemsCenter, BaseStyles.cGap4]}>
               <UsersFillIcon size={16} fill={Colors.primary} />
               <Text style={styles.headerTitle}>Khách hàng ({customers?.length ?? 0})</Text>
@@ -214,7 +203,10 @@ const UpdateRoute = () => {
                         requestAnimationFrame(() => {
                           navigation.navigate(Routes.CreateCustomer, {
                             showRoute: false,
-                            onSuccess: () => {},
+                            onSuccess: () => {
+                              mutate()
+                              navigation.pop()
+                            },
                             route: { id: data.hierarchy_id, name: data.name },
                           })
                         })

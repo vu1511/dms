@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { AppState, AppStateStatus } from 'react-native'
 
-export const useFocusEffect = (activeCallback: () => void, inactiveCallback: () => void) => {
+// this hook is use to invoke a function when the app changes between active|inactive state
+export const useFocusEffect = (activeCallback: () => void, inactiveCallback?: () => void) => {
   const appState = useRef(AppState.currentState)
 
   const _handleAppStateChange = useCallback(
@@ -10,7 +11,7 @@ export const useFocusEffect = (activeCallback: () => void, inactiveCallback: () 
         activeCallback()
       }
       if (appState.current === 'active' && nextAppState.match(/inactive|background/)) {
-        inactiveCallback()
+        inactiveCallback?.()
       }
       appState.current = nextAppState
     },

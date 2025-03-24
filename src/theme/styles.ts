@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { Colors } from './color'
+import { Typography } from './typography'
 
 export const BaseStyles = StyleSheet.create({
   py6: {
@@ -190,5 +191,10 @@ export const BaseStyles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 12,
+  },
+
+  inputErrorMessage: {
+    ...Typography.body14Normal,
+    color: Colors.danger,
   },
 })

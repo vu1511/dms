@@ -19,6 +19,10 @@ export const usePreventGoBack = (props?: UsePreventGoBackProps) => {
     onConfirm,
   } = props || {}
 
+  useEffect(() => {
+    navigation.setOptions({ gestureEnabled: !hasUnsavedChanges })
+  }, [hasUnsavedChanges, navigation])
+
   useEffect(
     () =>
       navigation.addListener('beforeRemove', (e) => {

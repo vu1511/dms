@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import { AppState, AppStateStatus } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { Host } from 'react-native-portalize'
 import 'react-native-reanimated'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -12,11 +13,6 @@ import { SWRConfig } from 'swr'
 import { Providers } from './providers'
 import { AppNavigator } from './routes'
 import { BaseStyles, Colors } from './theme'
-import { KeyboardProvider } from 'react-native-keyboard-controller'
-
-if (__DEV__) {
-  require('../ReactotronConfig')
-}
 
 SplashScreen.preventAutoHideAsync()
 

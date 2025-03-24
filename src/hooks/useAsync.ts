@@ -1,5 +1,4 @@
 import { System } from '@/core'
-import { useUserSlice } from '@/store'
 import { AsyncHandler, HTTPConfig, HTTPResponse, HTTPResultResponse } from '@/types'
 import { isUnknownDataTruethy } from '@/utils'
 import { useEffect, useState } from 'react'
@@ -11,7 +10,6 @@ interface Res {
 }
 
 export const useAsync = (externalConfig?: HTTPConfig): Res => {
-  const token = useUserSlice((state) => state.token)
   const [isLoading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
@@ -22,22 +20,20 @@ export const useAsync = (externalConfig?: HTTPConfig): Res => {
 
   const asyncHandler = async <T>(params: AsyncHandler<T>) => {
     const { fetcher, onSuccess, onError, config } = params
-    const method = config?.method || 'POST'
     const {
       errorMsg,
       successMsg = 'Thành công',
-      showBackdrop = method === 'POST',
-      showErrorMsg = method === 'POST',
-      showSuccessMsg = method === 'POST',
-      requiredToken = true,
+      showBackdrop = true,
+      showErrorMsg = true,
+      showSuccessMsg = true,
       shouldSetLoadingState = true,
-      shouldNavigateToLoginIfNoTokenFound,
       ...toastProps
     } = { ...externalConfig, ...config }
 
     try {
       showBackdrop && System.showBackdrop()
       shouldSetLoadingState && setLoading(true)
+
       const res = await fetcher
 
       const message: string =
@@ -60,13 +56,8 @@ export const useAsync = (externalConfig?: HTTPConfig): Res => {
             message: successMsg || 'Thành công',
             ...toastProps,
           })
-
-        shouldSetLoadingState && setLoading(false)
-        showBackdrop && System.closeBackdrop()
       } else {
         await onError?.(res)
-        shouldSetLoadingState && setLoading(false)
-        showBackdrop && System.closeBackdrop()
 
         if (message && message?.toLowerCase()?.includes('odoo')) {
           Alert.alert('Có lỗi xảy ra', message, [{ text: 'Quay lại' }])
@@ -86,9 +77,11 @@ export const useAsync = (externalConfig?: HTTPConfig): Res => {
           message: errorMsg || 'Có lỗi xảy ra, vui lòng thử lại sau',
           ...toastProps,
         })
+
+      onError?.(undefined)
+    } finally {
       showBackdrop && System.closeBackdrop()
       shouldSetLoadingState && setLoading(false)
-      onError?.(undefined)
     }
   }
 

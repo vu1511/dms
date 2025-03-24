@@ -96,7 +96,6 @@ export type StackParamsList = {
   ChangePassword: undefined
   UpdateRoute: {
     data: Required<Omit<UpdateRouteReq, 'delete_partner_ids' | 'partner_ids'>>
-    onSuccess?: () => void
   }
   CreateCustomer: {
     route?: IdAndName

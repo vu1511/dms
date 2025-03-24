@@ -36,7 +36,7 @@ export default function Popover({
   children,
   offset = 0,
   placement = 'auto',
-  arrowSize = 8,
+  arrowSize = 0,
   edgeOffset = 12,
   backgroundStyle,
   backdropClosable = true,
@@ -128,6 +128,15 @@ export default function Popover({
   const handleOnLayout = useCallback(
     ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
       triggerRef.current?.measure?.((x, y, width, height, pageX, pageY) => {
+        if (
+          typeof width !== 'number' ||
+          typeof height !== 'number' ||
+          typeof pageX !== 'number' ||
+          typeof pageY !== 'number'
+        ) {
+          return
+        }
+
         const nextMeasurement: Measurement = {
           measured: true,
           popover: layout,

@@ -1,16 +1,16 @@
-import { AttachmentUrlRes, ImagePickerResult } from '@/types'
+import { AttachmentUrlRes, IdAndName, IdAndUrl, ImagePickerResult } from '@/types'
 import * as Yup from 'yup'
 import { Regex } from './regex'
 
 export const idAndNameSchema = Yup.object().shape({
   id: Yup.number(),
   name: Yup.string(),
-})
+}) as Yup.ObjectSchema<IdAndName>
 
 export const idAndUrlSchema = Yup.object().shape({
   id: Yup.number(),
   url: Yup.string(),
-})
+}) as Yup.ObjectSchema<IdAndUrl>
 
 export const emailSchema = Yup.string()
   .required('Vui lòng nhập email')
@@ -34,10 +34,10 @@ export const loginPasswordSchema = Yup.string()
 export const ratingStarSchema = Yup.string().oneOf(['1', '2', '3', '4', '5']).required()
 
 export const imagePickerSchema: Yup.ObjectSchema<ImagePickerResult> = Yup.object().shape({
-  uri: Yup.string(),
+  uri: Yup.string().required(),
   base64: Yup.string(),
-  size: Yup.number(),
-  height: Yup.number(),
-  width: Yup.number(),
-  mime: Yup.string(),
+  size: Yup.number().required(),
+  height: Yup.number().required(),
+  width: Yup.number().required(),
+  mime: Yup.string().required(),
 })

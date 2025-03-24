@@ -1,6 +1,6 @@
 import { CloseIcon } from '@/assets'
 import { IconButton } from '@/components/button'
-import { Colors, Spacings, Typography } from '@/theme'
+import { BaseStyles, Colors, Spacings, Typography } from '@/theme'
 import { forwardRef, ReactNode, useCallback, useEffect, useState } from 'react'
 import {
   NativeSyntheticEvent,
@@ -71,12 +71,12 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
 
     useEffect(() => {
       border.value = error ? Colors.danger : isFocused ? Colors.active : Colors.inputBg
-    }, [error, isFocused])
+    }, [border, error, isFocused])
 
     useEffect(() => {
       labelPosition.value = isLabelOnTop ? 8 : (HEIGHT - LABEL_HEIGHT) / 2
       labelFontSize.value = isLabelOnTop ? 12 : 16
-    }, [isLabelOnTop])
+    }, [isLabelOnTop, labelFontSize, labelPosition])
 
     const animatedLabelPositionStyle = useAnimatedStyle(() => {
       return {
@@ -109,7 +109,7 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
         onBlur?.(e)
         setIsFocused(false)
       },
-      [setIsFocused, onFocus]
+      [onBlur]
     )
 
     const handleChangeText = useCallback(
@@ -119,11 +119,11 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
           setText(text)
         }
       },
-      [isControlled]
+      [isControlled, onChangeText]
     )
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, style]}>
         <Pressable disabled={!onPress} onPress={onPress}>
           <Animated.View style={[styles.content, animatedBorderStyle, disabled && styles.disabled]}>
             {left && <View style={styles.inputLeft}>{left}</View>}
@@ -161,7 +161,7 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
             )}
           </Animated.View>
         </Pressable>
-        {error && !!errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+        {error && !!errorMsg && <Text style={BaseStyles.inputErrorMessage}>{errorMsg}</Text>}
       </View>
     )
   }
@@ -221,10 +221,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 12,
     right: 12,
-  },
-  errorMsg: {
-    ...Typography.body14Normal,
-    color: Colors.danger,
   },
 })
 

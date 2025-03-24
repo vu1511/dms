@@ -310,9 +310,9 @@ export interface RefreshTokenReq {
 export interface CreateAccountReq {
   name: string
   phone: string
-  password: string
+  password?: string
+  confirm_password?: string
   address: CreateAccountAddress
-  confirm_password: string
   longitude: string
   latitude: string
   birth_day: string
@@ -324,12 +324,12 @@ export interface CreateAccountReq {
 
 export type CreateAccountForm = Omit<
   CreateAccountReq,
-  'address' | 'hcategory_id' | 'birth_day' | 'route_sale_id' | 'image'
+  'address' | 'hcategory_id' | 'birth_day' | 'route_sale_id' | 'image' | 'longitude' | 'latitude'
 > & {
-  birth_day?: Date
+  birth_day?: Date | null
   address: CreateAddressForm
-  hcategory_id?: IdAndName
-  route_sale_id?: IdAndName
+  hcategory_id?: IdAndName | null
+  route_sale_id?: IdAndName | null
   image: ImagePickerResult
 }
 
