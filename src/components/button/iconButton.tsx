@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import { isAndroid, isIOS } from '@/constants'
 import { Colors } from '@/theme'
 import { IconProps } from '@/types'

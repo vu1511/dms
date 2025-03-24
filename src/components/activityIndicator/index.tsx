@@ -15,7 +15,7 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = memo(
     const rotation = useSharedValue(0)
 
     const animatedStyles = useAnimatedStyle(() => ({
-      transform: [{ rotate: rotation.value + 'deg' }],
+      transform: [{ rotate: `${rotation.value}deg` }],
     }))
 
     useEffect(() => {

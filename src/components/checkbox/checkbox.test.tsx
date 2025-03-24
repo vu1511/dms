@@ -67,7 +67,7 @@ describe('checkbox', () => {
     })
 
     it('should toggle controlled checkbox with value as true', async () => {
-      render(<Render value={true} />)
+      render(<Render value />)
 
       expectCheckboxVisible()
 
@@ -134,7 +134,7 @@ describe('checkbox', () => {
     })
 
     it('should toggle checkbox state with defaultValue as true', async () => {
-      render(<Render defaultValue={true} />)
+      render(<Render defaultValue />)
 
       expectCheckboxVisible()
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Colors } from '@/theme'
 import debounce from 'lodash/debounce'
 import { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
@@ -130,7 +131,7 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
           externalOnChange?.(value)
         }
       },
-      [delay, externalOnChange]
+      [debounceFn, delay, externalOnChange, handleSetValue]
     )
 
     const handleFocus = useCallback(
@@ -190,7 +191,7 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
               height={clearIconSize}
               width={clearIconSize}
             >
-              <Path d="M405 136.798L375.202 107 256 226.202 136.798 107 107 136.798 226.202 256 107 375.202 136.798 405 256 285.798 375.202 405 405 375.202 285.798 256z"></Path>
+              <Path d="M405 136.798L375.202 107 256 226.202 136.798 107 107 136.798 226.202 256 107 375.202 136.798 405 256 285.798 375.202 405 405 375.202 285.798 256z" />
             </Svg>
           </TouchableOpacity>
         ) : (

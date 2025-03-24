@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import { Colors, Spacings, Typography } from '@/theme'
 import { forwardRef, memo, useMemo } from 'react'
 import {

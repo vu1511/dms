@@ -2,6 +2,7 @@
   // Configuration for JavaScript files
   "extends": ["airbnb-base", "plugin:prettier/recommended"],
   "rules": {
+    "no-empty": ["error", { "allowEmptyCatch": true }],
     "prettier/prettier": [
       "error",
       {
@@ -63,9 +64,9 @@
         "@typescript-eslint/comma-dangle": "off",
         "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
         "import/prefer-default-export": "off",
-        "@typescript-eslint/no-unused-vars": "warn",
-        "unused-imports/no-unused-imports": "warn",
-        "unused-imports/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+        "@typescript-eslint/no-unused-vars": ["warn", { "caughtErrors": "none" }],
+        "unused-imports/no-unused-imports": ["warn", { "caughtErrors": "none" }],
+        "unused-imports/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "caughtErrors": "none" }],
         "react/prop-types": "off",
         "no-else-return": "off",
         "object-shorthand": "off",
@@ -93,7 +94,8 @@
         "@typescript-eslint/no-non-null-assertion": "warn",
         "no-param-reassign": "off",
         "@typescript-eslint/no-throw-literal": "off",
-        "@typescript-eslint/no-unused-expressions": "off"
+        "@typescript-eslint/no-unused-expressions": "off",
+        "prefer-template": "off"
       }
     },
     {

@@ -10,6 +10,7 @@ export enum Routes {
   UpdateRoute = 'UpdateRoute',
   CreateCustomer = 'CreateCustomer',
   CreateAddress = 'CreateAddress',
+  AccountInfo = 'AccountInfo',
   // History = 'History',
   // PrinterConfig = 'PrinterConfig',
   // CreateReturn = 'CreateReturn',
@@ -93,6 +94,7 @@ export type StackParamsList = {
   Home: undefined
   Login: undefined
   RouteList: undefined
+  AccountInfo: undefined
   ChangePassword: undefined
   UpdateRoute: {
     data: Required<Omit<UpdateRouteReq, 'delete_partner_ids' | 'partner_ids'>>

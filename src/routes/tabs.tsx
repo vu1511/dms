@@ -50,7 +50,7 @@ const bottomTabs: RouteData[] = [
     route: RouteTabs.OrderTab,
     label: 'Đặt hàng',
     Component: () => null,
-    Icon: BagIcon as any,
+    Icon: BagIcon,
     IconActive: BagFillIcon,
   },
   {

@@ -64,7 +64,7 @@ describe('Switch', () => {
     })
 
     it('toggle controlled switch with value = true', async () => {
-      render(<Render value={true} />)
+      render(<Render value />)
 
       expectSwitchVisible()
 
@@ -132,7 +132,7 @@ describe('Switch', () => {
     })
 
     it('toggle uncontrolled switch with defaultValue is true', async () => {
-      render(<Render defaultValue={true} />)
+      render(<Render defaultValue />)
 
       expectSwitchVisible()
 

@@ -20,16 +20,14 @@ export const useSelectItems = <T = any>({
       const index = prevItems.findIndex((i) => i[idKey] === item[idKey])
       if (index !== -1) {
         return [...prevItems.slice(0, index), ...prevItems.slice(index + 1)]
-      } else {
-        if (limit) {
-          if (prevItems.length < limit) {
-            return [...prevItems, item]
-          } else {
-            onLimitReached?.()
-          }
-        } else {
+      } else if (limit) {
+        if (prevItems.length < limit) {
           return [...prevItems, item]
+        } else {
+          onLimitReached?.()
         }
+      } else {
+        return [...prevItems, item]
       }
 
       return prevItems

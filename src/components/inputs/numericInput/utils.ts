@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { AddSignPrefixAndSuffixOptions, FormatNumberOptions } from './types'
 
 export const removePrefixAndSuffix = (text: string, { prefix, suffix }: { prefix?: string; suffix?: string }) => {
@@ -19,11 +20,10 @@ export const removePrefixAndSuffix = (text: string, { prefix, suffix }: { prefix
 export const addSignPrefixAndSuffix = (value: string, options: AddSignPrefixAndSuffixOptions) => {
   const { prefix, sign, suffix, signPosition } = options
 
-  switch (signPosition) {
-    case 'beforePrefix':
-      return `${sign}${prefix}${value}${suffix}`
-    case 'afterPrefix':
-      return `${prefix}${sign}${value}${suffix}`
+  if (signPosition === 'beforePrefix') {
+    return `${sign}${prefix}${value}${suffix}`
+  } else {
+    return `${prefix}${sign}${value}${suffix}`
   }
 }
 

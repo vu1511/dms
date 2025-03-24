@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   config.baseURL = useUserSlice?.getState()?.domain
 
   if (config?.headers && token) {
-    config.headers.Authorization = 'Bearer ' + token
+    config.headers.Authorization = `Bearer ${token}`
   }
 
   return config

@@ -1,6 +1,4 @@
-import { ArrowRightIcon } from '@/assets'
-// import { AccountTypeNames, Colors, Screen, Typography } from '@/common'
-import { NoteIcon, SecureIcon, ShareIcon, UserIcon } from '@/assets'
+import { ArrowRightIcon, SecureIcon } from '@/assets'
 import { Avatar, Button, Container } from '@/components'
 import { SwrKey } from '@/constants'
 import { System } from '@/core'
@@ -44,12 +42,12 @@ const Account = () => {
         id: 1,
         title: 'Cá nhân',
         children: [
-          {
-            name: 'Tài khoản',
-            Icon: UserIcon,
-            route: Routes.AccountInfo,
-            hidden: false,
-          },
+          // {
+          //   name: 'Tài khoản',
+          //   Icon: UserIcon,
+          //   route: Routes.AccountInfo,
+          //   hidden: false,
+          // },
           // {
           //   name: 'Yêu thích',
           //   Icon: HeartIcon,
@@ -83,20 +81,20 @@ const Account = () => {
           //   route: Routes.SelectPrinter,
           //   hidden: !user?.account_type || user?.account_type === 'th',
           // },
-          {
-            id: 9,
-            name: 'Truy cập trang admin',
-            Icon: ShareIcon,
-            route: Routes.AdminSite,
-            hidden: !user?.account_type || user?.account_type === 'th',
-          },
-          {
-            id: 8,
-            name: 'Liên hệ chúng tôi',
-            Icon: NoteIcon,
-            route: Routes.ContactUs,
-            hidden: false,
-          },
+          // {
+          //   id: 9,
+          //   name: 'Truy cập trang admin',
+          //   Icon: ShareIcon,
+          //   route: Routes.AdminSite,
+          //   hidden: !user?.account_type || user?.account_type === 'th',
+          // },
+          // {
+          //   id: 8,
+          //   name: 'Liên hệ chúng tôi',
+          //   Icon: NoteIcon,
+          //   route: Routes.ContactUs,
+          //   hidden: false,
+          // },
         ],
       },
     ]

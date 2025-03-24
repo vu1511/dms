@@ -1,12 +1,13 @@
 import { useUserSlice } from '@/store'
 import { CreateAddressForm } from '@/types'
 
-export const sleep = (delay: number): Promise<void> =>
-  new Promise((resolve) =>
+export const delay = (delay: number): Promise<void> => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve()
     }, delay)
-  )
+  })
+}
 
 export function checkAnyKeyInObjectHasValue(object: Object) {
   return Object.values(object).some((value) => value !== '' && value !== null && value !== undefined)
@@ -23,7 +24,7 @@ export function removeEmptyValueFromObject<T extends Object>(obj: T): T {
 export const getShortName = (text: string) => {
   let shortName = ''
   if (text && text !== '') {
-    let arr = text.split(' ')
+    const arr = text.split(' ')
     if (arr && arr.length > 0) {
       if (arr.length <= 1) {
         shortName = arr[0].substring(0, 1)
@@ -40,40 +41,40 @@ export const getShortName = (text: string) => {
 }
 
 export const getRandomColor = (text: string) => {
-  let arr_color = ['#2979FF', '#FC625D', '#22C993', '#2979FF', '#FDBD41']
-  let shortName = getShortName(text)
+  const colors = ['#2979FF', '#FC625D', '#22C993', '#2979FF', '#FDBD41']
+  const shortName = getShortName(text)
   let bgColor = '#0279C7'
 
-  if (!arr_color || arr_color.length === 0) {
+  if (!colors || colors.length === 0) {
     return bgColor
   }
 
   const charCodeShortName = shortName !== '' ? shortName.substring(0, 1).charCodeAt(0) : 0
   switch (true) {
-    case charCodeShortName >= 65 && charCodeShortName < 70 && arr_color[0] !== undefined:
-      bgColor = arr_color[0]
+    case charCodeShortName >= 65 && charCodeShortName < 70 && colors[0] !== undefined:
+      bgColor = colors[0]
       break
-    case charCodeShortName >= 70 && charCodeShortName < 75 && arr_color[1] !== undefined:
-      bgColor = arr_color[1]
+    case charCodeShortName >= 70 && charCodeShortName < 75 && colors[1] !== undefined:
+      bgColor = colors[1]
       break
-    case charCodeShortName >= 75 && charCodeShortName < 80 && arr_color[2] !== undefined:
-      bgColor = arr_color[2]
+    case charCodeShortName >= 75 && charCodeShortName < 80 && colors[2] !== undefined:
+      bgColor = colors[2]
       break
-    case charCodeShortName >= 80 && charCodeShortName < 85 && arr_color[3] !== undefined:
-      bgColor = arr_color[3]
+    case charCodeShortName >= 80 && charCodeShortName < 85 && colors[3] !== undefined:
+      bgColor = colors[3]
       break
-    case charCodeShortName >= 85 && charCodeShortName <= 90 && arr_color[4] !== undefined:
-      bgColor = arr_color[4]
+    case charCodeShortName >= 85 && charCodeShortName <= 90 && colors[4] !== undefined:
+      bgColor = colors[4]
       break
     default:
-      bgColor = arr_color[0] !== undefined ? arr_color[0] : bgColor
+      bgColor = colors[0] !== undefined ? colors[0] : bgColor
       break
   }
   return bgColor
 }
 
 export const isNumber = (value: unknown): value is number => {
-  return typeof value === 'number' && !isNaN(Number(value))
+  return typeof value === 'number' && !Number.isNaN(Number(value))
 }
 
 export const isUnknownDataTruethy = (data: any): boolean => {

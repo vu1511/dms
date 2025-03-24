@@ -1,3 +1,4 @@
+/* eslint-disable no-compare-neg-zero */
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { NativeSyntheticEvent, TextInput, TextInputFocusEventData, TextInputProps } from 'react-native'
 import { NumericInputProps } from './types'
@@ -88,7 +89,7 @@ const NumericInput = forwardRef<TextInput, NumericInputProps>(
         }
 
         if (precision > 0) {
-          const lastChar = cleanedText?.[cleanedText?.length - 1]
+          const lastChar = cleanedText?.[(cleanedText?.length ?? 0) - 1]
 
           if (lastChar === ',' || lastChar === '.') {
             cleanedText = cleanedText.slice(0, -1) + separator
@@ -160,6 +161,7 @@ const NumericInput = forwardRef<TextInput, NumericInputProps>(
         onChangeValue,
         onMaxValueReached,
         onMinValueReached,
+        setCurrentDecimals,
       ]
     )
 
@@ -169,7 +171,7 @@ const NumericInput = forwardRef<TextInput, NumericInputProps>(
         setStartingWithSign(undefined)
         onBlur?.(e)
       },
-      [onBlur]
+      [onBlur, setCurrentDecimals]
     )
 
     const textInputValue = useMemo(() => {

@@ -21,8 +21,7 @@ const Typography = forwardRef<Text, TypographyProps>(
         case '600':
         case 600:
           return 'Inter-SemiBold'
-        case '700':
-        case 700:
+        default:
           return 'Inter-Bold'
       }
     }, [fontWeight])

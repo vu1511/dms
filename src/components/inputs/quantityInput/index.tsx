@@ -1,9 +1,7 @@
 import { BaseStyles, Typography } from '@/theme'
 import { isNumber } from '@/utils'
-import { BottomSheetTextInput } from '@gorhom/bottom-sheet'
-import { useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import Svg, { Path, SvgXml } from 'react-native-svg'
+import Svg, { Path } from 'react-native-svg'
 import { NumericInput, NumericInputProps } from '../numericInput'
 
 export type QuantityInputProps = NumericInputProps & {
@@ -19,10 +17,7 @@ const QuantityInput = ({ onChangeValue, value, minValue, maxValue, step = 1, ...
   const disabledIncreaseBtn = isNumber(maxValue) && isNumber(value) && value >= maxValue
 
   const increaseValue = () => {
-    // const nextValue = (value ?? 0) + step
-
     const nextValue = Math.round((value ?? 0 + step) * 100) / 100
-    console.log({ nextValue })
 
     if (isNumber(maxValue)) {
       if (nextValue <= maxValue) {

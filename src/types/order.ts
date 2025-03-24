@@ -210,14 +210,6 @@ export interface GetStatusOrderRes {
   }
 }
 
-export interface Payment {
-  acquirer_id: number
-  name: string
-  provider: string
-  state: string
-  image_url: string
-}
-
 export type OrderBookingProduct = {
   product_id: number
   name: string
