@@ -2,7 +2,7 @@ import { Colors } from '@/theme'
 import { IconProps } from '@/types'
 import Svg, { Path } from 'react-native-svg'
 
-export const ThreeDotsIcon = ({ size = 24, fill = Colors.gray50 }: IconProps) => {
+export const ThreeDotsHorizontalIcon = ({ size = 24, fill = Colors.gray50 }: IconProps) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 28 28" fill="none">
       <Path

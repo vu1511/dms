@@ -18,9 +18,17 @@ export type UseAsyncOptions<Response = any> = {
 
 export const useAsyncV2 = <Params = any, Response = any>(
   fetcher: Fetcher<Params, Response>,
-  options: UseAsyncOptions<Response>
+  options?: UseAsyncOptions<Response>
 ) => {
-  const { onError, onSuccess, errorMsg, successMsg, toastOptions, showErrorMsg = true, showBackdrop = true } = options
+  const {
+    onError,
+    onSuccess,
+    errorMsg,
+    successMsg,
+    toastOptions,
+    showErrorMsg = true,
+    showBackdrop = true,
+  } = options || {}
 
   const [isLoading, setLoading] = useState<boolean>(false)
 

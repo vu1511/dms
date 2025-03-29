@@ -1,4 +1,3 @@
-import { type KeyedMutator } from 'swr'
 import { ToastProps } from './core'
 
 export type HTTPResponse<T> = {
@@ -14,13 +13,6 @@ export type HTTPDataResponse<T> = {
   message: string
   data: T
   validate_token: boolean
-}
-
-export type ChatHTTPDataResponse<T> = {
-  success: boolean
-  message: string
-  status_code: number
-  data: T
 }
 
 export interface Pagination {
@@ -86,41 +78,10 @@ export interface AsyncHandlerParams<Params, Response> {
   config?: HTTPConfig
 }
 
-export type AsyncHandlerNoFetcher<T> = Omit<AsyncHandler<T>, 'fetcher'>
-
-export type QueryListFunction<T, V> = QueryListFetchMoreFunction<T> & {
-  params: V
-}
-
-export type QueryListFetchMoreFunction<T> = {
-  onError?: Function
-  onSuccess?: (_: T[]) => void
-}
-
-export interface UseQueryListRes<Data = any, Params extends QueryList = any, AdditionalData = any> {
-  isValidating: boolean
-  hasMore: boolean
-  isLoadingMore: boolean
-  offset: number
-  data: Data[] | undefined
-  additionalData?: AdditionalData
-  error: any
-  isLoading: boolean
-  params: Params | undefined
-  mutate: KeyedMutator<any>
-  fetchMore: (_?: QueryListFetchMoreFunction<Data>) => Promise<void>
-  filter: (_: QueryListFunction<Data, Partial<Params>>) => Promise<void>
-  refresh: (params?: Params) => void
-}
-
 export interface QueryList {
   limit?: number
   offset?: number
 }
-
-export type Fetcher<Params, Data> = (params: Params) => Promise<HTTPResponseV2<Data[]>>
-
-export type FetcherPartialParams<Params, Data> = (params: Partial<Params>) => Promise<HTTPResponseV2<Data[]>>
 
 export type HTTPProductFilterResponse<T> = HTTPResponseDataV2<{
   result: T
@@ -128,3 +89,11 @@ export type HTTPProductFilterResponse<T> = HTTPResponseDataV2<{
   price_max: number
   price_min: number
 }>
+
+export type FetcherResponse<Response = any> =
+  | HTTPResponse<Response>
+  | HTTPResultResponse<Response>
+  | HTTPResponseV2<Response>
+  | HTTPDataResponse<Response>
+
+export type FetcherPromiseResponse<Response = any> = Promise<FetcherResponse<Response>>

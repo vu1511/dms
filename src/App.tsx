@@ -64,14 +64,14 @@ export default function App() {
       <StatusBar style="dark" backgroundColor={Colors.transparent} translucent />
       <SafeAreaProvider>
         <GestureHandlerRootView style={BaseStyles.flex1}>
-          <BottomSheetModalProvider>
-            <Host>
+          <Host>
+            <BottomSheetModalProvider>
               <KeyboardProvider statusBarTranslucent>
                 <Providers />
                 <AppNavigator />
               </KeyboardProvider>
-            </Host>
-          </BottomSheetModalProvider>
+            </BottomSheetModalProvider>
+          </Host>
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </SWRConfig>

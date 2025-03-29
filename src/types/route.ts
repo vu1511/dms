@@ -49,9 +49,6 @@ export interface RouteDetailRes {
   country_id: IdAndName[]
   partner_ids: [PartnerRes[]]
   partner_current: number[]
-}
-
-export interface TodayRouteDetailRes extends RouteDetailRes {
   visited_count: number
   no_visited_count: number
 }
@@ -85,6 +82,8 @@ export interface SearchCustomerRouteRes {
   credit_limit: number
   img_url: string
   checkin: boolean
+  // add more
+  distance?: number | null
 }
 
 export interface RatingTagRes {

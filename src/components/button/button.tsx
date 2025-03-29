@@ -1,18 +1,7 @@
 /* eslint-disable react/no-unused-prop-types */
 import { Colors, Spacings, Typography } from '@/theme'
 import { forwardRef, memo, useMemo } from 'react'
-import {
-  Insets,
-  Platform,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextStyle,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native'
+import { Insets, StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
 import ActivityIndicator from '../activityIndicator'
 
 export type ButtonProps = {
@@ -29,7 +18,7 @@ export type ButtonProps = {
   hitSlop?: null | Insets | number | undefined
 }
 
-const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
+// const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
 const Button = memo(
   forwardRef<View, ButtonProps>(
@@ -62,24 +51,24 @@ const Button = memo(
       }, [textStyles])
 
       return (
-        <Touchable
+        <TouchableOpacity
+          ref={ref}
           hitSlop={hitSlop}
+          style={btnStyles}
           activeOpacity={0.5}
           onPress={() => onPress?.()}
           disabled={disabled || loading || readOnly || !onPress}
         >
-          <View ref={ref} style={btnStyles}>
-            {left && (loading ? Loading : left)}
-            {typeof title === 'string' ? (
-              <Text numberOfLines={1} style={textStyles}>
-                {title}
-              </Text>
-            ) : (
-              title
-            )}
-            {loading && !left ? Loading : right}
-          </View>
-        </Touchable>
+          {left && (loading ? Loading : left)}
+          {typeof title === 'string' ? (
+            <Text numberOfLines={1} style={textStyles}>
+              {title}
+            </Text>
+          ) : (
+            title
+          )}
+          {loading && !left ? Loading : right}
+        </TouchableOpacity>
       )
     }
   )

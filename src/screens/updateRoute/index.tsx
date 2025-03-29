@@ -1,4 +1,4 @@
-import { CloseIcon, ThreeDotsIcon, TrashIcon, UserAddIcon, UsersFillIcon } from '@/assets'
+import { CloseIcon, ThreeDotsHorizontalIcon, TrashIcon, UserAddIcon, UsersFillIcon } from '@/assets'
 import {
   BottomSheetModal,
   Button,
@@ -145,10 +145,13 @@ const UpdateRoute = () => {
     [deleteCustomer]
   )
 
-  const handleScroll = useCallback(({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetY = nativeEvent.contentOffset.y
-    animatedValue.value = offsetY > MIN_OFFSET_Y ? 1 : 0
-  }, [])
+  const handleScroll = useCallback(
+    ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offsetY = nativeEvent.contentOffset.y
+      animatedValue.value = offsetY > MIN_OFFSET_Y ? 1 : 0
+    },
+    [animatedValue]
+  )
 
   const deleteAllCustomers = () => {
     if (!customers?.length) return
@@ -194,7 +197,9 @@ const UpdateRoute = () => {
               <Text style={styles.headerTitle}>Khách hàng ({customers?.length ?? 0})</Text>
             </View>
             <View style={[BaseStyles.flexRowItemsCenter, BaseStyles.cGap32]}>
-              <Popover trigger={<IconButton color={Colors.gray80} size={18} onPress={onOpen} icon={ThreeDotsIcon} />}>
+              <Popover
+                trigger={<IconButton color={Colors.gray80} size={18} onPress={onOpen} icon={ThreeDotsHorizontalIcon} />}
+              >
                 {({ closePopover }) => (
                   <View style={styles.popover}>
                     <ListItem

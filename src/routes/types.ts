@@ -11,6 +11,7 @@ export enum Routes {
   CreateCustomer = 'CreateCustomer',
   CreateAddress = 'CreateAddress',
   AccountInfo = 'AccountInfo',
+  CheckinCustomer = 'CheckinCustomer',
   // History = 'History',
   // PrinterConfig = 'PrinterConfig',
   // CreateReturn = 'CreateReturn',
@@ -107,6 +108,11 @@ export type StackParamsList = {
   CreateAddress: {
     defaultValues?: CreateAddressForm
     onSubmit?: (data: CreateAddressForm) => void | Promise<void>
+  }
+  CheckinCustomer: {
+    routeId: number
+    customerId: number
+    onSuccess(): void
   }
 }
 

@@ -16,7 +16,7 @@ import { Navigation, RouteProp, Routes } from '@/routes'
 import { userAPI } from '@/services'
 import { BaseStyles, Colors } from '@/theme'
 import { CreateAccountForm, CreateAccountReq } from '@/types'
-import { getAddressFormLabel, removeEmptyValueFromObject } from '@/utils'
+import { getAddressLabel, removeEmptyValueFromObject } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import moment from 'moment'
@@ -35,7 +35,7 @@ const CreateCustomer = () => {
   const { bottom } = useSafeAreaInsets()
 
   const { asyncHandler } = useAsync()
-  const { getCurrentLocation, coordinate, isloading: isLoadingLocation } = useCurrentLocation()
+  const { getCurrentLocation, coordinate, isLoading: isLoadingLocation } = useCurrentLocation()
 
   const {
     control,
@@ -164,9 +164,9 @@ const CreateCustomer = () => {
                 pointerEvents="none"
                 label="Địa chỉ"
                 errorMsg="Vui lòng nhập địa chỉ"
-                value={getAddressFormLabel(value)}
-                onPress={navigateToAddress}
                 right={<ArrowRightIcon size={20} fill={Colors.gray80} />}
+                value={getAddressLabel(value?.street, value?.ward_name, value?.district_name, value?.state_name)}
+                onPress={navigateToAddress}
               />
             )
           }}

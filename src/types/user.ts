@@ -1,4 +1,5 @@
-import { IdAndName, ImagePickerResult } from './core'
+import { CategoryIcon, EditSquareIcon, LocationIcon, StarIcon, StoreIcon } from '@/assets'
+import { IconProps, IdAndName, ImagePickerResult, Option } from './core'
 import { QueryList } from './http'
 
 export type AccountType = 'th' | 'nvkd' | 'npp' | 'gsbh' | 'asm' | 'rsm' | 'manager'
@@ -466,3 +467,42 @@ export interface CompanyRes {
   banner_img: string[]
   image: string
 }
+
+export enum ECustomerCheckinMenuOption {
+  ViewInfo,
+  ViewLocation,
+  CreateInventory,
+  Rate,
+  UpdateAddress,
+}
+
+export const CustomerCheckinMenuOptions: (Option<ECustomerCheckinMenuOption> & {
+  icon: (props: IconProps) => JSX.Element
+})[] = [
+  {
+    label: 'Thông tin',
+    icon: StoreIcon,
+    value: ECustomerCheckinMenuOption.ViewInfo,
+  },
+  {
+    label: 'Xem đường đi',
+    icon: LocationIcon,
+    value: ECustomerCheckinMenuOption.ViewLocation,
+  },
+  {
+    label: 'Kiểm hàng',
+    icon: CategoryIcon,
+    value: ECustomerCheckinMenuOption.CreateInventory,
+  },
+
+  {
+    label: 'Đánh giá',
+    icon: StarIcon,
+    value: ECustomerCheckinMenuOption.Rate,
+  },
+  {
+    label: 'Sửa địa chỉ',
+    icon: EditSquareIcon,
+    value: ECustomerCheckinMenuOption.UpdateAddress,
+  },
+]

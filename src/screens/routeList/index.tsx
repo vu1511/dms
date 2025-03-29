@@ -1,4 +1,4 @@
-import { Container, CustomersLoading, Empty, ListItemSeparator } from '@/components'
+import { Container, CustomersLoading, ListItemSeparator } from '@/components'
 import { SwrKey } from '@/constants'
 import { usePreviousRoute } from '@/hooks'
 import { Navigation, Routes } from '@/routes'
@@ -6,9 +6,10 @@ import { routeAPI } from '@/services'
 import { RouteRes } from '@/types'
 import { useNavigation } from '@react-navigation/native'
 import { useCallback } from 'react'
-import { FlatList, ListRenderItem, StyleSheet, View } from 'react-native'
+import { ListRenderItem, StyleSheet } from 'react-native'
 import useSWR from 'swr'
 import { RouteItem } from './item'
+import List from './list'
 
 const RouteList = () => {
   const navigation = useNavigation<Navigation>()
@@ -44,22 +45,16 @@ const RouteList = () => {
 
   return (
     <Container title="Tuyến (MCP)">
-      <FlatList
+      <List
         data={data}
         refreshing={false}
+        isLoading={isLoading}
         onRefresh={mutate}
         renderItem={renderItem}
         ItemSeparatorComponent={ListItemSeparator}
         contentContainerStyle={styles.contentContainer}
-        ListEmptyComponent={
-          isLoading ? (
-            <CustomersLoading />
-          ) : (
-            <View style={styles.emptyContainer}>
-              <Empty style={styles.empty} title="Không có tuyến nào được tìm thấy" />
-            </View>
-          )
-        }
+        emptyTitle="Không có tuyến nào được tìm thấy"
+        ListLoadingComponent={<CustomersLoading />}
       />
     </Container>
   )

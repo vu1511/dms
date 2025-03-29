@@ -5,24 +5,22 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export type BottomAreaViewProps = {
   children?: ReactNode
-  withShadow?: boolean
+  shadowVisible?: boolean
   style?: StyleProp<ViewStyle>
 }
 
-const BottomAreaView = ({ children, style, withShadow = true }: BottomAreaViewProps) => {
+const BottomAreaView = ({ children, style, shadowVisible = true }: BottomAreaViewProps) => {
   const { bottom } = useSafeAreaInsets()
 
   return (
     <View
-      style={
-        [
-          styles.container,
-          children && styles.p16,
-          bottom > 16 && { paddingBottom: bottom },
-          children && withShadow && styles.shadow,
-          style,
-        ] as StyleProp<ViewStyle>
-      }
+      style={[
+        styles.container,
+        !!children && styles.p16,
+        bottom > 16 && { paddingBottom: bottom },
+        shadowVisible && styles.shadow,
+        style,
+      ]}
     >
       {children}
     </View>

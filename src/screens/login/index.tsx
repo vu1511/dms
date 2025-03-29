@@ -128,7 +128,7 @@ const Login = () => {
         <View style={BaseStyles.flex1}>
           <View style={{ marginBottom: 32, rowGap: 16 }}>
             <Image source={Images.logoWithText} style={{ width: 200, height: 64 }} resizeMode="contain" />
-            <Text style={[Typography.body18Bold, { fontSize: 28, lineHeight: 36 }]}>Đăng nhập tài khoản</Text>
+            <Text style={[Typography.body18SemiBold, { fontSize: 28, lineHeight: 36 }]}>Đăng nhập tài khoản</Text>
           </View>
 
           <View style={{ rowGap: 16 }}>

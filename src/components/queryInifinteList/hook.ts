@@ -61,7 +61,7 @@ const useQueryInfiniteList = <
         return { data: [], hasMore: false }
       }
     },
-    []
+    [fetcher, mutateFetcherParams, mutateFetcherResponse]
   )
 
   const {
@@ -96,7 +96,7 @@ const useQueryInfiniteList = <
     if (hasMore && !isValidating && rawData?.length) {
       await setSize((size) => size + 1)
     }
-  }, [hasMore, isValidating, rawData])
+  }, [hasMore, isValidating, rawData?.length, setSize])
 
   const data = useMemo(() => {
     if (mutateDataResult && originalData?.length) {
@@ -125,14 +125,17 @@ const useQueryInfiniteList = <
         setIsRefreshing(false)
       })
     },
-    [initialParams]
+    [initialParams, mutate]
   )
 
-  const filter = useCallback(async (filterParams: Partial<FilterParams>) => {
-    onFilter?.()
-    setRevalidatedAll(false)
-    setParams((prevParams) => removeEmptyValueFromObject({ ...prevParams, filterParams }))
-  }, [])
+  const filter = useCallback(
+    async (filterParams: Partial<FilterParams>) => {
+      onFilter?.()
+      setRevalidatedAll(false)
+      setParams((prevParams) => removeEmptyValueFromObject({ ...prevParams, filterParams }))
+    },
+    [onFilter]
+  )
 
   return useMemo(
     () => ({

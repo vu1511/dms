@@ -12,8 +12,7 @@ import {
 } from '@/assets'
 import { BottomTabs } from '@/components'
 import { RouteData, Tabs as RouteTabs } from '@/routes'
-import { Account, Home } from '@/screens'
-// import { AccountsForCheckin, History, Home, MoreAccount, Product } from '@/screens'
+import { Account, Home, RouteCustomers } from '@/screens'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 const Tab = createBottomTabNavigator()
@@ -21,7 +20,7 @@ const Tab = createBottomTabNavigator()
 export const Tabs = () => {
   return (
     <Tab.Navigator
-      screenOptions={{ headerShown: false, unmountOnBlur: true, tabBarHideOnKeyboard: true }}
+      screenOptions={{ headerShown: false, unmountOnBlur: false, tabBarHideOnKeyboard: true }}
       tabBar={(props) => <BottomTabs {...props} routes={bottomTabs} />}
     >
       {bottomTabs.map(({ Component, route }) => (
@@ -42,7 +41,7 @@ const bottomTabs: RouteData[] = [
   {
     route: RouteTabs.WorkTab,
     label: 'Công việc',
-    Component: () => null,
+    Component: RouteCustomers,
     Icon: WorkIcon,
     IconActive: WorkFillIcon,
   },

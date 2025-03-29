@@ -1,9 +1,10 @@
 import { Colors } from '@/theme'
 import { FlashList } from '@shopify/flash-list'
 import { forwardRef, Ref, useCallback, useImperativeHandle, useMemo, useRef } from 'react'
-import { ActivityIndicator, View } from 'react-native'
+import { View } from 'react-native'
 import { RefreshControl, ScrollView } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import ActivityIndicator from '../activityIndicator'
 import Empty from '../empty'
 import useQueryInfiniteList from './hook'
 import { styles } from './style'
@@ -25,7 +26,6 @@ const QueryInfiniteListInner = <
     mutateDataResult,
     mutateFetcherParams,
     mutateFetcherResponse,
-    style,
     containerStyle,
     LoadingComponent,
     ListFooterComponent = null,
@@ -72,6 +72,7 @@ const QueryInfiniteListInner = <
   const { hasMore, getMore, refresh } = swrData
   const isLoading = swrData.isRefreshing || swrData.isLoading
   const data = isLoading ? undefined : swrData.data
+  const hasData = !!data?.length
 
   useImperativeHandle(ref, () => {
     const ref = listRef.current
@@ -93,30 +94,45 @@ const QueryInfiniteListInner = <
   const handleRefresh = useCallback(() => {
     refresh()
     onRefresh && onRefresh()
-  }, [])
+  }, [refresh, onRefresh])
 
-  const { RenderHeader, RenderStickyFooter, RenderStickyHeader, RenderEmptyComponent } = useMemo(() => {
-    return {
-      RenderHeader: !renderHeader ? null : renderHeader(swrData),
-      RenderStickyHeader: !renderStickyHeader ? null : renderStickyHeader(swrData),
-      RenderStickyFooter: !renderStickyFooter ? null : renderStickyFooter(swrData),
-      RenderEmptyComponent: !renderEmptyComponent ? null : renderEmptyComponent(swrData),
-    }
-  }, [swrData, rest.extraData])
+  const RenderHeader = useMemo(
+    () => renderHeader?.(swrData),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [renderHeader, swrData, rest.extraData]
+  )
+
+  const RenderStickyHeader = useMemo(
+    () => renderStickyHeader?.(swrData),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [swrData, renderStickyHeader, rest.extraData]
+  )
+
+  const RenderStickyFooter = useMemo(
+    () => renderStickyFooter?.(swrData),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [swrData, renderStickyFooter, rest.extraData]
+  )
+
+  const RenderEmptyComponent = useMemo(
+    () => renderEmptyComponent?.(swrData) ?? ListEmptyComponent,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [swrData, ListEmptyComponent, renderEmptyComponent, rest.extraData]
+  )
 
   const RenderListFooterComponent = useMemo(
     () => (
       <>
         {ListFooterComponent}
-        {data?.length ? (
+        {hasData && (
           <>
-            {hasMore ? <ActivityIndicator color={Colors.gray80} size={20} style={styles.loadingMore} /> : null}
-            {showFooterSpacing && bottom > 0 ? <View style={{ height: bottom }} /> : null}
+            {hasMore && <ActivityIndicator color={Colors.gray80} size={20} style={styles.loadingMore} />}
+            {showFooterSpacing && bottom > 0 && <View style={{ height: bottom }} />}
           </>
-        ) : null}
+        )}
       </>
     ),
-    [hasMore, data?.length, showFooterSpacing, ListFooterComponent]
+    [ListFooterComponent, showFooterSpacing, hasData, hasMore, bottom]
   )
 
   const RenderListEmptyComponent = useMemo(() => {
@@ -124,17 +140,17 @@ const QueryInfiniteListInner = <
       <View style={styles.loadingContainer}>
         {LoadingComponent || (
           <View style={styles.loading}>
-            <ActivityIndicator />
+            <ActivityIndicator size={24} color={Colors.gray80} />
           </View>
         )}
       </View>
     ) : (
       RenderEmptyComponent || <Empty style={[styles.empty, emptyStyle]} icon={emptyIcon} title={emptyTitle} />
     )
-  }, [hasMore, isLoading, RenderEmptyComponent, LoadingComponent])
+  }, [hasMore, isLoading, LoadingComponent, RenderEmptyComponent, emptyStyle, emptyIcon, emptyTitle])
 
   return (
-    <View style={[[styles.container, !isLoading && !data?.length && styles.bgWhite, containerStyle]]}>
+    <View style={[[styles.container, !isLoading && !hasData && styles.bgWhite, containerStyle]]}>
       {RenderStickyHeader}
 
       <FlashList
@@ -160,7 +176,7 @@ const QueryInfiniteListInner = <
 
       {RenderStickyFooter}
 
-      {showBottomSpacing && bottom > 0 ? <View style={[styles.bottom, { paddingBottom: bottom }]} /> : null}
+      {showBottomSpacing && bottom > 0 && <View style={[styles.bottom, { paddingBottom: bottom }]} />}
     </View>
   )
 }

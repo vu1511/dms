@@ -10,9 +10,22 @@ type Route = {
 }
 
 /**
-  The usePreviousRoute hook is designed to track and capture the previous route (or screen) in a React Navigation setup,
-  whether it's a stack or tab navigator. This is useful when you need to know where the user navigated from when they land on a new screen.
-**/
+ * usePreviousRoute Hook
+ *
+ * Tracks the last visited route before the current screen gains focus.
+ * Useful for handling navigation changes, such as refreshing data when returning to a screen.
+ *
+ * @param {Function} callback - A function that receives the last visited route when the screen becomes active.
+ *
+ * @example
+ * ```tsx
+ * usePreviousRoute((prevRoute) => {
+ *   if (prevRoute) {
+ *     console.log('Came from:', prevRoute.name);
+ *   }
+ * });
+ * ```
+ */
 export const usePreviousRoute = (callback: (prevRoute: Route | null) => void) => {
   const isFocused = useIsFocused()
   const navigation = useNavigation<Navigation>()

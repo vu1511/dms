@@ -110,32 +110,41 @@ export const userAPI = {
     return axiosInstance.post('/api/v2.0/user/adress_delete', { params })
   },
 
-  updateUserInfo: (params: UpdateUserInfo): any =>
-    axiosInstance.post('/api/v2.0/information_customers/update_user', { params }),
+  updateUserInfo: (params: UpdateUserInfo): any => {
+    return axiosInstance.post('/api/v2.0/information_customers/update_user', { params })
+  },
+  createAccount: (params: CreateAccountReq): any => {
+    return axiosInstance.post('/api/v2.0/user/create', { params })
+  },
 
-  createAccount: (params: CreateAccountReq): any => axiosInstance.post('/api/v2.0/user/create', { params }),
+  getListAccountsV2: (params: GetAccountsReq): Promise<HTTPResponse<PartnerRes[]>> => {
+    return axiosInstance.post('/api/v2.0/user/accounts', { params })
+  },
 
-  getListAccountsV2: (params: GetAccountsReq): Promise<HTTPResponse<PartnerRes[]>> =>
-    axiosInstance.post('/api/v2.0/user/accounts', { params }),
-
-  updatePassword: (params: any): any =>
-    axiosInstance.post('/user_information_controller/change-password', {
+  updatePassword: (params: any): any => {
+    return axiosInstance.post('/user_information_controller/change-password', {
       params,
-    }),
+    })
+  },
 
-  resetPassword: (params: ResetPasswordReq): Promise<HTTPResponseDataV2<LoginPasswordRes>> =>
-    axiosInstance.post('/user_information_controller/reset-password', {
+  resetPassword: (params: ResetPasswordReq): Promise<HTTPResponseDataV2<LoginPasswordRes>> => {
+    return axiosInstance.post('/user_information_controller/reset-password', {
       params,
-    }),
+    })
+  },
 
-  checkRegister: (params: CreateAccountReq): any => axiosInstance.post('/api/v2.0/validate_register', { params }),
+  checkRegister: (params: CreateAccountReq): any => {
+    return axiosInstance.post('/api/v2.0/validate_register', { params })
+  },
 
-  getListAttendanceByDay: (params: GetAttendanceReq): Promise<HTTPResponse<AttendanceRes[]>> =>
-    axiosInstance.post('/api/v2.0/user/attendance_by_day', { params }),
+  getListAttendanceByDay: (params: GetAttendanceReq): Promise<HTTPResponse<AttendanceRes[]>> => {
+    return axiosInstance.post('/api/v2.0/user/attendance_by_day', { params })
+  },
+  attendanceCheckinV2: (params: AttendanceCheckinV2Req): any => {
+    return axiosInstance.post('/api/v2.0/attendance/checkin', { params })
+  },
 
-  attendanceCheckinV2: (params: AttendanceCheckinV2Req): any =>
-    axiosInstance.post('/api/v2.0/attendance/checkin', { params }),
-
-  getReportInfoV2: (params: GetReportInfoReq): Promise<HTTPResponse<ReportInfoRes>> =>
-    axiosInstance.post('/api/v2.0/report_api/statistic_target_report', { params }),
+  getReportInfoV2: (params: GetReportInfoReq): Promise<HTTPResponse<ReportInfoRes>> => {
+    return axiosInstance.post('/api/v2.0/report_api/statistic_target_report', { params })
+  },
 }

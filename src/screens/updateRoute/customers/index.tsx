@@ -6,16 +6,16 @@ import {
   Empty,
   ListItemSeparator,
   SearchInput,
+  useQueryInfiniteList,
 } from '@/components'
+import { useSelectItems } from '@/hooks'
 import { routeAPI } from '@/services'
 import { useUserSlice } from '@/store'
-import { Colors } from '@/theme'
-import { CustomerHierarchyRes, PartnerRes } from '@/types'
+import { BaseStyles } from '@/theme'
+import { CustomerHierarchyRes, GetCustomersHierarchyReq, PartnerRes } from '@/types'
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
-import { produce } from 'immer'
 import { useState } from 'react'
 import { View } from 'react-native'
-import useSWR from 'swr'
 import { CustomerItem } from '../customerItem'
 import { styles } from './style'
 
@@ -23,45 +23,24 @@ interface CustomersProps {
   onChange: (data: PartnerRes[]) => Promise<void>
 }
 
+const LIMIT = 10
+
 export const Customers = ({ onChange }: CustomersProps) => {
   const user = useUserSlice((state) => state.userInfo)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  // const { data, isValidating, getMore, filter, hasMore, refresh } = useQueryInfiniteList<
-  //   CustomerHierarchyRes,
-  //   GetCustomersHierarchyReq
-  // >({
-  //   key: 'customers_hierarchy',
-  //   fetcher: routeAPI.getCustomersHierarchy ,
-  //   mutateFetcherResponse: data => ({data: data.}),
-  //   initialParams: { limit: 12 },
-  // })
 
-  const { data, isLoading } = useSWR('customers_hierarchy', async () => {
-    const response = await routeAPI.getCustomersHierarchy({ limit: 20 })
-    return response.result?.data
+  const { data, isLoading, hasMore, getMore, filter } = useQueryInfiniteList({
+    key: 'customers_hierarchy',
+    initialParams: { limit: LIMIT } as GetCustomersHierarchyReq,
+    fetcher: routeAPI.getCustomersHierarchy,
+    mutateFetcherResponse: (data) => {
+      const result = data.result?.data || []
+      return { data: result, hasMore: result.length >= LIMIT }
+    },
+    mutateFetcherParams: (params, { page }) => ({ ...params, offset: page * LIMIT }),
   })
 
-  const getMore = () => {}
-  const filter = () => {}
-  const hasMore = false
-  const refresh = () => {}
-
-  const [selectedItems, setSelectedItems] = useState<CustomerHierarchyRes[]>([])
-
-  const toggleCheckItem = (customer: CustomerHierarchyRes) => {
-    if (!data) return
-
-    setSelectedItems((data) =>
-      produce(data, (draft) => {
-        const index = draft.findIndex((item) => item.id === customer.id)
-        if (index !== -1) {
-          draft.splice(index, 1)
-        } else {
-          draft.push(customer)
-        }
-      })
-    )
-  }
+  const { selectedItems, toggleSelectItem } = useSelectItems<CustomerHierarchyRes>({ idKey: 'id' })
 
   const handleSelect = () => {
     if (!selectedItems?.length) return
@@ -87,44 +66,41 @@ export const Customers = ({ onChange }: CustomersProps) => {
       <View style={styles.modalSelectHeader}>
         <SearchInput
           placeholder={user?.account_type === 'nvkd' ? 'Tìm kiếm khách hàng...' : 'Tìm kiếm nhân viên...'}
-          onChange={(keyword) => filter({ params: { keyword } })}
+          onChange={(keyword) => filter({ keyword })}
         />
       </View>
 
       <BottomSheetFlatList
         data={data}
         refreshing={false}
-        // onRefresh={refresh}
-        keyboardDismissMode="on-drag"
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1, paddingTop: 16 }}
-        onEndReached={() => getMore()}
+        style={BaseStyles.flex1}
         onEndReachedThreshold={0.4}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.contentContainer}
+        onEndReached={getMore}
         renderItem={({ item }) => (
-          <View>
-            {item.account_type === 'th' ? (
-              <CustomerItem
-                name={item.name}
-                phone={item.phone}
-                avatar={item?.image}
-                onSelect={() => toggleCheckItem(item)}
-                active={selectedItems?.some?.((i) => i.id === item.id) ?? false}
-              />
-            ) : null}
-          </View>
+          <CustomerItem
+            key={item.id}
+            name={item.name}
+            phone={item.phone}
+            avatar={item?.image}
+            onSelect={() => toggleSelectItem(item)}
+            active={selectedItems?.some?.((i) => i.id === item.id) ?? false}
+          />
         )}
+        ItemSeparatorComponent={ListItemSeparator}
         ListEmptyComponent={
           isLoading ? (
             <CustomersLoading />
           ) : (
-            <View style={{ flex: 1, backgroundColor: Colors.white }}>
-              <Empty style={{ flex: undefined, paddingTop: 32 }} title="Không tìm thấy khách hàng nào" />
+            <View style={styles.emptyContainer}>
+              <Empty style={styles.empty} title="Không tìm thấy khách hàng nào" />
             </View>
           )
         }
-        ItemSeparatorComponent={ListItemSeparator}
-        ListFooterComponent={<>{hasMore ? <ActivityIndicator /> : null}</>}
+        ListFooterComponent={hasMore ? <ActivityIndicator /> : null}
       />
 
       <BottomAreaView>

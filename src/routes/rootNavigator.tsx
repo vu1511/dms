@@ -1,5 +1,5 @@
 import { Routes } from '@/routes'
-import { ChangePassword, CreateAddress, CreateCustomer, RouteList, UpdateRoute } from '@/screens'
+import { ChangePassword, CheckinCustomer, CreateAddress, CreateCustomer, RouteList, UpdateRoute } from '@/screens'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Tabs } from './tabs'
 
@@ -23,6 +23,7 @@ export const RootNavigator = () => {
       <Stack.Screen name={Routes.UpdateRoute} component={UpdateRoute} />
       <Stack.Screen name={Routes.CreateCustomer} component={CreateCustomer} />
       <Stack.Screen name={Routes.CreateAddress} component={CreateAddress} />
+      <Stack.Screen name={Routes.CheckinCustomer} component={CheckinCustomer} />
       {/* <Stack.Screen name={Routes.History} component={History} />
       <Stack.Screen name={Routes.Route} component={Plan} />
       <Stack.Screen name={Routes.VisitHistory} component={VisitHistory} />

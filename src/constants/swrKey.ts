@@ -4,9 +4,6 @@ export const SwrKey = {
   cart_company_promotion: (id: number) => `cart_company_promotion_${id}`,
   order_drafts: 'order_drafts',
   orders: 'orders',
-  home_categories: 'home_categories',
-  productsBarcode: 'productsBarcode',
-  get_promotions: 'get_promotions',
   categories: 'categories',
   newest_products: 'newest_products',
   promotions: ({ sale_order_id, customer_id }: { sale_order_id: number; customer_id: number }) =>
@@ -34,6 +31,7 @@ export const SwrKey = {
   best_sell_products: 'best_sell_products',
   today_route: 'today_route',
   visit_history: 'visit_history',
+  routeCustomers: 'routeCustomers',
   routes: 'routes',
   rating_tags: (type: string) => `rating_tags_${type}`,
   account_info: (id: number) => `account_info_${id}`,

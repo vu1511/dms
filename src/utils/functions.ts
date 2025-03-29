@@ -1,5 +1,4 @@
 import { useUserSlice } from '@/store'
-import { CreateAddressForm } from '@/types'
 
 export const delay = (delay: number): Promise<void> => {
   return new Promise((resolve) => {
@@ -133,6 +132,14 @@ export const convertViToEn = (str: string) => {
 
 export const normalizeViString = (value: string) => (!value ? '' : convertViToEn(value).trim().toLowerCase())
 
-export const getAddressFormLabel = (data?: CreateAddressForm) => {
-  return [data?.street, data?.ward_name, data?.district_name, data?.state_name].filter(Boolean).join(', ')
+export const getAddressLabel = (
+  street?: string,
+  ward?: string,
+  district?: string,
+  province?: string,
+  country?: string
+) => {
+  return [street, ward, district, province, country].filter(Boolean).join(', ')
 }
+
+export const toBase64Image = (url: string) => `data:image/jpeg;base64,${url}`

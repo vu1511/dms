@@ -12,6 +12,9 @@ export const BaseStyles = StyleSheet.create({
   py8: {
     paddingVertical: 8,
   },
+  pt0: {
+    paddingTop: 0,
+  },
   pt72: {
     paddingTop: 72,
   },
@@ -77,6 +80,13 @@ export const BaseStyles = StyleSheet.create({
   },
   cGap32: {
     columnGap: 32,
+  },
+
+  hide: {
+    display: 'none',
+  },
+  show: {
+    display: 'flex',
   },
 
   // Flexbox

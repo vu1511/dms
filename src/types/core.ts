@@ -130,7 +130,7 @@ export type PopupState = OptionalExceptFor<
 >
 
 export type ToastProps = {
-  type?: 'warning' | 'danger' | 'success'
+  type?: 'warning' | 'danger' | 'success' | 'info'
   position?: 'top' | 'bottom'
   message?: string
   duration?: number

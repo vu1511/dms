@@ -1,33 +1,54 @@
+import { System } from '@/core'
 import { LngLat } from '@/types'
 import { openAppSettings } from '@/utils'
 import * as Location from 'expo-location'
-import { useEffect, useState } from 'react'
-import { Alert } from 'react-native'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-export const useCurrentLocation = (callback?: (data: LngLat) => void) => {
+type Options = {
+  requestOnMount?: boolean
+}
+
+export const useCurrentLocation = (options?: Options) => {
+  const { requestOnMount = true } = options || {}
+
   const [hasPermission, setHasPermission] = useState<boolean>(false)
-  const [coordinate, setCoordinate] = useState<LngLat | undefined>()
-  const [isloading, setIsLoading] = useState<boolean>(false)
+  const [coordinate, setCoordinate] = useState<LngLat | null | undefined>()
+  const [isValidating, setIsValidating] = useState<boolean>(false)
 
   useEffect(() => {
-    getCurrentLocation()
+    if (requestOnMount) {
+      getCurrentLocation()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const showPopupRequireLocationPermission = () => {
-    Alert.alert('Cấp quyền vị trí cho ứng dụng', 'Vui lòng cấp quyền vị trí cho ứng dụng để thực hiện chức năng này', [
-      { text: 'Quay lại', style: 'cancel' },
-      { text: 'Cài đặt', onPress: openAppSettings },
-    ])
-  }
+  const showPopupPermission = useCallback(() => {
+    System.showPopup({
+      message: 'Cấp quyền vị trí cho ứng dụng',
+      description: 'Vui lòng cấp quyền vị trí cho ứng dụng để thực hiện chức năng này',
+      onCancel: () => {},
+      onConfirm: openAppSettings,
+    })
+  }, [])
 
-  async function getCurrentLocation(): Promise<LngLat | undefined> {
+  const requestPermission = useCallback(async () => {
     try {
-      setIsLoading(true)
+      const { granted } = await Location.requestForegroundPermissionsAsync()
+      setHasPermission(granted)
+      return granted
+    } catch (error) {
+      setHasPermission(false)
+      return false
+    }
+  }, [])
+
+  const getCurrentLocation = useCallback(async (): Promise<LngLat | null> => {
+    try {
+      setIsValidating(true)
       const hasPermission = await requestPermission()
       if (!hasPermission) {
-        showPopupRequireLocationPermission()
-        return
+        showPopupPermission()
+        return null
       }
 
       const location = await Location.getCurrentPositionAsync({
@@ -39,25 +60,24 @@ export const useCurrentLocation = (callback?: (data: LngLat) => void) => {
       const coordinate = { longitude, latitude }
 
       setCoordinate(coordinate)
-      callback?.(coordinate)
+      return coordinate
     } catch (error) {
-      console.log({ error })
+      setCoordinate(null)
+      return null
     } finally {
-      setIsLoading(false)
+      setIsValidating(false)
     }
-  }
+  }, [requestPermission, showPopupPermission])
 
-  async function requestPermission() {
-    const { granted } = await Location.requestForegroundPermissionsAsync()
-    setHasPermission(granted)
-    return granted
-  }
-
-  return {
-    hasPermission,
-    coordinate,
-    isloading,
-    getCurrentLocation,
-    showPopupRequireLocationPermission,
-  }
+  return useMemo(
+    () => ({
+      coordinate,
+      hasPermission,
+      isValidating,
+      isLoading: isValidating && coordinate === undefined,
+      getCurrentLocation,
+      showPopupPermission,
+    }),
+    [hasPermission, coordinate, isValidating, getCurrentLocation, showPopupPermission]
+  )
 }
