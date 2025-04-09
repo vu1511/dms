@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { CloseIcon } from '@/assets'
+import { IconButton } from '@/components/button'
 import { Colors } from '@/theme'
 import debounce from 'lodash/debounce'
 import { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
@@ -9,7 +11,7 @@ import {
   TextInputFocusEventData,
   TextInputProps,
   TextStyle,
-  TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
@@ -76,7 +78,7 @@ export type SearchInputProps = Omit<TextInputProps, 'onChangeText' | 'onChange'>
 const SearchInput = forwardRef<TextInput, SearchInputProps>(
   (
     {
-      delay,
+      delay = 500,
       style,
       inputStyle,
       left,
@@ -86,7 +88,7 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
       value: externalValue,
       searchIconColor = Colors.gray50,
       searchIconSize = 16,
-      clearIconSize = 18,
+      clearIconSize = 16,
       onChange: externalOnChange,
       onClearValue,
       onFocus,
@@ -181,22 +183,10 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
           onChangeText={handleChange}
           {...attributes}
         />
-        {value ? (
-          <TouchableOpacity hitSlop={8} activeOpacity={0.5} onPress={clearValue}>
-            <Svg
-              stroke={Colors.gray50}
-              fill={Colors.gray50}
-              strokeWidth="0"
-              viewBox="0 0 512 512"
-              height={clearIconSize}
-              width={clearIconSize}
-            >
-              <Path d="M405 136.798L375.202 107 256 226.202 136.798 107 107 136.798 226.202 256 107 375.202 136.798 405 256 285.798 375.202 405 405 375.202 285.798 256z" />
-            </Svg>
-          </TouchableOpacity>
-        ) : (
-          right
-        )}
+        <View style={styles.inputRight}>
+          {!!value && <IconButton onPress={clearValue} icon={CloseIcon} size={clearIconSize} color={Colors.gray50} />}
+          {right}
+        </View>
       </Animated.View>
     )
   }

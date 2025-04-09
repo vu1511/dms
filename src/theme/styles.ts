@@ -21,6 +21,15 @@ export const BaseStyles = StyleSheet.create({
   mt24: {
     marginTop: 24,
   },
+  mb24: {
+    marginBottom: 24,
+  },
+  mb16: {
+    marginBottom: 16,
+  },
+  mb12: {
+    marginBottom: 12,
+  },
   pb0: {
     paddingBottom: 0,
   },
@@ -47,6 +56,9 @@ export const BaseStyles = StyleSheet.create({
   },
   px16: {
     paddingHorizontal: 16,
+  },
+  py12: {
+    paddingVertical: 12,
   },
   py16: {
     paddingVertical: 16,
@@ -206,5 +218,8 @@ export const BaseStyles = StyleSheet.create({
   inputErrorMessage: {
     ...Typography.body14Normal,
     color: Colors.danger,
+  },
+  textCenter: {
+    textAlign: 'center',
   },
 })

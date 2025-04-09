@@ -180,7 +180,7 @@ export const Report = () => {
               </Typography>
             </View>
             <View style={[BaseStyles.flexRowItemsCenter, BaseStyles.cGap8]}>
-              <View style={{ height: 12, width: 12, borderRadius: 4, backgroundColor: '#49BC78' }} />
+              <View style={{ height: 12, width: 12 }} />
               <Typography fontSize={12} fontWeight={500}>
                 <Typography fontSize={12} fontWeight={400} color={Colors.gray70}>
                   Còn:{' '}

@@ -1,119 +1,104 @@
-import { CreateAddressForm, IconProps, IdAndName, UpdateRouteReq } from '@/types'
+import { ScanBarcodeProps } from '@/components'
+import {
+  CreateAddressForm,
+  CustomerRes,
+  FilterProductReq,
+  GetCustomerReq,
+  IconProps,
+  IdAndName,
+  InventoryRes,
+  ProductVariant,
+  UpdateRouteReq,
+} from '@/types'
 import { type RouteProp as RNRouteProp } from '@react-navigation/native'
 import { type NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 export enum Routes {
+  // Tabs
+  HomeTab = 'HomeTab',
+  OrderTab = 'OrderTab',
+  WorkTab = 'WorkTab',
+  HistoryTab = 'HistoryTab',
+  AccountTab = 'AccountTab',
+  AuthTab = 'AuthTab',
+
+  // Screens
   Home = 'Home',
   Login = 'Login',
   RouteList = 'RouteList',
   ChangePassword = 'ChangePassword',
-  UpdateRoute = 'UpdateRoute',
+  RouteDetail = 'RouteDetail',
   CreateCustomer = 'CreateCustomer',
   CreateAddress = 'CreateAddress',
   AccountInfo = 'AccountInfo',
   CheckinCustomer = 'CheckinCustomer',
-  // History = 'History',
-  // PrinterConfig = 'PrinterConfig',
-  // CreateReturn = 'CreateReturn',
-  // DetailReturnMaterial = 'DetailReturnMaterial',
-  // ReturnMaterial = 'ReturnMaterial',
-  // BeforeUpdateInfo = 'BeforeUpdateInfo',
-  // AddProduct = 'AddProduct',
-  // ContactUs = 'ContactUs',
-  // SelectProduct = 'SelectProduct',
-  // CreateAccount = 'CreateAccount',
-  // ServiceByCategory = 'ServiceByCategory',
-  // Book = 'Book',
-  // DetailProduct = 'DetailProduct',
-  // Cart = 'Cart',
-  // Checkout = 'Checkout',
-  // AccountInfo = 'AccountInfo',
-  // Promotion = 'Promotion',
-  // PromotionDetail = 'PromotionDetail',
-  // Contact = 'Contact',
-  // MoreAccount = 'MoreAccount',
-  // Notification = 'Notification',
-  // OrderSuccess = 'OrderSuccess',
-  // DetailOrder = 'DetailOrder',
-  // Timekeeping = 'Timekeeping',
-  // Product = 'Product',
-  // UpdateInfo = 'UpdateInfo',
-  // SelectPromotion = 'SelectPromotion',
-  // ScanBarcode = 'ScanBarcode',
-  // ManagerAccount = 'ManagerAccount',
-  // SelectCustomer = 'SelectCustomer',
-  // ResetPassword = 'ResetPassword',
-  // ChildAccount = 'ChildAccount',
-  // Attendance = 'Attendance',
-  // Report = 'Report',
-  // ReportEmployee = 'ReportEmployee',
-  // ProductSaleOff = 'ProductSaleOff',
-  // WishList = 'WishList',
-  // Address = 'Address',
-  // SelectAddress = 'SelectAddress',
-  // QuickOrder = 'QuickOrder',
-  // OutletInfo = 'OutletInfo',
-  // DetailRoute = 'DetailRoute',
-  // InfoCheckin = 'InfoCheckin',
-  // RatingOutlet = 'RatingOutlet',
-  // UpdateRoute = 'UpdateRoute',
-  // MultiTakePhotos = 'MultiTakePhotos',
-  // AccountsForCheckin = 'AccountsForCheckin',
-  // Plan = 'Plan',
-  // Category = 'Category',
-  // Visit = 'Visit',
-  // Route = 'Route',
-  // VisitHistory = 'VisitHistory',
-  // SelectCustomerByRole = 'SelectCustomerByRole',
-  // AdminSite = 'AdminSite',
-  // MapViewSelectCoordinate = 'MapViewSelectCoordinate',
-  // ScanBarCodeRMA = 'ScanBarCodeRMA',
-  // CreateInventory = 'CreateInventory',
-  // InventorySelectProduct = 'InventorySelectProduct',
-  // OTP = 'OTP',
-  // UpdateInventory = 'UpdateInventory',
-  // Debts = 'Debts',
-  // DebtDetail = 'DebtDetail',
-  // FilterProduct = 'FilterProduct',
-  // ProductFilter = 'ProductFilter',
-  // DealDetail = 'DealDetail',
-  // PaymentGateway = 'PaymentGateway',
-  // PrintOrder = 'PrintOrder',
-  // CheckinCustomer = 'CheckinCustomer',
+  CreateInventory = 'CreateInventory',
+  SelectCustomer = 'SelectCustomer',
+  SelectProductVariant = 'SelectProductVariant',
+  ScanBarcode = 'ScanBarcode',
 }
 
 export const Tabs = {
-  HomeTab: 'HomeTab',
-  OrderTab: 'OrderTab',
-  WorkTab: 'WorkTab',
-  HistoryTab: 'HistoryTab',
-  AccountTab: 'AccountTab',
-  AuthTab: 'AuthTab',
-}
+  [Routes.HomeTab]: Routes.HomeTab,
+  [Routes.OrderTab]: Routes.OrderTab,
+  [Routes.WorkTab]: Routes.WorkTab,
+  [Routes.HistoryTab]: Routes.HistoryTab,
+  [Routes.AccountTab]: Routes.AccountTab,
+  [Routes.AuthTab]: Routes.AuthTab,
+} as const
 
 export type StackParamsList = {
-  Home: undefined
-  Login: undefined
-  RouteList: undefined
-  AccountInfo: undefined
-  ChangePassword: undefined
-  UpdateRoute: {
+  // Tabs
+  [Routes.HomeTab]: undefined
+  [Routes.OrderTab]: undefined
+  [Routes.WorkTab]: undefined
+  [Routes.HistoryTab]: undefined
+  [Routes.AccountTab]: undefined
+  [Routes.AuthTab]: undefined
+
+  // Screens
+  [Routes.Home]: undefined
+  [Routes.Login]: undefined
+  [Routes.RouteList]: undefined
+  [Routes.AccountInfo]: undefined
+  [Routes.ChangePassword]: undefined
+  [Routes.RouteDetail]: {
     data: Required<Omit<UpdateRouteReq, 'delete_partner_ids' | 'partner_ids'>>
   }
-  CreateCustomer: {
+  [Routes.CreateCustomer]: {
     route?: IdAndName
     showRoute?: boolean
     onSuccess?: () => void
   }
-  CreateAddress: {
+  [Routes.CreateAddress]: {
     defaultValues?: CreateAddressForm
     onSubmit?: (data: CreateAddressForm) => void | Promise<void>
   }
-  CheckinCustomer: {
+  [Routes.CheckinCustomer]: {
     routeId: number
     customerId: number
     onSuccess(): void
   }
+  [Routes.SelectCustomer]: {
+    id?: number
+    initialParams?: GetCustomerReq
+    onChange?(value: CustomerRes): void
+  }
+  [Routes.SelectProductVariant]: {
+    unitSelectable?: boolean
+    defaultValues?: ProductVariant[]
+    selectLimit?: number // for multi values
+    onChange?: (value: ProductVariant) => void | Promise<void>
+    onChangeMany?: (value: ProductVariant[]) => void | Promise<void>
+    initialParams?: Partial<FilterProductReq>
+  }
+  [Routes.CreateInventory]: {
+    customer?: IdAndName
+    defaultValues?: InventoryRes
+    onDelete?: () => void
+    onSuccess?: () => void
+  }
+  [Routes.ScanBarcode]: ScanBarcodeProps
 }
 
 export type StackParamsListKey = keyof StackParamsList

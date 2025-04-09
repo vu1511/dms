@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
 
   dotWrapper: {
     justifyContent: 'center',
-    marginHorizontal: 8,
   },
   dot: {
     fontSize: 18,

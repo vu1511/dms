@@ -12,6 +12,7 @@ type ContainerProps = Partial<HeaderProps> & {
   children?: ReactNode
   headerShown?: boolean
   headerShadowVisible?: boolean
+  HeaderComponent?: ReactNode
   contentStyle?: StyleProp<ViewStyle>
 }
 
@@ -21,6 +22,7 @@ const Container = ({
   headerShadowVisible = true,
   backgroundColor = Colors.background,
   contentStyle,
+  HeaderComponent,
   ...props
 }: ContainerProps) => {
   const navigation = useNavigation()
@@ -43,6 +45,7 @@ const Container = ({
             left={<IconButton size={20} icon={ArrowLeftIcon} color={Colors.gray80} onPress={goBack} />}
             {...props}
           />
+          {HeaderComponent}
         </View>
       ) : null}
       <View style={[BaseStyles.flex1, { backgroundColor }, contentStyle]}>{children}</View>

@@ -1,4 +1,4 @@
-import { AttachmentUrlRes, IdAndName, IdAndUrl, ImagePickerResult } from '@/types'
+import { AttachmentUrlRes, IdAndName, IdAndUrl, ImagePickerResult, StarRating } from '@/types'
 import * as Yup from 'yup'
 import { Regex } from './regex'
 
@@ -6,6 +6,11 @@ export const idAndNameSchema = Yup.object().shape({
   id: Yup.number(),
   name: Yup.string(),
 }) as Yup.ObjectSchema<IdAndName>
+
+export const idAndNameRequiredSchema: Yup.ObjectSchema<IdAndName> = Yup.object().shape({
+  id: Yup.number().required(),
+  name: Yup.string().required(),
+})
 
 export const idAndUrlSchema = Yup.object().shape({
   id: Yup.number(),
@@ -31,7 +36,7 @@ export const loginPasswordSchema = Yup.string()
   .required('Vui lòng nhập mật khẩu')
   .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
 
-export const ratingStarSchema = Yup.string().oneOf(['1', '2', '3', '4', '5']).required()
+export const ratingStarSchema = Yup.string().oneOf(['1', '2', '3', '4', '5']) as Yup.StringSchema<StarRating>
 
 export const imagePickerSchema: Yup.ObjectSchema<ImagePickerResult> = Yup.object().shape({
   uri: Yup.string().required(),

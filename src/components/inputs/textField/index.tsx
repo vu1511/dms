@@ -5,7 +5,7 @@ export type TextFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = TextInputProps & {
-  control: Control<any>
+  control: Control<TFieldValues>
   name: TName
 }
 

@@ -1,9 +1,7 @@
 import { Images } from '@/assets'
-import { BaseStyles, Colors } from '@/theme'
 import { Image as ExpoImage, ImageProps as ExpoImageProps, ImageSource, useImage } from 'expo-image'
 import { memo, useMemo, useState } from 'react'
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
-import ActivityIndicator from '../activityIndicator'
 
 type Source = ImageSource | string
 
@@ -48,12 +46,6 @@ const Image = memo(
 
     return (
       <View style={[{ width, height, borderRadius, overflow: 'hidden' }, style]}>
-        {!image && !isError ? (
-          <View style={styles.loadingView}>
-            <ActivityIndicator size={Math.max(width, height) / 2} color={Colors.gray50} />
-          </View>
-        ) : null}
-
         {isError ? (
           (errorComponent ?? (
             <ExpoImage
@@ -83,13 +75,6 @@ const Image = memo(
 export default Image
 
 export const styles = StyleSheet.create({
-  loadingView: {
-    ...BaseStyles.absoluteInset,
-    ...BaseStyles.flexCenter,
-    width: '100%',
-    height: '100%',
-    zIndex: 1,
-  },
   image: {
     width: '100%',
     height: '100%',

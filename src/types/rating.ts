@@ -100,19 +100,7 @@ export interface GetRatingPhotoTagsReq {
   rating_star?: StarRating
 }
 
-// export interface RagtingPhotoTagRes {
-//   tag_id: number
-//   tag_content: string
-// }
-
-// import { IconType } from './common'
-
 export type StarString = '1' | '2' | '3' | '4' | '5'
-
-// export interface StarRating {
-//   star_rating: StarString
-//   rating_count: number
-// }
 
 export interface AttachmentProps {
   product_id: number
@@ -222,4 +210,78 @@ export interface CreateProductRatingReq {
 export interface DeleteProductRatingReq {
   product_id: number
   history_line_id: number
+}
+
+export interface CustomerCommentRes {
+  o
+  customer_comment_id: number
+  customer_comment_name: string
+  customer: IdAndName
+  user: IdAndName
+  comment_date: string
+  comment_line_ids: [
+    {
+      comment_line_id: number
+      comment_line_name: string
+      company_id: CompanyId
+      customer_id: {
+        company_id: number
+        partner_id: number
+        partner_name: string
+        phone: string
+        gender: string
+        avatar_url: {
+          id: number
+          url: string
+          image_url: string
+          name: string
+          data_type: string
+        }
+        account_type: AccountType
+        medicine_account_type: false
+        business_type: false
+        gpp_certification_image_url: {
+          id: string
+          url: string
+          image_url: string
+          name: string
+          data_type: string
+        }
+        business_registration_certification_image_url: {
+          id: false
+          url: false
+          image_url: false
+          name: false
+          data_type: false
+        }
+        business_operation_name: false
+        business_operation_owner: false
+        business_phone: false
+        establish_date: false
+        country_id: { country_id: number; country_name: string }
+        province_id: { province_id: number; province_name: string }
+        district_id: {
+          district_id: number
+          district_name: string
+        }
+        ward_id: { ward_id: number; ward_name: string }
+        street: string
+        full_address: string
+        email: false
+        date_of_birth: false
+      }
+      rating_type: { code: CustomerCommentRatingType; name: string }
+      rating_star: { rating_star_int: number; rating_star_name: string }
+      rating_tags: [{ tag_id: number; tag_content: string }, { tag_id: number; tag_content: string }]
+      comment_date: string
+      rating_content: string
+      attachment_images: [
+        {
+          type_data: string
+          id: number
+          url: string
+        },
+      ]
+    },
+  ]
 }

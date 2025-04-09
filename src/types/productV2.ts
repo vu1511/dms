@@ -1,6 +1,6 @@
-import { AttributeMinor } from './attribute'
+import { AttributeId, AttributeMinor } from './attribute'
 import { Category } from './category'
-import { IdAndName, ValueId } from './core'
+import { IdAndName, Option, ValueId } from './core'
 import { Pagination, QueryList } from './http'
 import { ProductType } from './product'
 import { ImageId } from './promotion'
@@ -21,7 +21,40 @@ export interface ProductParams {
 
 export type ProductClassification = 'dietary_supplement' | 'medicine' | 'combo'
 
-export type GetProductType = 'product_combo' | 'product_product'
+export enum EGetProductType {
+  All = 'all',
+  Combo = 'product_combo',
+  Product = 'product_product',
+}
+
+export type GetProductType = EGetProductType.Combo | EGetProductType.Product
+
+export enum GetProductTypeFilter {
+  All = 'all',
+  Combo = 'product_combo',
+  Product = 'product_product',
+}
+
+export const ProductTypeName = {
+  [EGetProductType.All]: 'Tất cả',
+  [EGetProductType.Combo]: 'Combo',
+  [EGetProductType.Product]: 'Sản phẩm',
+} as const
+
+export const ProductTypeOptions: Option<EGetProductType>[] = [
+  {
+    label: ProductTypeName[EGetProductType.All],
+    value: EGetProductType.All,
+  },
+  {
+    label: ProductTypeName[EGetProductType.Product],
+    value: EGetProductType.Product,
+  },
+  {
+    label: ProductTypeName[EGetProductType.Combo],
+    value: EGetProductType.Combo,
+  },
+] as const
 
 export interface GetProductByAttributeMinorParams extends QueryList {
   attribute_id?: number
@@ -39,6 +72,14 @@ export interface CompanyIdName {
 }
 
 export type ProductfilterSortType = 'sold_quantity' | 'price_increase' | 'price_decrease' | 'new_product' | undefined
+
+export const ProductFilterSortOptions: Option<ProductfilterSortType | null>[] = [
+  { label: 'Tất cả', value: null },
+  { label: 'Mới nhất', value: 'new_product' },
+  { label: 'Bán chạy', value: 'sold_quantity' },
+  { label: 'Giá giảm dần', value: 'price_decrease' },
+  { label: 'Giá tăng dần', value: 'price_increase' },
+] as const
 
 export interface FilterProductReq extends QueryList {
   product_type?: GetProductType
@@ -105,17 +146,30 @@ export interface Combo {
   }
 }
 
+export interface ProductVariant {
+  id: number
+  name: string
+  code: string
+  type: ProductType
+  price: number
+  priceOriginal: number | null
+  stockQuantity: number | null
+  soldQuantity: number
+  imageUrl: string
+  units: ProductUom[]
+  unitId: number | null
+  unitName: string | null
+  categoryId: number | null
+  categoryName: string | null
+  pricelist: { [key: number]: { [key: number]: number } } | null
+}
+
 export interface ProductUom {
   uom_id: number
   uom_name: string
   uom_full_standard_name?: string
   factor?: number
   quantity?: number
-}
-
-export interface AttributeId {
-  attribute_id: number
-  attribute_name: string
 }
 
 export interface ProductAttributeV2 {

@@ -1,38 +1,46 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 export type useSelectItemsProps<T = any> = {
   limit?: number
-  idKey: keyof T
+  compareId: keyof T | ((data: T) => boolean)
   defaultValues?: T[]
   onLimitReached?(): void
 }
 
 export const useSelectItems = <T = any>({
   limit,
-  idKey,
+  compareId,
   defaultValues = [],
   onLimitReached,
 }: useSelectItemsProps<T>) => {
   const [selectedItems, setSelectedItems] = useState<T[]>(defaultValues)
 
-  const toggleSelectItem = useCallback((item: T) => {
-    setSelectedItems((prevItems) => {
-      const index = prevItems.findIndex((i) => i[idKey] === item[idKey])
-      if (index !== -1) {
-        return [...prevItems.slice(0, index), ...prevItems.slice(index + 1)]
-      } else if (limit) {
-        if (prevItems.length < limit) {
-          return [...prevItems, item]
+  const toggleSelectItem = useCallback(
+    (item: T) => {
+      setSelectedItems((prevItems) => {
+        const index = prevItems.findIndex((i) => {
+          if (typeof compareId === 'function') {
+            return compareId(item)
+          }
+          return i[compareId] === item[compareId]
+        })
+        if (index !== -1) {
+          return [...prevItems.slice(0, index), ...prevItems.slice(index + 1)]
+        } else if (limit) {
+          if (prevItems.length < limit) {
+            return [...prevItems, item]
+          } else {
+            onLimitReached?.()
+          }
         } else {
-          onLimitReached?.()
+          return [...prevItems, item]
         }
-      } else {
-        return [...prevItems, item]
-      }
 
-      return prevItems
-    })
-  }, [])
+        return prevItems
+      })
+    },
+    [compareId, limit, onLimitReached]
+  )
 
   const clearAllItems = useCallback(() => {
     setSelectedItems([])
@@ -48,14 +56,17 @@ export const useSelectItems = <T = any>({
         }
       }
     },
-    [selectedItems]
+    [clearAllItems, selectedItems.length]
   )
 
-  return {
-    selectedItems,
-    clearAllItems,
-    toggleAllItems,
-    toggleSelectItem,
-    setSelectedItems,
-  }
+  return useMemo(
+    () => ({
+      selectedItems,
+      clearAllItems,
+      toggleAllItems,
+      toggleSelectItem,
+      setSelectedItems,
+    }),
+    [selectedItems, clearAllItems, toggleAllItems, toggleSelectItem, setSelectedItems]
+  )
 }

@@ -490,7 +490,7 @@ export const CustomerCheckinMenuOptions: (Option<ECustomerCheckinMenuOption> & {
     value: ECustomerCheckinMenuOption.ViewLocation,
   },
   {
-    label: 'Kiểm hàng',
+    label: 'Kiểm tồn',
     icon: CategoryIcon,
     value: ECustomerCheckinMenuOption.CreateInventory,
   },

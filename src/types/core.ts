@@ -1,11 +1,11 @@
 import { type PopupProps } from '@/components'
 
-export interface IdAndName<T extends number | string = number> {
+export interface IdAndName<T = number> {
   id: T
   name: string
 }
 
-export interface NameAndValue<T extends string = string> {
+export interface NameAndValue<T = string> {
   name: string
   value: T
 }
@@ -60,7 +60,7 @@ export interface TimeValue {
   time_type: string
 }
 
-export interface Option<T extends string | number> {
+export interface Option<T = string> {
   value: T
   label: string
 }

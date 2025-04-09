@@ -1,4 +1,10 @@
 export const SwrKey = {
+  select_product_variants: 'select_product_variants',
+  select_customers: 'select_customers',
+  attribute_minors: 'attribute_minors',
+  category_minors: 'category_minors',
+  category_majors: 'category_majors',
+
   cart_list: 'cart_list',
   cart_count: 'cart_count',
   cart_company_promotion: (id: number) => `cart_company_promotion_${id}`,
@@ -58,10 +64,6 @@ export const SwrKey = {
   order_return_products: 'order_return_products',
   order_returns: 'order_returns',
   order_return_reasons: 'order_return_reasons',
-  wishlist: 'wishlist',
-  attribute_minors: `attribute_minors`,
-  category_minors: 'category_minors',
-  category_majors: 'category_majors',
   // product_detail: (type: GetProductType, id: number) => `product_detail_${type}_${id}`,
   products_related: 'products_related',
   product_comment: (id: number) => `product_comment_${id}`,

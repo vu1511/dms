@@ -13,7 +13,6 @@
 // } from '@/assets'
 import { Navigation, Routes } from '@/routes'
 import { useUserSlice } from '@/store'
-import { CustomerRes } from '@/types'
 import { useNavigation } from '@react-navigation/native'
 import { useMemo } from 'react'
 import { Pressable, Text, View } from 'react-native'
@@ -76,13 +75,13 @@ export const Menu = () => {
         // icon: TrolleyFillIcon,
         onPress: () =>
           navigation.navigate(Routes.CreateInventory, {
-            onSuccess: (item: CustomerRes) => {
-              navigation.replace(Routes.OutletInfo, {
-                item,
-                initialRoute: OutletInfoRoutes.inventory,
-              })
-            },
-            shouldNavigate: false,
+            // onSuccess: (item: CustomerRes) => {
+            //   navigation.replace(Routes.OutletInfo, {
+            //     item,
+            //     initialRoute: OutletInfoRoutes.inventory,
+            //   })
+            // },
+            // shouldNavigate: false,
           }),
       },
       {

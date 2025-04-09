@@ -12,7 +12,7 @@ import {
 } from '@/assets'
 import { BottomTabs } from '@/components'
 import { RouteData, Tabs as RouteTabs } from '@/routes'
-import { Account, Home, RouteCustomers } from '@/screens'
+import { Account, CustomersToCheckIn, Home } from '@/screens'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 const Tab = createBottomTabNavigator()
@@ -41,7 +41,7 @@ const bottomTabs: RouteData[] = [
   {
     route: RouteTabs.WorkTab,
     label: 'Công việc',
-    Component: RouteCustomers,
+    Component: CustomersToCheckIn,
     Icon: WorkIcon,
     IconActive: WorkFillIcon,
   },

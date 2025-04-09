@@ -22,6 +22,7 @@ export interface Pagination {
 }
 
 export type HTTPResponseDataV2<T> = {
+  error?: any
   code: number
   success: boolean
   message: string

@@ -1,4 +1,4 @@
-import { Colors, Spacings, Typography } from '@/theme'
+import { BaseStyles, Colors, Spacings, Typography } from '@/theme'
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
@@ -8,8 +8,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1.5,
     borderRadius: Spacings.sm,
-    backgroundColor: Colors.gray20,
-    borderColor: Colors.gray20,
+    backgroundColor: Colors.inputBg,
+    borderColor: Colors.inputBg,
     paddingHorizontal: 12,
   },
   inputText: {
@@ -19,5 +19,9 @@ export const styles = StyleSheet.create({
     paddingBottom: 0,
     flex: 1,
     paddingHorizontal: 8,
+  },
+  inputRight: {
+    ...BaseStyles.flexRowItemsCenter,
+    columnGap: 16,
   },
 })
