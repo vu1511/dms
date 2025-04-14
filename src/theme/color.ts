@@ -40,6 +40,7 @@ export const Colors = Object.freeze({
   greenBg: '#F4FDF7',
   yellowBg: '#FFFEE0',
   orangeBg: '#FFF8F2',
+  dangerBg: 'rgba(255, 86, 48, 0.1)',
 
   // Border Colors
   border: '#E3E9ED',
@@ -66,5 +67,5 @@ export const Colors = Object.freeze({
   cyan: '#00BCD3',
   yellow: '#FFEB4F',
 
-  inputBg: 'rgba(22, 161, 253, 0.04)',
+  inputBg: '#F8F8F8',
 })

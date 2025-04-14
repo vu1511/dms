@@ -50,14 +50,4 @@ export const styles = StyleSheet.create({
     color: Colors.gray50,
     marginTop: 4,
   },
-  editIcon: {
-    ...BaseStyles.flexCenter,
-    position: 'absolute',
-    bottom: 0,
-    right: 12,
-    backgroundColor: Colors.primary,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-  },
 })

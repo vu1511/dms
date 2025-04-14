@@ -1,22 +1,19 @@
-import { CloseIcon, EditSquareIcon, Images } from '@/assets'
+import { CloseIcon, Images } from '@/assets'
+import { BottomSheetModal, Header, IconButton } from '@/components'
 import { useVisibleRef } from '@/hooks'
 import { BaseStyles, Colors } from '@/theme'
 import { ImagePickerOptions, ImagePickerResult } from '@/types'
-import { memo, useCallback, useState } from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native'
-import BottomSheetModal from '../../bottomSheetModal'
-import { IconButton } from '../../button'
-import Header from '../../header'
-import ImagePicker from '../imagePicker'
-import { styles } from './style'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { Image, ImageStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import ImagePickerSource from '../imagePickerSource'
 
 export type AvatarPickerProps = {
   uri?: string
   size?: number
   title?: string
-  errorMsg?: string
-  onBlur?: () => void
+  error?: boolean
   options?: ImagePickerOptions
+  onBlur?: () => void
   onChange?: (value: ImagePickerResult) => void
 }
 
@@ -26,15 +23,41 @@ const AvatarPicker = memo(
     onChange: externalOnChange,
     title = 'Chọn hình ảnh',
     uri: externalUri,
-    size = 120,
+    size = 100,
     options,
-    errorMsg,
+    error,
   }: AvatarPickerProps) => {
     const { onClose, onOpen, ref } = useVisibleRef()
     const [imageUri, setImageUri] = useState<string | undefined>(externalUri)
 
     const isControlled = typeof externalUri !== undefined
     const uri = isControlled ? externalUri : imageUri
+
+    const styles = useMemo<ViewStyle>(
+      () => ({
+        ...BaseStyles.flexCenter,
+        borderWidth: 1,
+        borderStyle: 'dashed',
+        width: size,
+        height: size,
+        borderRadius: size / 2,
+        borderColor: error ? Colors.danger : Colors.gray50,
+        backgroundColor: error ? Colors.dangerBg : Colors.inputBg,
+      }),
+      [error, size]
+    )
+
+    const avatarStyles = useMemo<ImageStyle>(
+      () => ({
+        width: size - 8,
+        height: size - 8,
+        borderRadius: size / 2,
+        backgroundColor: Colors.gray20,
+      }),
+      [size]
+    )
+
+    const source = useMemo(() => (uri ? { uri } : Images.blankAvatar), [uri])
 
     const handleSetImage = useCallback(
       (images: ImagePickerResult[]) => {
@@ -51,17 +74,9 @@ const AvatarPicker = memo(
     return (
       <>
         <View style={[BaseStyles.flexCenter, BaseStyles.rGap8]}>
-          <TouchableOpacity activeOpacity={0.5} onPress={onOpen}>
-            <Image
-              resizeMode="cover"
-              source={uri ? { uri } : Images.blankAvatar}
-              style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: Colors.gray20 }}
-            />
-            <View style={styles.editIcon}>
-              <EditSquareIcon size={12} fill={Colors.white} />
-            </View>
+          <TouchableOpacity activeOpacity={0.5} onPress={onOpen} style={styles}>
+            <Image resizeMode="cover" source={source} style={avatarStyles} />
           </TouchableOpacity>
-          {!!errorMsg && <Text style={BaseStyles.inputErrorMessage}>{errorMsg}</Text>}
         </View>
 
         <BottomSheetModal ref={ref} enableDynamicSizing>
@@ -69,7 +84,7 @@ const AvatarPicker = memo(
             title={title}
             right={<IconButton color={Colors.gray80} size={20} icon={CloseIcon} onPress={onClose} />}
           />
-          <ImagePicker onBlur={onBlur} onChange={handleSetImage} {...options} includeBase64 multiple={false} />
+          <ImagePickerSource onBlur={onBlur} onChange={handleSetImage} {...options} includeBase64 multiple={false} />
         </BottomSheetModal>
       </>
     )

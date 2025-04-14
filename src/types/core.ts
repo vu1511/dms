@@ -206,6 +206,7 @@ export const timePeriodOptions: Option<ETimePeriod>[] = [
 ] as const
 
 export type ImagePickerResult = {
+  id: number
   uri: string
   base64?: string
   size: number

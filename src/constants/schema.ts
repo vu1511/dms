@@ -38,11 +38,11 @@ export const loginPasswordSchema = Yup.string()
 
 export const ratingStarSchema = Yup.string().oneOf(['1', '2', '3', '4', '5']) as Yup.StringSchema<StarRating>
 
-export const imagePickerSchema: Yup.ObjectSchema<ImagePickerResult> = Yup.object().shape({
+export const imagePickerSchema = Yup.object().shape({
   uri: Yup.string().required(),
   base64: Yup.string(),
   size: Yup.number().required(),
   height: Yup.number().required(),
   width: Yup.number().required(),
   mime: Yup.string().required(),
-})
+}) as Yup.ObjectSchema<ImagePickerResult>

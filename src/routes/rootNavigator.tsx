@@ -5,6 +5,7 @@ import {
   CreateAddress,
   CreateCustomer,
   CreateInventory,
+  CreateRating,
   RouteList,
   ScanBarcode,
   SelectCustomer,
@@ -28,6 +29,7 @@ export const RootNavigator = () => {
         <Stack.Screen name={Routes.RouteDetail} component={UpdateRoute} />
         <Stack.Screen name={Routes.CheckinCustomer} component={CheckInCustomer} />
         <Stack.Screen name={Routes.CreateInventory} component={CreateInventory} />
+        <Stack.Screen name={Routes.CreateRating} component={CreateRating} />
       </Stack.Group>
 
       <Stack.Group>

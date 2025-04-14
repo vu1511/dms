@@ -7,7 +7,6 @@ export { default as BottomSheetModal, BottomSheetModalProps } from './bottomShee
 export { default as BottomTabs } from './bottomTabs'
 export * from './button'
 export { default as Checkbox, CheckboxProps } from './checkbox'
-export { default as Chip, ChipProps } from './chip'
 export { default as CircularProgressBar, CircularProgressBarProps } from './circularProgressBar'
 export { default as Container } from './container'
 export { default as CustomerItem } from './customerItem'
@@ -25,3 +24,5 @@ export { default as ScanBarcode, ScanBarcodeProps, ScanBarcodeRef } from './scan
 export * from './separators'
 export { default as StarRating, StarRatingProps } from './starRating'
 export { default as Switch, SwitchProps } from './switch'
+export * from './tags'
+export { default as UploadProgress, UploadProgressBarProps } from './uploadProgress'

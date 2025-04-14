@@ -143,3 +143,21 @@ export const getAddressLabel = (
 }
 
 export const toBase64Image = (url: string) => `data:image/jpeg;base64,${url}`
+
+export const generateId = () => {
+  const d = typeof performance === 'undefined' ? Date.now() : performance.now() * 1000
+
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    // eslint-disable-next-line no-bitwise
+    const r = (Math.random() * 16 + d) % 16 | 0
+
+    // eslint-disable-next-line no-bitwise
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
+  })
+}
+
+export const generateTimestampedId = (randomDigits = 4) => {
+  const timestamp = Date.now() // milliseconds since epoch
+  const random = Math.floor(Math.random() * 10 ** randomDigits)
+  return Number(`${timestamp}${random.toString().padStart(randomDigits, '0')}`)
+}

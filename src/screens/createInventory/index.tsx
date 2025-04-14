@@ -1,11 +1,11 @@
 import { ArrowRightIcon } from '@/assets'
-import { Button, Container, StarRatingField, TextAreaField, TextInput } from '@/components'
+import { Button, Container, StarRatingField, TagsField, TextAreaField, TextInput } from '@/components'
 import { idAndNameRequiredSchema, ratingStarSchema } from '@/constants'
 import { useAsync, usePreventGoBack } from '@/hooks'
 import { Navigation, RouteProp, Routes } from '@/routes'
 import { inventoryAPI, ratingAPI } from '@/services'
 import { BaseStyles, Colors, Typography } from '@/theme'
-import { CreateInventoryForm, ProductVariant, RatingTagRes } from '@/types'
+import { CreateInventoryForm, IdAndName, ProductVariant } from '@/types'
 import { removeEmptyValueFromObject } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -19,7 +19,6 @@ import useSWR from 'swr'
 import * as Yup from 'yup'
 import { InventoryProductsField } from './productsField'
 import { styles } from './style'
-import { TagsField } from './tagsField'
 
 const CreateInventory = () => {
   const { bottom } = useSafeAreaInsets()
@@ -34,7 +33,6 @@ const CreateInventory = () => {
     watch,
     control,
     setValue,
-    getValues,
     handleSubmit,
     formState: { isValid, isDirty, isSubmitSuccessful },
   } = useForm<CreateInventoryForm>({
@@ -73,15 +71,12 @@ const CreateInventory = () => {
 
   const ratingStar = watch('rating_star')
 
-  const { data: tags, isLoading: isTagsLoading } = useSWR<RatingTagRes[]>(
+  const { data: tags = [], isLoading: isTagsLoading } = useSWR<IdAndName[]>(
     ratingStar ? `inventory_rating_tags?value=${ratingStar}` : null,
     () =>
       ratingAPI
-        .getRatingTags({
-          type: 'inventory',
-          rating_star: getValues('rating_star') || '5',
-        })
-        .then((res) => res?.data || [])
+        .getRatingTags({ type: 'inventory', rating_star: ratingStar })
+        .then((res) => (res?.data || [])?.map((i) => ({ id: i.tag_id, name: i.tag_content })))
         .catch(() => [])
   )
 
@@ -207,7 +202,7 @@ const CreateInventory = () => {
               }}
             />
           </View>
-          <TagsField isLoading={isTagsLoading} data={tags} control={control} />
+          <TagsField name="rating_tags" isLoading={isTagsLoading} data={tags} control={control} />
         </View>
 
         <View style={styles.section} pointerEvents={defaultValues?.inventory_store_id ? 'none' : 'auto'}>

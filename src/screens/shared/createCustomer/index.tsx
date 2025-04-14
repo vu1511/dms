@@ -107,12 +107,7 @@ const CreateCustomer = () => {
           control={control}
           name="image"
           render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
-            <AvatarPicker
-              onBlur={onBlur}
-              onChange={onChange}
-              uri={value?.uri}
-              errorMsg={error ? 'Vui lòng chọn ảnh đại diện' : undefined}
-            />
+            <AvatarPicker onBlur={onBlur} onChange={onChange} uri={value?.uri} error={!!error} />
           )}
         />
         <TextField

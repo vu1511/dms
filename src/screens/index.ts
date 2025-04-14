@@ -1,6 +1,7 @@
 export { default as Account } from './account'
 export * from './auth'
 export { default as CreateInventory } from './createInventory'
+export { default as CreateRating } from './createRating'
 export { default as Home } from './home'
 export * from './routes'
 export * from './shared'

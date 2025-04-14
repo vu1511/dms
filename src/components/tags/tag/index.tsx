@@ -1,7 +1,10 @@
 import { BaseStyles, Colors, Typography } from '@/theme'
 import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native'
 
-export type ChipProps = {
+/**
+ * TODO: support outlined - flat mode, color, backgroundColor
+ *  */
+export type TagProps = {
   label: string
   style?: StyleProp<ViewStyle>
   onPress?: () => void
@@ -10,21 +13,21 @@ export type ChipProps = {
   readOnly?: boolean
 }
 
-const Chip = ({ label, disabled, isActive, onPress, readOnly, style }: ChipProps) => {
+const Tag = ({ label, disabled, isActive, onPress, readOnly, style }: TagProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.5}
       onPress={() => onPress?.()}
       disabled={disabled || readOnly}
-      style={[styles.chip, isActive && styles.chipActive, disabled && styles.disabled, style]}
+      style={[styles.tag, isActive && styles.tagActive, disabled && styles.disabled, style]}
     >
-      <Text style={[styles.chipText, isActive && styles.chipTextActive]}>{label}</Text>
+      <Text style={[styles.tagText, isActive && styles.tagTextActive]}>{label}</Text>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
-  chip: {
+  tag: {
     ...BaseStyles.flexCenter,
     alignSelf: 'flex-start',
     flexShrink: 1,
@@ -36,21 +39,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.transparent,
   },
-  chipActive: {
+  tagActive: {
     borderColor: Colors.primary,
     backgroundColor: Colors.primaryBg,
   },
   disabled: {
     opacity: 0.5,
   },
-  chipText: {
+  tagText: {
     ...Typography.body12Medium,
     lineHeight: 16,
     color: Colors.gray70,
   },
-  chipTextActive: {
+  tagTextActive: {
     color: Colors.primary,
   },
 })
 
-export default Chip
+export default Tag

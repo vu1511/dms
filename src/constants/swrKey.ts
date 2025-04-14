@@ -39,7 +39,6 @@ export const SwrKey = {
   visit_history: 'visit_history',
   routeCustomers: 'routeCustomers',
   routes: 'routes',
-  rating_tags: (type: string) => `rating_tags_${type}`,
   account_info: (id: number) => `account_info_${id}`,
   attendance_images: (id: number) => `attendance_images_${id}`,
   // rating_photos: (type: RatingType, id: number) => `rating_photos_${type}_${id}`,

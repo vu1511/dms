@@ -1,7 +1,8 @@
 import { BaseStyles, Colors, Typography } from '@/theme'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import Modal from 'react-native-modal'
+import { Portal } from 'react-native-portalize'
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { Button, ButtonProps } from '../button'
 
 export type PopupProps = {
@@ -31,7 +32,29 @@ const Popup = ({
   onConfirm,
   onDismiss,
 }: PopupProps) => {
+  const opacity = useSharedValue(0)
+
   const [isLoading, setIsLoading] = useState(false)
+  const [shouldRender, setShouldRender] = useState(visible)
+
+  useEffect(() => {
+    if (visible) {
+      setShouldRender(true)
+      opacity.value = withTiming(1, { duration: 200 })
+    } else {
+      opacity.value = withTiming(0, { duration: 200 }, () => {
+        runOnJS(setShouldRender)(false)
+        if (onDismiss) {
+          runOnJS(onDismiss)()
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opacity, visible])
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }))
 
   const handleCancel = () => {
     onCancel?.()
@@ -56,49 +79,42 @@ const Popup = ({
     }
   }
 
+  if (!shouldRender) {
+    return null
+  }
+
   return (
-    <Modal
-      onDismiss={onDismiss}
-      isVisible={visible}
-      animationIn="fadeIn"
-      animationOut="fadeOut"
-      animationOutTiming={200}
-      animationInTiming={150}
-      style={styles.modal}
-      backdropOpacity={0.5}
-      backdropTransitionOutTiming={1}
-      useNativeDriver
-      useNativeDriverForBackdrop
-      hideModalContentWhileAnimating
-    >
-      <View style={styles.container}>
-        <View style={styles.body}>
-          {message ? React.isValidElement(message) ? message : <Text style={styles.title}>{message}</Text> : null}
-          {description ? (
-            React.isValidElement(description) ? (
-              description
-            ) : (
-              <Text style={styles.desc}>{description}</Text>
-            )
-          ) : null}
+    <Portal>
+      <Animated.View style={[styles.modal, animatedStyle]}>
+        <View style={styles.container}>
+          <View style={styles.body}>
+            {message ? React.isValidElement(message) ? message : <Text style={styles.title}>{message}</Text> : null}
+            {description ? (
+              React.isValidElement(description) ? (
+                description
+              ) : (
+                <Text style={styles.desc}>{description}</Text>
+              )
+            ) : null}
+          </View>
+          <View style={styles.footer}>
+            {onCancel ? (
+              <Button
+                readOnly={isLoading}
+                title={cancelBtnText}
+                onPress={handleCancel}
+                style={styles.cancelBtn}
+                textStyle={styles.cancelBtnText}
+                {...cancelBtnProps}
+              />
+            ) : null}
+            {onConfirm ? (
+              <Button loading={isLoading} title={confirmBtnText} onPress={handleConfirm} {...confirmBtnProps} />
+            ) : null}
+          </View>
         </View>
-        <View style={styles.footer}>
-          {onCancel ? (
-            <Button
-              readOnly={isLoading}
-              title={cancelBtnText}
-              onPress={handleCancel}
-              style={styles.cancelBtn}
-              textStyle={styles.cancelBtnText}
-              {...cancelBtnProps}
-            />
-          ) : null}
-          {onConfirm ? (
-            <Button loading={isLoading} title={confirmBtnText} onPress={handleConfirm} {...confirmBtnProps} />
-          ) : null}
-        </View>
-      </View>
-    </Modal>
+      </Animated.View>
+    </Portal>
   )
 }
 
@@ -106,8 +122,9 @@ export default Popup
 
 const styles = StyleSheet.create({
   modal: {
-    margin: 0,
     ...BaseStyles.flexCenter,
+    flex: 1,
+    backgroundColor: Colors.black50,
   },
   container: {
     width: 320,

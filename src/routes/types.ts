@@ -36,6 +36,7 @@ export enum Routes {
   SelectCustomer = 'SelectCustomer',
   SelectProductVariant = 'SelectProductVariant',
   ScanBarcode = 'ScanBarcode',
+  CreateRating = 'CreateRating',
 }
 
 export const Tabs = {
@@ -99,6 +100,10 @@ export type StackParamsList = {
     onSuccess?: () => void
   }
   [Routes.ScanBarcode]: ScanBarcodeProps
+  [Routes.CreateRating]: {
+    customerId: number
+    onSuccess?: () => void
+  }
 }
 
 export type StackParamsListKey = keyof StackParamsList

@@ -16,6 +16,7 @@ import {
 
 export type IconButtonProps = {
   size?: number
+  sizeIncrease?: number
   color?: string
   backgroundColor?: string
   loading?: boolean
@@ -29,8 +30,6 @@ export type IconButtonProps = {
 
 const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight
 
-const SIZE_INCREASE = 12
-
 const IconButton = memo(
   forwardRef<View, IconButtonProps>(
     (
@@ -39,6 +38,7 @@ const IconButton = memo(
         style,
         icon,
         size = 24,
+        sizeIncrease = 12,
         color = Colors.primary,
         backgroundColor = Colors.transparent,
         loading,
@@ -51,7 +51,7 @@ const IconButton = memo(
       const isBgTransparent = backgroundColor === Colors.transparent
 
       const btnIconStyles = useMemo<StyleProp<ViewStyle>>(() => {
-        const btnSize = size + SIZE_INCREASE
+        const btnSize = size + sizeIncrease
         return [
           {
             width: btnSize,
@@ -62,13 +62,13 @@ const IconButton = memo(
           isAndroid &&
             isBgTransparent && {
               position: 'absolute',
-              left: -SIZE_INCREASE / 2,
-              top: -SIZE_INCREASE / 2,
+              left: -sizeIncrease / 2,
+              top: -sizeIncrease / 2,
             },
           styles.btnIcon,
           style,
         ]
-      }, [size, style, backgroundColor, isBgTransparent])
+      }, [size, style, backgroundColor, isBgTransparent, sizeIncrease])
 
       const btnStyles = useMemo<StyleProp<ViewStyle>>(
         () => [
@@ -76,11 +76,11 @@ const IconButton = memo(
           isIOS &&
             isBgTransparent && {
               position: 'absolute',
-              top: -SIZE_INCREASE / 2,
-              left: -SIZE_INCREASE / 2,
+              top: -sizeIncrease / 2,
+              left: -sizeIncrease / 2,
             },
         ],
-        [isBgTransparent]
+        [isBgTransparent, sizeIncrease]
       )
 
       const wrapperStyle = useMemo<StyleProp<ViewStyle>>(() => ({ height: size, width: size }), [size])

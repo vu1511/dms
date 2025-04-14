@@ -1,19 +1,26 @@
 import { CameraIcon, PhotoIcon } from '@/assets'
+import ActivityIndicator from '@/components/activityIndicator'
 import { useCameraPermission, usePhotoLibraryPermission } from '@/hooks'
-import { Colors } from '@/theme'
+import { BaseStyles, Colors } from '@/theme'
 import { ImagePickerOptions, ImagePickerResult } from '@/types'
+import { generateTimestampedId } from '@/utils'
+import { useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { Image, openCamera } from 'react-native-image-crop-picker'
 import { type ImagePickerResponse, launchImageLibrary as onLaunchImageLibrary } from 'react-native-image-picker'
 import { styles } from './style'
 
-export type ImagePickerProps = ImagePickerOptions & {
+export type ImagePickerSourceProps = ImagePickerOptions & {
   onBlur?: () => void
-  setLoading?: (state: boolean) => void
+  onLoad?: (state: boolean) => void
   onChange: (data: ImagePickerResult[]) => void
 }
 
-const ImagePicker = ({ setLoading, onChange, onBlur, ...options }: ImagePickerProps) => {
+type Source = 'camera' | 'library'
+
+const ImagePickerSource = ({ onLoad, onChange, onBlur, ...options }: ImagePickerSourceProps) => {
+  const [sourceLoading, setSourceLoading] = useState<Source | null>(null)
+
   const { requestPermission: requestCameraPermission, hasPermission: hasCameraPermisson } = useCameraPermission({
     requestOnMount: false,
   })
@@ -61,14 +68,17 @@ const ImagePicker = ({ setLoading, onChange, onBlur, ...options }: ImagePickerPr
     })
   }
 
-  const handleSelect = async (type: 'camera' | 'library') => {
-    setLoading?.(true)
+  const handleSelect = async (type: Source) => {
+    onLoad?.(true)
     try {
+      setSourceLoading(type)
+
       if (type === 'camera') {
         const image = await launchCamera()
         if (image) {
           onChange?.([
             {
+              id: generateTimestampedId(),
               uri: image.path,
               height: image.height,
               mime: image.mime,
@@ -85,6 +95,7 @@ const ImagePicker = ({ setLoading, onChange, onBlur, ...options }: ImagePickerPr
         } else if (response?.assets?.length) {
           onChange?.(
             response.assets.map((image) => ({
+              id: generateTimestampedId(),
               uri: image.uri ?? '',
               mime: image.type ?? '',
               width: image.width ?? 0,
@@ -98,23 +109,32 @@ const ImagePicker = ({ setLoading, onChange, onBlur, ...options }: ImagePickerPr
     } catch (error) {
       onBlur?.()
     } finally {
-      setLoading?.(false)
+      onLoad?.(false)
+      setSourceLoading(null)
     }
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} pointerEvents={sourceLoading ? 'none' : 'auto'}>
       <TouchableOpacity activeOpacity={0.5} style={styles.btnItem} onPress={() => handleSelect('library')}>
-        <PhotoIcon size={28} fill={Colors.gray70} />
+        {sourceLoading === 'library' ? <Loading /> : <PhotoIcon size={28} fill={Colors.gray70} />}
         <Text style={styles.btnItemText}>Thư viện</Text>
       </TouchableOpacity>
       <View style={styles.separator} />
       <TouchableOpacity activeOpacity={0.5} style={styles.btnItem} onPress={() => handleSelect('camera')}>
-        <CameraIcon size={32} fill={Colors.gray70} />
+        {sourceLoading === 'camera' ? <Loading /> : <CameraIcon size={32} fill={Colors.gray70} />}
         <Text style={styles.btnItemText}>Chụp ảnh</Text>
       </TouchableOpacity>
     </View>
   )
 }
 
-export default ImagePicker
+const Loading = () => {
+  return (
+    <View style={BaseStyles.p4}>
+      <ActivityIndicator size={24} color={Colors.gray70} />
+    </View>
+  )
+}
+
+export default ImagePickerSource

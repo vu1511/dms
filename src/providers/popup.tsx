@@ -1,6 +1,5 @@
 import { Popup as PopupComponent } from '@/components'
 import { useCoreSlice } from '@/store'
-import { Portal } from 'react-native-portalize'
 
 const Popup = () => {
   const popup = useCoreSlice((state) => state.popup)
@@ -14,11 +13,7 @@ const Popup = () => {
     setPopup({ visible: false })
   }
 
-  return (
-    <Portal>
-      <PopupComponent {...popup} onClose={closePopup} onDismiss={clearPopup} />
-    </Portal>
-  )
+  return <PopupComponent {...popup} onClose={closePopup} onDismiss={clearPopup} />
 }
 
 export default Popup

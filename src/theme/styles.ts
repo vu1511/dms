@@ -48,6 +48,15 @@ export const BaseStyles = StyleSheet.create({
   py3: {
     paddingVertical: 3,
   },
+  p4: {
+    padding: 4,
+  },
+  p8: {
+    padding: 8,
+  },
+  p12: {
+    padding: 12,
+  },
   p16: {
     padding: 16,
   },

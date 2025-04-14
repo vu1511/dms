@@ -13,7 +13,19 @@ export type RatingType =
   | 'processing'
   | 'inventory'
 
-export type CustomerCommentRatingType = 'quantity_product' | 'quality_product' | 'employee_attitude' | 'delivery'
+export enum ECustomerRatingType {
+  QuantityProduct = 'quantity_product',
+  QualityProduct = 'quality_product',
+  EmployeeAttitude = 'employee_attitude',
+  Delivery = 'delivery',
+}
+
+export const CustomerCommentTypeLabel = {
+  [ECustomerRatingType.QuantityProduct]: 'Chất lượng sản phẩm',
+  [ECustomerRatingType.QualityProduct]: 'Số lượng sản phấm',
+  [ECustomerRatingType.EmployeeAttitude]: 'Thái độ nhân viên',
+  [ECustomerRatingType.Delivery]: 'Dịch vụ giao hàng',
+} as const
 
 export type StarRating = '1' | '2' | '3' | '4' | '5'
 
@@ -48,7 +60,7 @@ export interface CreateRatingPhotoRes {}
 
 export type RatingAttachmentType = 'image' | 'video'
 
-export type RatingAttachmentReq = { fil: string; type: RatingAttachmentType }
+export type RatingAttachmentReq = { file: string; type: RatingAttachmentType }
 
 export type CreateAttachmentReq = {
   attachments: RatingAttachmentReq[]
@@ -88,7 +100,7 @@ export interface GetCustomerCommentsReq extends QueryList {
 export interface CreateCustomerCommentReq {
   customer_id: number
   comment_lines: (Omit<CreateRatingForm, 'image'> & {
-    rating_type: CustomerCommentRatingType
+    rating_type: ECustomerRatingType
     attachment_images: number[]
   })[]
 }
@@ -213,7 +225,6 @@ export interface DeleteProductRatingReq {
 }
 
 export interface CustomerCommentRes {
-  o
   customer_comment_id: number
   customer_comment_name: string
   customer: IdAndName
@@ -270,7 +281,7 @@ export interface CustomerCommentRes {
         email: false
         date_of_birth: false
       }
-      rating_type: { code: CustomerCommentRatingType; name: string }
+      rating_type: { code: ECustomerRatingType; name: string }
       rating_star: { rating_star_int: number; rating_star_name: string }
       rating_tags: [{ tag_id: number; tag_content: string }, { tag_id: number; tag_content: string }]
       comment_date: string

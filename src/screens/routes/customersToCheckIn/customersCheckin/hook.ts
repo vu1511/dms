@@ -298,9 +298,15 @@ export const useCustomersCheckin = () => {
     [goBack, navigation]
   )
 
-  const onRate = useCallback((item: SearchCustomerRouteRes) => {
-    // navigation.navigate(Routes.RatingOutlet, { customer: item })
-  }, [])
+  const onRate = useCallback(
+    (item: SearchCustomerRouteRes) => {
+      navigation.navigate(Routes.CreateRating, {
+        customerId: item.id,
+        onSuccess: goBack,
+      })
+    },
+    [goBack, navigation]
+  )
 
   const onMenuItemPress = useCallback(
     (action: ECustomerCheckinMenuOption, data: SearchCustomerRouteRes) => {

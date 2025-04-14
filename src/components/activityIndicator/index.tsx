@@ -1,4 +1,4 @@
-import { Colors, BaseStyles } from '@/theme'
+import { BaseStyles, Colors } from '@/theme'
 import React, { memo, useEffect } from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated'

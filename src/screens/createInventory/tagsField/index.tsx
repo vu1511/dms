@@ -1,4 +1,4 @@
-import { ActivityIndicator, Chip } from '@/components'
+import { ActivityIndicator, Tag } from '@/components'
 import { BaseStyles } from '@/theme'
 import { CreateInventoryForm, RatingTagRes } from '@/types'
 import { produce } from 'immer'
@@ -30,7 +30,7 @@ export const TagsField = ({ data, control, isLoading }: TagsFieldProps) => {
   ) : data?.length ? (
     <View style={styles.container}>
       {data.map((item) => (
-        <Chip
+        <Tag
           key={item.tag_id}
           label={item.tag_content}
           isActive={value?.includes(item.tag_id)}
