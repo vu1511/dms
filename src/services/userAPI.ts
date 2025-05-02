@@ -28,7 +28,7 @@ import {
   RefreshTokenReq,
   ReportInfoRes,
   ResetPasswordReq,
-  UpdateUserInfo,
+  UpdateUserInfoReq,
   UserInfo,
 } from '@/types'
 import { axiosInstance } from './axiosInstance'
@@ -109,8 +109,7 @@ export const userAPI = {
   deleteAddress: (params: DeleteAddress): Promise<HTTPResponse<[{}]>> => {
     return axiosInstance.post('/api/v2.0/user/adress_delete', { params })
   },
-
-  updateUserInfo: (params: UpdateUserInfo): any => {
+  updateUserInfo: (params: UpdateUserInfoReq): any => {
     return axiosInstance.post('/api/v2.0/information_customers/update_user', { params })
   },
   createAccount: (params: CreateAccountReq): any => {
@@ -120,30 +119,25 @@ export const userAPI = {
   getListAccountsV2: (params: GetAccountsReq): Promise<HTTPResponse<PartnerRes[]>> => {
     return axiosInstance.post('/api/v2.0/user/accounts', { params })
   },
-
   updatePassword: (params: any): any => {
     return axiosInstance.post('/user_information_controller/change-password', {
       params,
     })
   },
-
   resetPassword: (params: ResetPasswordReq): Promise<HTTPResponseDataV2<LoginPasswordRes>> => {
     return axiosInstance.post('/user_information_controller/reset-password', {
       params,
     })
   },
-
   checkRegister: (params: CreateAccountReq): any => {
     return axiosInstance.post('/api/v2.0/validate_register', { params })
   },
-
   getListAttendanceByDay: (params: GetAttendanceReq): Promise<HTTPResponse<AttendanceRes[]>> => {
     return axiosInstance.post('/api/v2.0/user/attendance_by_day', { params })
   },
   attendanceCheckinV2: (params: AttendanceCheckinV2Req): any => {
     return axiosInstance.post('/api/v2.0/attendance/checkin', { params })
   },
-
   getReportInfoV2: (params: GetReportInfoReq): Promise<HTTPResponse<ReportInfoRes>> => {
     return axiosInstance.post('/api/v2.0/report_api/statistic_target_report', { params })
   },

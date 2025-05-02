@@ -1,5 +1,5 @@
 import { BaseStyles, Colors, Typography } from '@/theme'
-import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native'
 
 /**
  * TODO: support outlined - flat mode, color, backgroundColor
@@ -7,21 +7,24 @@ import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-
 export type TagProps = {
   label: string
   style?: StyleProp<ViewStyle>
+  labelStyle?: StyleProp<TextStyle>
   onPress?: () => void
   isActive?: boolean
   disabled?: boolean
   readOnly?: boolean
 }
 
-const Tag = ({ label, disabled, isActive, onPress, readOnly, style }: TagProps) => {
+const Tag = ({ label, disabled, isActive, onPress, readOnly, style, labelStyle }: TagProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.5}
       onPress={() => onPress?.()}
       disabled={disabled || readOnly}
-      style={[styles.tag, isActive && styles.tagActive, disabled && styles.disabled, style]}
+      style={[styles.tag, style, isActive && styles.tagActive, disabled && styles.disabled]}
     >
-      <Text style={[styles.tagText, isActive && styles.tagTextActive]}>{label}</Text>
+      <Text numberOfLines={1} style={[styles.tagText, labelStyle, isActive && styles.tagTextActive]}>
+        {label}
+      </Text>
     </TouchableOpacity>
   )
 }
@@ -49,6 +52,7 @@ const styles = StyleSheet.create({
   tagText: {
     ...Typography.body12Medium,
     lineHeight: 16,
+    flexShrink: 1,
     color: Colors.gray70,
   },
   tagTextActive: {

@@ -8,7 +8,7 @@ export const getFetcherResponse = <Response>(response: FetcherResponse<Response>
     if ('result' in response) {
       return (response as HTTPResultResponse<Response>).result
     }
-  } else if ('code' in response && 'data' in response) {
+  } else if ('code' in response && 'data' in response && 'result' in response.data) {
     return (response as HTTPResponseV2<Response>).data?.result
   } else if ('success' in response && 'data' in response) {
     return (response as HTTPDataResponse<Response>).data

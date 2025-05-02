@@ -41,10 +41,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   filterBtn: {
-    ...BaseStyles.flexRowItemsCenter,
+    ...BaseStyles.flexRowSpaceBetween,
     columnGap: 4,
     height: 36,
-    maxWidth: 180,
+    width: 132,
     borderRadius: 8,
     paddingHorizontal: 12,
     backgroundColor: Colors.background,

@@ -22,6 +22,8 @@ export default function App() {
     'Inter-Medium': require('./assets/fonts/Inter-Medium.ttf'),
     'Inter-Regular': require('./assets/fonts/Inter-Regular.ttf'),
     'Inter-SemiBold': require('./assets/fonts/Inter-SemiBold.ttf'),
+    'Inter-MediumItalic': require('./assets/fonts/Inter-MediumItalic.ttf'),
+    'Inter-NormalItalic': require('./assets/fonts/Inter-NormalItalic.otf'),
   })
 
   useEffect(() => {

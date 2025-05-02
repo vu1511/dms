@@ -76,7 +76,7 @@ const CustomersCheckin = () => {
               offset={8}
               trigger={
                 <TouchableOpacity style={styles.filterBtn} activeOpacity={0.5}>
-                  <Text style={styles.filterBtnText}>
+                  <Text numberOfLines={1} style={styles.filterBtnText}>
                     {routes?.find((i) => i.id === routeId)?.name ?? 'Chọn tuyến'}
                   </Text>
                   <ArrowDownIcon fill={Colors.gray80} size={18} />

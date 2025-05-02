@@ -6,6 +6,7 @@ import { UserInfo } from '@/types'
 import { useEffect } from 'react'
 // import { NotificationClickEvent, NotificationWillDisplayEvent, OneSignal } from 'react-native-onesignal'
 import useSWR, { useSWRConfig } from 'swr'
+import { useRoutes, useTodayRoute } from './useSwrFetchers'
 
 export const useInitApp = () => {
   const { mutate } = useSWRConfig()
@@ -25,6 +26,10 @@ export const useInitApp = () => {
       revalidateOnFocus: true,
     }
   )
+
+  useRoutes()
+
+  useTodayRoute()
 
   useSWR<UserInfo | undefined>(token ? SwrKey.userInfo : null, () =>
     userAPI

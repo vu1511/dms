@@ -1,5 +1,6 @@
 import { useCoreSlice } from '@/store'
 import { PopupState, ToastOptions } from '@/types'
+import { setStringAsync } from 'expo-clipboard'
 import { showMessage } from 'react-native-flash-message'
 
 class System {
@@ -27,6 +28,13 @@ class System {
 
   static closeBackdrop() {
     useCoreSlice.getState().setBackdropVisible(false)
+  }
+
+  static async copyToClipboard(value: string, options?: ToastOptions) {
+    try {
+      await setStringAsync(value)
+      this.showToast({ message: 'Đã sao chép', type: 'info', ...options })
+    } catch (error) {}
   }
 }
 

@@ -1,4 +1,4 @@
-import { AttachmentUrlRes, IdAndName, IdAndUrl, ImagePickerResult, StarRating } from '@/types'
+import { AttachmentUrlRes, IdAndName, IdAndUrl, ImagePickerResult, LngLat, StarRating } from '@/types'
 import * as Yup from 'yup'
 import { Regex } from './regex'
 
@@ -41,8 +41,13 @@ export const ratingStarSchema = Yup.string().oneOf(['1', '2', '3', '4', '5']) as
 export const imagePickerSchema = Yup.object().shape({
   uri: Yup.string().required(),
   base64: Yup.string(),
-  size: Yup.number().required(),
-  height: Yup.number().required(),
-  width: Yup.number().required(),
-  mime: Yup.string().required(),
+  size: Yup.number(),
+  height: Yup.number(),
+  width: Yup.number(),
+  mime: Yup.string(),
 }) as Yup.ObjectSchema<ImagePickerResult>
+
+export const coordinateSchema = Yup.object().shape({
+  longitude: Yup.string(),
+  latitude: Yup.string(),
+}) as Yup.ObjectSchema<LngLat<string>>

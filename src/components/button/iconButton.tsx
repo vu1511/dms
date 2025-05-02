@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 import { isAndroid, isIOS } from '@/constants'
-import { Colors } from '@/theme'
+import { BaseStyles, Colors } from '@/theme'
 import { IconProps } from '@/types'
 import { forwardRef, memo, useMemo } from 'react'
 import {
@@ -65,10 +65,11 @@ const IconButton = memo(
               left: -sizeIncrease / 2,
               top: -sizeIncrease / 2,
             },
+          disabled && BaseStyles.opacity50,
           styles.btnIcon,
           style,
         ]
-      }, [size, style, backgroundColor, isBgTransparent, sizeIncrease])
+      }, [size, style, backgroundColor, isBgTransparent, sizeIncrease, disabled])
 
       const btnStyles = useMemo<StyleProp<ViewStyle>>(
         () => [

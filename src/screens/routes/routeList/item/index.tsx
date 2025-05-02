@@ -2,7 +2,7 @@ import { ClockFillIcon, UsersFillIcon } from '@/assets'
 import { DotSeparator } from '@/components'
 import { BaseStyles, Colors } from '@/theme'
 import { RouteRes } from '@/types'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { styles } from './style'
 
@@ -27,7 +27,7 @@ export const RouteItem = ({ data, style, onPress }: RouteItemProps) => {
           <DotSeparator />
           <View style={[styles.item]}>
             <ClockFillIcon fill={Colors.gray60} size={14} />
-            <Text style={styles.itemValue}>{moment(data.date_sale).format('DD/MM/YYYY')}</Text>
+            <Text style={styles.itemValue}>{dayjs(data.date_sale).format('DD/MM/YYYY')}</Text>
           </View>
         </View>
       </View>

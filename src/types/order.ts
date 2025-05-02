@@ -1,3 +1,4 @@
+import { Colors } from '@/theme'
 import { IdAndName, IdAndQty } from './core'
 import { QueryList } from './http'
 import { ProductType } from './product'
@@ -287,6 +288,7 @@ export interface OrderBookingRes {
   price_list: IdAndName[]
   from_origin: string
   type_product: string
+  shipping_fee: number
   discount: PromotionOrderRes[]
 }
 
@@ -393,3 +395,23 @@ export interface ConfirmPaymentMethodResponse {
   amount_total: number
   fee_acquirer: number
 }
+
+export const OrderStateColor = {
+  all: Colors.inputBg,
+  draft: Colors.gray80,
+  sale: Colors.primary,
+  done: Colors.success,
+  cancel: Colors.red,
+  delivery: Colors.yellow,
+  received: Colors.purple,
+  paid: Colors.info,
+  refund: Colors.orange,
+} as const
+
+export const BookingTypeLabel = {
+  state: 'Trạng thái',
+  delivery_status: 'Giao hàng',
+  paid_status: 'Thanh toán',
+  return_delivery_status: 'Trả hàng',
+  return_paid_status: 'Hoàn tiền',
+} as const

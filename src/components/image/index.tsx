@@ -5,7 +5,7 @@ import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
 type Source = ImageSource | string
 
-export type ImageProps = Pick<ExpoImageProps, 'recyclingKey' | 'contentFit'> & {
+export type ImageProps = Pick<ExpoImageProps, 'recyclingKey' | 'contentFit' | 'cachePolicy'> & {
   height?: number
   width?: number
   borderRadius?: number
@@ -20,6 +20,7 @@ const Image = memo(
     source,
     defaultSource = Images.blank,
     style,
+    cachePolicy = 'memory-disk',
     recyclingKey,
     contentFit = 'cover',
     borderRadius,
@@ -62,6 +63,7 @@ const Image = memo(
             transition={500}
             style={styles.image}
             contentFit={contentFit}
+            cachePolicy={cachePolicy}
             placeholder={placeholder}
             placeholderContentFit="contain"
             recyclingKey={recyclingKey}

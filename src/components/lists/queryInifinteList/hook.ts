@@ -1,5 +1,5 @@
 import { QueryList } from '@/types'
-import { getFetcherResponse, removeEmptyValueFromObject } from '@/utils'
+import { getFetcherResponse, isArray, removeEmptyValueFromObject } from '@/utils'
 import { useCallback, useMemo, useState } from 'react'
 import useSWRInfinite from 'swr/dist/infinite'
 import type { GetKeyResult, PreviousData, UseQueryInfiniteListProps, UseQueryInfiniteListResult } from './types'
@@ -35,14 +35,15 @@ const useQueryInfiniteList = <Data = any, Params extends QueryList = any>(
         const response = await fetcher({ ...(params as unknown as Params), offset: page * limit })
 
         const data = getFetcherResponse(response) as Data[]
+        const list = isArray(data) ? data : []
 
         if (mutateFetcherResponse) {
           return mutateFetcherResponse(response)
         }
 
         return {
-          data,
-          hasMore: data.length >= limit,
+          data: list,
+          hasMore: list.length >= limit,
         }
       } catch (error) {
         return {

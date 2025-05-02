@@ -35,10 +35,11 @@ export type InventoryLineForm = ProductVariant & {
 export interface CreateInventoryRes {}
 
 export interface GetInventoriesReq extends QueryList {
-  customer_id: string
-  inventory_date: string
-  start_date: string
-  end_date: string
+  customer_id?: number
+  inventory_date?: string
+  start_date?: string
+  end_date?: string
+  full_data?: boolean
 }
 
 export interface InventoryLineRes {

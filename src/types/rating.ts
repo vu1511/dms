@@ -1,4 +1,4 @@
-import { AttachmentUrlRes, IdAndName, TimeValue, URLRes } from './core'
+import { AttachmentUrlRes, IdAndName, Option, TimeValue, URLRes } from './core'
 import { QueryList } from './http'
 import { CompanyId } from './product'
 import { Product } from './productV2'
@@ -12,6 +12,15 @@ export type RatingType =
   | 'product_damaged'
   | 'processing'
   | 'inventory'
+
+export const RatingTypeLabel = {
+  checkin: 'Check-in',
+  product_store: 'Kệ trưng bày',
+  product_product: 'Đối thủ',
+  product_damaged: 'Sản phẩm hư hỏng',
+  processing: 'processing',
+  inventory: 'inventory',
+} as const
 
 export enum ECustomerRatingType {
   QuantityProduct = 'quantity_product',
@@ -27,9 +36,51 @@ export const CustomerCommentTypeLabel = {
   [ECustomerRatingType.Delivery]: 'Dịch vụ giao hàng',
 } as const
 
+export type AllRatingType = RatingType | `${ECustomerRatingType}`
+
+export const AllRatingTypeOptions: Option<AllRatingType>[] = [
+  {
+    label: 'Dịch vụ giao hàng',
+    value: ECustomerRatingType.Delivery,
+  },
+  {
+    label: 'Số lượng sản phấm',
+    value: ECustomerRatingType.QuantityProduct,
+  },
+  {
+    label: 'Chất lượng sản phẩm',
+    value: ECustomerRatingType.QualityProduct,
+  },
+  {
+    label: 'Thái độ nhân viên',
+    value: ECustomerRatingType.EmployeeAttitude,
+  },
+  {
+    label: RatingTypeLabel.product_store,
+    value: 'product_store',
+  },
+  {
+    label: RatingTypeLabel.product_product,
+    value: 'product_product',
+  },
+  {
+    label: RatingTypeLabel.product_damaged,
+    value: 'product_damaged',
+  },
+]
+
 export type StarRating = '1' | '2' | '3' | '4' | '5'
 
 export type StarRatingNumber = 1 | 2 | 3 | 4 | 5
+
+export type RatingCommonData = {
+  imageUrls: string[]
+  ratingStar: number
+  ratingContent: string
+  ratingDate: string
+  ratingTags: RatingTagRes[]
+  ratingType: AllRatingType
+}
 
 export interface CreateRatingPhotoReq {
   customer_id: number
@@ -85,15 +136,15 @@ export interface RatingPhotoRes {
 }
 
 export interface GetRatingPhotoReq extends QueryList {
-  customer_id: number
-  rating_type: RatingType
+  customer_id?: number
+  rating_type?: RatingType
   rating_date?: string
   start_date?: string
   end_date?: string
 }
 
 export interface GetCustomerCommentsReq extends QueryList {
-  customer_id: number
+  customer_id?: number
   full_data: true
 }
 

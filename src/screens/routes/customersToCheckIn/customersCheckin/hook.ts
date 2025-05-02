@@ -1,6 +1,6 @@
 import { DEFAULT_COUNTRY_ID, SwrKey } from '@/constants'
 import { System } from '@/core'
-import { useAsyncV2, useCurrentLocation, usePreviousRoute } from '@/hooks'
+import { useAsyncV2, useCurrentLocation, usePreviousRoute, useRoutes } from '@/hooks'
 import { Navigation, Routes, Tabs } from '@/routes'
 import { routeAPI, userAPI } from '@/services'
 import { ECustomerCheckinMenuOption, SearchCustomerRouteReq, SearchCustomerRouteRes } from '@/types'
@@ -107,15 +107,7 @@ export const useCustomersCheckin = () => {
     { fallbackData: todayRoute }
   )
 
-  const routesFetcherHandler = useCallback(async () => {
-    try {
-      const res = await routeAPI.getRoutes()
-      return res?.result?.data || []
-    } catch (error) {
-      return []
-    }
-  }, [])
-  const { data: routes, isLoading: isRoutesLoading, mutate: mutateRoutes } = useSWR(SwrKey.routes, routesFetcherHandler)
+  const { data: routes, isLoading: isRoutesLoading, mutate: mutateRoutes } = useRoutes()
 
   const getKey = useCallback(
     (page: number, previousData: PreviousData | null): GetKeyResult | null => {
@@ -249,47 +241,42 @@ export const useCustomersCheckin = () => {
 
   const onViewInfo = useCallback(
     (item: SearchCustomerRouteRes) => {
-      // navigation.navigate('OutletInfo', {
-      //   item: item,
-      //   hierarchy_id: routeId,
-      //   initialRoute: 'info',
-      // })
+      navigation.navigate(Routes.CustomerDetail, { customerId: item.id })
     },
-    [routeId, coordinate]
+    [navigation]
   )
 
-  const onUpdateAddress = useCallback((item: SearchCustomerRouteRes) => {
-    const shippingAddress = item?.shipping_adress?.[0]
-    navigation.navigate(Routes.CreateAddress, {
-      defaultValues: {
-        street: shippingAddress?.street,
-        district_id: shippingAddress?.district_id?.id,
-        district_name: shippingAddress?.district_id?.name,
-        ward_id: shippingAddress?.ward_id?.id,
-        ward_name: shippingAddress?.ward_id?.name,
-        state_id: shippingAddress?.state_id?.id,
-        state_name: shippingAddress?.state_id?.name,
-      },
-      onSubmit: (data) => {
-        triggerCreateAddress({
-          adress_id: shippingAddress.id,
-          partner_id: item.id,
-          address_new: {
-            district_id: data.district_id,
-            state_id: data.state_id,
-            ward_id: data.ward_id,
-            street: data.street,
-            country_id: DEFAULT_COUNTRY_ID,
-          },
-        })
-      },
-      // defaultValues: shippingAddress,
-      // address_id: shippingAddress?.id,
-      // onCreateSuccess: () => {
-      //   mutate()
-      // },
-    })
-  }, [])
+  const onUpdateAddress = useCallback(
+    (item: SearchCustomerRouteRes) => {
+      const shippingAddress = item?.shipping_adress?.[0]
+      navigation.navigate(Routes.CreateAddress, {
+        defaultValues: {
+          street: shippingAddress?.street,
+          district_id: shippingAddress?.district_id?.id,
+          district_name: shippingAddress?.district_id?.name,
+          ward_id: shippingAddress?.ward_id?.id,
+          ward_name: shippingAddress?.ward_id?.name,
+          state_id: shippingAddress?.state_id?.id,
+          state_name: shippingAddress?.state_id?.name,
+        },
+        onSubmit: (data) => {
+          triggerCreateAddress({
+            adress_id: shippingAddress.id,
+            partner_id: item.id,
+            address_new: {
+              district_id: data.district_id,
+              state_id: data.state_id,
+              ward_id: data.ward_id,
+              street: data.street,
+              country_id: DEFAULT_COUNTRY_ID,
+            },
+          })
+        },
+      })
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [navigation]
+  )
 
   const onCreateInventory = useCallback(
     (item: SearchCustomerRouteRes) => {

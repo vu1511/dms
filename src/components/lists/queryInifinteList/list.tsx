@@ -4,6 +4,12 @@ import { List, ListElement, ListProps, ListProvider } from '../list'
 import useQueryInfiniteList from './hook'
 import { QueryInfiniteListProps, QueryInfiniteListRef } from './types'
 
+/*
+  TODO: 
+  1. auto scroll to top after filter
+  2. fix ts error of StickyHeaderComponent
+*/
+
 const QueryInfiniteListInner = <Data, Params extends QueryList, Provider extends ListProvider>(
   {
     swrKey,
@@ -31,7 +37,7 @@ const QueryInfiniteListInner = <Data, Params extends QueryList, Provider extends
     mutateFetcherResponse,
   })
 
-  const { data, hasMore, isLoading, isValidating, getMore, refresh } = swrData
+  const { data, hasMore, isLoading, getMore, refresh } = swrData
 
   useEffect(() => {
     if (isLoading) {

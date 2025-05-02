@@ -11,6 +11,7 @@ type ContainerProps = Partial<HeaderProps> & {
   backgroundColor?: string
   children?: ReactNode
   headerShown?: boolean
+  headerBackground?: string
   headerShadowVisible?: boolean
   HeaderComponent?: ReactNode
   contentStyle?: StyleProp<ViewStyle>
@@ -20,6 +21,7 @@ const Container = ({
   children,
   headerShown = true,
   headerShadowVisible = true,
+  headerBackground = Colors.white,
   backgroundColor = Colors.background,
   contentStyle,
   HeaderComponent,
@@ -37,7 +39,7 @@ const Container = ({
       {headerShown ? (
         <View
           style={[
-            { paddingTop: top, backgroundColor: Colors.white },
+            { paddingTop: top, backgroundColor: headerBackground },
             headerShadowVisible && { ...BaseStyles.shadowMd, zIndex: 10 },
           ]}
         >

@@ -5,8 +5,8 @@ export const styles = StyleSheet.create({
   container: {
     ...BaseStyles.flexRowSpaceBetween,
     backgroundColor: Colors.white,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     columnGap: 8,
   },
   disabled: {

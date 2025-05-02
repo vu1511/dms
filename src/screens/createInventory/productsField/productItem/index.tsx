@@ -3,7 +3,7 @@ import { ProductItem } from '@/components'
 import { useVisible } from '@/hooks'
 import { BaseStyles, Colors, Typography } from '@/theme'
 import { InventoryLineForm } from '@/types'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { QuantityInput } from '../quantityInput'
@@ -46,7 +46,7 @@ export const InventoryProductItem = ({ data, borderBottomVisible, onDelete, onCh
           />
           <TouchableOpacity onPress={onOpen} hitSlop={8} activeOpacity={0.5} style={styles.dateTrigger}>
             <Text numberOfLines={1} style={styles.dateTriggerLabel}>
-              {moment(data.exp_date).format('DD/MM/YYYY')}
+              {dayjs(data.exp_date).format('DD/MM/YYYY')}
             </Text>
             <CalendarIcon size={16} fill="#6C798F" />
           </TouchableOpacity>

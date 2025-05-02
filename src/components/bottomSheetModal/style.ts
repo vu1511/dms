@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   indicator: {
-    backgroundColor: '#B0B0B0',
+    backgroundColor: Colors.gray30,
     height: 6,
     width: 36,
     borderRadius: 16,

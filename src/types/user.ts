@@ -1,5 +1,5 @@
 import { CategoryIcon, EditSquareIcon, LocationIcon, StarIcon, StoreIcon } from '@/assets'
-import { IconProps, IdAndName, ImagePickerResult, Option } from './core'
+import { IconProps, IdAndName, ImagePickerResult, LngLat, Option } from './core'
 import { QueryList } from './http'
 
 export type AccountType = 'th' | 'nvkd' | 'npp' | 'gsbh' | 'asm' | 'rsm' | 'manager'
@@ -286,7 +286,7 @@ export interface CustomerHierarchyRes {
   is_check?: boolean
 }
 
-export interface UpdateUserInfo {
+export interface UpdateUserInfoReq {
   partner_id?: number
   birth_day?: string
   name?: string
@@ -300,8 +300,9 @@ export interface UpdateUserInfo {
   address?: CreateAddressForm
 }
 
-export type UpdateUserInfoForm = Omit<UpdateUserInfo, 'address'> & {
-  address?: AddressRes
+export type UpdateUserInfoForm = Omit<UpdateUserInfoReq, 'image' | 'longitude' | 'latitude'> & {
+  image?: ImagePickerResult
+  coordinate?: LngLat<string>
 }
 
 export interface RefreshTokenReq {
@@ -506,3 +507,7 @@ export const CustomerCheckinMenuOptions: (Option<ECustomerCheckinMenuOption> & {
     value: ECustomerCheckinMenuOption.UpdateAddress,
   },
 ]
+
+export type CustomerId = {
+  customerId: number
+}

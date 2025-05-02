@@ -1,12 +1,13 @@
 import { type EmptyProps } from '@/components'
+import { PickRequired } from '@/types'
 import { type FlashList, type FlashListProps } from '@shopify/flash-list'
 import type { FlatList, FlatListProps, StyleProp, ViewStyle } from 'react-native'
 
-type ListProvider = 'FlatList' | 'FlashList'
+type ListProvider = 'FlatList' | 'FlashList' | 'BottomSheetFlashList' | 'BottomSheetFlatList'
 
 type ListProviderProps<Data = any, Provider extends ListProvider = 'FlatList'> = Provider extends 'FlatList'
   ? FlatListProps<Data>
-  : FlashListProps<Data>
+  : PickRequired<FlashListProps<Data>, 'estimatedItemSize'>
 
 type ListElement =
   | React.ComponentType<any>
@@ -31,4 +32,4 @@ type ListProps<Data = any, Provider extends ListProvider = 'FlatList'> = ListPro
   StickyFooterComponent?: ListElement
 }
 
-export { ListProps, ListProvider, ListProviderProps, ListRef, ListElement }
+export { ListElement, ListProps, ListProvider, ListProviderProps, ListRef }

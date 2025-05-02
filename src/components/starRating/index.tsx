@@ -7,15 +7,16 @@ import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 export type StarRatingProps = {
   value: number
   size?: number
+  gap?: number
   style?: StyleProp<ViewStyle>
-  onChange: (val: StarRatingNumber) => void
+  onChange?: (val: StarRatingNumber) => void
 }
 
-const StarRating = memo(({ value, size = 16, style, onChange }: StarRatingProps) => {
+const StarRating = memo(({ value, size = 16, style, gap = 8, onChange }: StarRatingProps) => {
   return (
-    <View style={[{ flexDirection: 'row', columnGap: 8 }, style]}>
+    <View style={[{ flexDirection: 'row', columnGap: gap }, style]}>
       {stars.map((star) => (
-        <TouchableOpacity activeOpacity={0.5} key={star} onPress={() => onChange(star)}>
+        <TouchableOpacity disabled={!onChange} activeOpacity={0.5} key={star} onPress={() => onChange?.(star)}>
           <StarFillIcon fill={star > Math.round(value) ? Colors.gray30 : Colors.gold} size={size} />
         </TouchableOpacity>
       ))}

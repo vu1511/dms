@@ -1,4 +1,4 @@
-import { BarCodeIcon, CloseIcon, SortArrowUpIcon } from '@/assets'
+import { CloseIcon, SortArrowUpIcon } from '@/assets'
 import {
   BottomAreaView,
   BottomSheetModal,
@@ -17,7 +17,7 @@ import {
 } from '@/components'
 import { SwrKey } from '@/constants'
 import { useSelectItems, useVisibleRef } from '@/hooks'
-import { Navigation, RouteProp, Routes } from '@/routes'
+import { RouteProp, Routes } from '@/routes'
 import { productV2API } from '@/services'
 import { useUserSlice } from '@/store'
 import { Colors } from '@/theme'
@@ -29,7 +29,7 @@ import {
   ProductUom,
   ProductVariant,
 } from '@/types'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native'
 import { ListRenderItem } from '@shopify/flash-list'
 import { produce } from 'immer'
 import { useCallback, useMemo, useRef, useState } from 'react'
@@ -47,7 +47,6 @@ type Unit = {
 }
 
 const SelectProductVariant = () => {
-  const navigation = useNavigation<Navigation>()
   const { params: routeParams } = useRoute<RouteProp<Routes.SelectProductVariant>>()
   const { unitSelectable, defaultValues, selectLimit, onChange, onChangeMany } = routeParams
   const partner_id = useUserSlice((state) => state.userInfo?.partner_id)
@@ -175,25 +174,11 @@ const SelectProductVariant = () => {
           <View style={styles.headerTop}>
             <SearchInput
               delay={500}
+              showBarcodeScan
               value={params?.keyword}
               style={styles.searchInput}
               placeholder="Tìm kiếm sản phẩm"
               onChange={(keyword) => handleFilter({ keyword })}
-              right={
-                <IconButton
-                  size={20}
-                  icon={BarCodeIcon}
-                  color={Colors.gray80}
-                  onPress={() => {
-                    navigation.navigate(Routes.ScanBarcode, {
-                      onChange: (keyword) => {
-                        navigation.pop()
-                        handleFilter({ keyword })
-                      },
-                    })
-                  }}
-                />
-              }
             />
             <TouchableOpacity activeOpacity={0.5} style={styles.btnSort} onPress={onOpen}>
               <SortArrowUpIcon size={18} fill={Colors.gray80} />

@@ -9,7 +9,7 @@ import { CreateInventoryForm, IdAndName, ProductVariant } from '@/types'
 import { removeEmptyValueFromObject } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Text, View } from 'react-native'
@@ -84,7 +84,7 @@ const CreateInventory = () => {
     const inventory_store_lines: any = data.inventory_store_lines.map((item) =>
       removeEmptyValueFromObject({
         inventory_store_line_id: item?.inventory_store_line_id,
-        exp_date: moment(item.exp_date).format('YYYY-MM-DD'),
+        exp_date: dayjs(item.exp_date).format('YYYY-MM-DD'),
         product_id: item.id,
         product_quantity: item.quantity,
         uom_id: item.unitId,

@@ -20,9 +20,9 @@ export type ForwardModalRef = {
   onOpen: () => void
 }
 
-export interface LngLat {
-  longitude: number
-  latitude: number
+export interface LngLat<T extends string | number = number> {
+  longitude: T
+  latitude: T
 }
 
 export type IconProps = {
@@ -112,6 +112,10 @@ export type VisibleAction = {
 export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Required<Pick<T, TRequired>>
 
 export type RequiredExceptFor<T, TOptional extends keyof T> = Required<Omit<T, TOptional>> & Partial<Pick<T, TOptional>>
+
+export type PickRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>
+
+export type PickOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 export type PopupState = OptionalExceptFor<
   Pick<

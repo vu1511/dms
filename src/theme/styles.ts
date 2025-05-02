@@ -15,6 +15,12 @@ export const BaseStyles = StyleSheet.create({
   pt0: {
     paddingTop: 0,
   },
+  pt16: {
+    paddingTop: 16,
+  },
+  pt12: {
+    paddingTop: 12,
+  },
   pt72: {
     paddingTop: 72,
   },
@@ -26,6 +32,9 @@ export const BaseStyles = StyleSheet.create({
   },
   mb16: {
     marginBottom: 16,
+  },
+  mb8: {
+    marginBottom: 8,
   },
   mb12: {
     marginBottom: 12,
@@ -47,6 +56,9 @@ export const BaseStyles = StyleSheet.create({
   },
   py3: {
     paddingVertical: 3,
+  },
+  p2: {
+    padding: 2,
   },
   p4: {
     padding: 4,
@@ -74,6 +86,12 @@ export const BaseStyles = StyleSheet.create({
   },
   rGap4: {
     rowGap: 4,
+  },
+  rGap2: {
+    rowGap: 2,
+  },
+  cGap2: {
+    columnGap: 2,
   },
   cGap4: {
     columnGap: 4,

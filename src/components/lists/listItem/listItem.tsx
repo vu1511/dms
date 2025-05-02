@@ -1,6 +1,6 @@
 import { Colors } from '@/theme'
 import { ReactNode } from 'react'
-import { StyleProp, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleProp, Text, TextStyle, TouchableHighlight, View, ViewStyle } from 'react-native'
 import Svg, { Path } from 'react-native-svg'
 import { styles } from './style'
 
@@ -30,7 +30,11 @@ const ListItem = ({
   disabled,
 }: ListItemProps) => {
   return (
-    <TouchableOpacity activeOpacity={0.5} disabled={readOnly || disabled || !onPress} onPress={() => onPress?.()}>
+    <TouchableHighlight
+      onPress={() => onPress?.()}
+      underlayColor={Colors.gray30}
+      disabled={readOnly || disabled || !onPress}
+    >
       <View style={[styles.container, disabled && styles.disabled, style]}>
         {left}
         {typeof title === 'string' ? (
@@ -52,7 +56,7 @@ const ListItem = ({
             </Svg>
           ) : null)}
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   )
 }
 

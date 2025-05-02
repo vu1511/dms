@@ -1,6 +1,5 @@
 import { ActivityIndicator, Empty } from '@/components'
 import { BaseStyles, Colors } from '@/theme'
-import { FlashList } from '@shopify/flash-list'
 import { forwardRef, type ReactElement, useMemo } from 'react'
 import { FlatList, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -29,11 +28,22 @@ export const ListInner = <Data, P extends ListProvider = 'FlatList'>(
 
   const { bottom } = useSafeAreaInsets()
 
-  const ListRender = useMemo(() => (provider === 'FlashList' ? FlashList : FlatList), [provider])
+  const ListRender = useMemo(() => {
+    switch (provider) {
+      case 'FlashList':
+        return require('@shopify/flash-list').FlashList
+      case 'BottomSheetFlashList':
+        return require('@gorhom/bottom-sheet').BottomSheetFlashList
+      case 'BottomSheetFlatList':
+        return require('@gorhom/bottom-sheet').BottomSheetFlatList
+      default:
+        return FlatList
+    }
+  }, [provider])
 
   const RenderListEmptyComponent = useMemo(() => {
     return isLoading
-      ? (ListLoadingComponent ?? <ActivityIndicator />)
+      ? (ListLoadingComponent ?? <ActivityIndicator style={BaseStyles.py16} />)
       : (ListEmptyComponent ?? (
           <View style={styles.emptyContainer}>
             <Empty style={styles.empty} title={emptyTitle} {...emptyProps} />

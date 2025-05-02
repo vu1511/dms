@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 export const fromDDMMYYYYToDate = (date: string | undefined): Date | null => {
   if (!date) {
@@ -10,5 +10,7 @@ export const fromDDMMYYYYToDate = (date: string | undefined): Date | null => {
     return null
   }
 
-  return moment(`${year}-${month}-${day}`).toDate()
+  return dayjs(`${year}-${month}-${day}`).toDate()
 }
+
+export const reverseDateFormat = (date: string) => date.split('-').reverse().join('-')

@@ -6,10 +6,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 type Options = {
   requestOnMount?: boolean
+  onSuccess?(value: LngLat): void
 }
 
 export const useCurrentLocation = (options?: Options) => {
-  const { requestOnMount = true } = options || {}
+  const { requestOnMount = true, onSuccess } = options || {}
 
   const [hasPermission, setHasPermission] = useState<boolean>(false)
   const [coordinate, setCoordinate] = useState<LngLat | null | undefined>()
@@ -60,6 +61,7 @@ export const useCurrentLocation = (options?: Options) => {
       const coordinate = { longitude, latitude }
 
       setCoordinate(coordinate)
+      onSuccess?.(coordinate)
       return coordinate
     } catch (error) {
       setCoordinate(null)
@@ -67,7 +69,7 @@ export const useCurrentLocation = (options?: Options) => {
     } finally {
       setIsValidating(false)
     }
-  }, [requestPermission, showPopupPermission])
+  }, [onSuccess, requestPermission, showPopupPermission])
 
   return useMemo(
     () => ({

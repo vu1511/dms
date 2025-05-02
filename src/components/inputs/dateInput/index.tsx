@@ -1,6 +1,6 @@
 import { CalendarIcon } from '@/assets'
 import { Colors } from '@/theme'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { forwardRef, useMemo, useState } from 'react'
 import { TextInput as RNTextInput } from 'react-native'
 import DateTimePicker, { DateTimePickerProps } from 'react-native-modal-datetime-picker'
@@ -25,15 +25,15 @@ const DateInput = forwardRef<RNTextInput, DateInputProps>(
       if (!value) return undefined
 
       if (mode === 'date') {
-        return moment(value).format('DD/MM/YYYY')
+        return dayjs(value).format('DD/MM/YYYY')
       }
 
       if (mode === 'datetime') {
-        return moment(value).format('HH:mm DD/MM/YYYY')
+        return dayjs(value).format('HH:mm DD/MM/YYYY')
       }
 
       if (mode === 'time') {
-        return moment(value).format('HH:mm')
+        return dayjs(value).format('HH:mm')
       }
 
       return undefined
@@ -58,6 +58,7 @@ const DateInput = forwardRef<RNTextInput, DateInputProps>(
     return (
       <>
         <TextInput
+          onClearValue={() => handleConfirm(null)}
           {...attributes}
           ref={ref}
           readOnly
@@ -65,7 +66,6 @@ const DateInput = forwardRef<RNTextInput, DateInputProps>(
           pointerEvents="none"
           onPress={onOpen}
           value={valueDisplay}
-          onClearValue={() => handleConfirm(null)}
           right={<CalendarIcon fill={Colors.gray80} size={20} />}
         />
 

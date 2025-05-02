@@ -22,7 +22,7 @@ const Backdrop = ({ isVisible, ...rest }: BackdropProps) => {
         runOnJS(setShouldRender)(false)
       })
     }
-  }, [isVisible])
+  }, [isVisible, opacity])
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,

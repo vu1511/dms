@@ -96,7 +96,13 @@ const ImagePicker = memo(
       (item: AttachmentUrlRes) => {
         return (
           <View key={item.attachment_id} style={[styles.imageItem, sizeStyle]}>
-            <Image width={size} height={size} contentFit="cover" source={toImageUrl(item.attachment_url)} />
+            <Image
+              width={size}
+              height={size}
+              cachePolicy="none"
+              contentFit="cover"
+              source={toImageUrl(item.attachment_url)}
+            />
             <View style={styles.deleteBtn}>
               <IconButton
                 size={12}

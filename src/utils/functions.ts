@@ -161,3 +161,13 @@ export const generateTimestampedId = (randomDigits = 4) => {
   const random = Math.floor(Math.random() * 10 ** randomDigits)
   return Number(`${timestamp}${random.toString().padStart(randomDigits, '0')}`)
 }
+
+// TODO: write isObjectHasValue, isArrayHasValue
+//  const arr: Array<number> | undefined
+// const isArrayHasValue = <T,>(value: unknown): value is Array<T> => {
+//   return Array.isArray(value) && value.length > 0
+// }
+
+export const replaceLineBreaks = (value: string, replaceValue = '') => {
+  return value ? value.trim().replace(/\n/g, replaceValue) : value
+}

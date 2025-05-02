@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { CloseIcon } from '@/assets'
+import { BarCodeIcon, CloseIcon } from '@/assets'
 import { IconButton } from '@/components/button'
+import { Navigation, Routes } from '@/routes'
 import { Colors } from '@/theme'
+import { useNavigation } from '@react-navigation/native'
 import debounce from 'lodash/debounce'
 import { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import {
@@ -62,6 +64,13 @@ export type SearchInputProps = Omit<TextInputProps, 'onChangeText' | 'onChange'>
   right?: ReactNode
 
   /**
+   * If `true`, displays a barcode scan button when `right` is not provided.
+   * Tapping the button navigates to the barcode scanning screen,
+   * and the scanned value will automatically populate the input field.
+   */
+  showBarcodeScan?: boolean
+
+  /**
    * Callback fired when the clear (close) icon is pressed.
    */
   onClearValue?: () => void
@@ -97,6 +106,8 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
     },
     ref
   ) => {
+    const navigation = useNavigation<Navigation>()
+
     const [value, setValue] = useState<string | undefined>(defaultValue)
     const valueRef = useRef<string | undefined>(value)
 
@@ -135,6 +146,15 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
       },
       [debounceFn, delay, externalOnChange, handleSetValue]
     )
+
+    const scanBarcode = useCallback(() => {
+      navigation.navigate(Routes.ScanBarcode, {
+        onChange: (value) => {
+          navigation.pop()
+          handleSetValue(value)
+        },
+      })
+    }, [])
 
     const handleFocus = useCallback(
       (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -185,7 +205,7 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
         />
         <View style={styles.inputRight}>
           {!!value && <IconButton onPress={clearValue} icon={CloseIcon} size={clearIconSize} color={Colors.gray50} />}
-          {right}
+          {right ?? <IconButton size={20} icon={BarCodeIcon} color={Colors.gray80} onPress={scanBarcode} />}
         </View>
       </Animated.View>
     )

@@ -1,14 +1,22 @@
 import { ScanBarcodeProps } from '@/components'
 import {
+  AccountType,
   CreateAddressForm,
   CustomerRes,
+  DebtRes,
   FilterProductReq,
   GetCustomerReq,
+  GetDebtsReq,
+  GetInventoriesReq,
+  GetloyaltyHistoryReq,
+  GetOrderHistoryListReq,
   IconProps,
   IdAndName,
   InventoryRes,
+  LngLat,
   ProductVariant,
   UpdateRouteReq,
+  UserInfo,
 } from '@/types'
 import { type RouteProp as RNRouteProp } from '@react-navigation/native'
 import { type NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -33,10 +41,23 @@ export enum Routes {
   AccountInfo = 'AccountInfo',
   CheckinCustomer = 'CheckinCustomer',
   CreateInventory = 'CreateInventory',
+  CustomerDetail = 'CustomerDetail',
+  UpdateUserInfo = 'UpdateUserInfo',
+  DebtDetail = 'DebtDetail',
   SelectCustomer = 'SelectCustomer',
   SelectProductVariant = 'SelectProductVariant',
   ScanBarcode = 'ScanBarcode',
   CreateRating = 'CreateRating',
+  MapViewSelectCoordinate = 'MapViewSelectCoordinate',
+  Inventories = 'Inventories',
+  CheckinHistories = 'CheckinHistories',
+  Debts = 'Debts',
+  OrderHistories = 'OrderHistories',
+  RatingHistories = 'RatingHistories',
+  LoyaltyHistories = 'LoyaltyHistories',
+
+  // order
+  OrderDetail = 'OrderDetail',
 }
 
 export const Tabs = {
@@ -103,6 +124,43 @@ export type StackParamsList = {
   [Routes.CreateRating]: {
     customerId: number
     onSuccess?: () => void
+  }
+  [Routes.CustomerDetail]: {
+    customerId: number
+  }
+  [Routes.UpdateUserInfo]: {
+    defaultValues: UserInfo
+    onSuccess(): void
+  }
+  [Routes.MapViewSelectCoordinate]: {
+    defaultValues?: LngLat
+    onChange?: (data: LngLat) => void
+  }
+  [Routes.OrderDetail]: {
+    orderId: number
+  }
+  [Routes.DebtDetail]: {
+    debtId: number
+    initialData: DebtRes
+  }
+  [Routes.Inventories]: {
+    initialParams?: Partial<GetInventoriesReq>
+  }
+  [Routes.CheckinHistories]: {
+    customerType?: AccountType
+    customerId?: number
+  }
+  [Routes.Debts]: {
+    initialParams?: Partial<GetDebtsReq>
+  }
+  [Routes.RatingHistories]: {
+    customerId?: number
+  }
+  [Routes.OrderHistories]: {
+    initialParams?: Partial<GetOrderHistoryListReq>
+  }
+  [Routes.LoyaltyHistories]: {
+    initialParams?: Partial<GetloyaltyHistoryReq>
   }
 }
 

@@ -1,8 +1,8 @@
 import { BaseStyles, Colors, Typography } from '@/theme'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Portal } from 'react-native-portalize'
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import Animated, { FadeIn, FadeOut, runOnJS } from 'react-native-reanimated'
 import { Button, ButtonProps } from '../button'
 
 export type PopupProps = {
@@ -32,29 +32,7 @@ const Popup = ({
   onConfirm,
   onDismiss,
 }: PopupProps) => {
-  const opacity = useSharedValue(0)
-
   const [isLoading, setIsLoading] = useState(false)
-  const [shouldRender, setShouldRender] = useState(visible)
-
-  useEffect(() => {
-    if (visible) {
-      setShouldRender(true)
-      opacity.value = withTiming(1, { duration: 200 })
-    } else {
-      opacity.value = withTiming(0, { duration: 200 }, () => {
-        runOnJS(setShouldRender)(false)
-        if (onDismiss) {
-          runOnJS(onDismiss)()
-        }
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [opacity, visible])
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }))
 
   const handleCancel = () => {
     onCancel?.()
@@ -79,13 +57,21 @@ const Popup = ({
     }
   }
 
-  if (!shouldRender) {
+  if (!visible) {
     return null
   }
 
   return (
     <Portal>
-      <Animated.View style={[styles.modal, animatedStyle]}>
+      <Animated.View
+        style={[styles.modal]}
+        entering={FadeIn.duration(200)}
+        exiting={FadeOut.duration(200).withCallback((finished) => {
+          if (finished && onDismiss) {
+            runOnJS(onDismiss)()
+          }
+        })}
+      >
         <View style={styles.container}>
           <View style={styles.body}>
             {message ? React.isValidElement(message) ? message : <Text style={styles.title}>{message}</Text> : null}

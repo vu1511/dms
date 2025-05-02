@@ -19,7 +19,7 @@ import { CreateAccountForm, CreateAccountReq } from '@/types'
 import { getAddressLabel, removeEmptyValueFromObject } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Controller, useForm } from 'react-hook-form'
 import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -88,7 +88,7 @@ const CreateCustomer = () => {
           latitude: (location?.latitude ?? 0).toString(),
           address: { ...params.address, country_id: DEFAULT_COUNTRY_ID },
           route_sale_id: params.route_sale_id?.id,
-          birth_day: params?.birth_day ? moment(params.birth_day).format('DD-MM-YYYY') : '',
+          birth_day: params?.birth_day ? dayjs(params.birth_day).format('DD-MM-YYYY') : '',
         })
       )
     })()

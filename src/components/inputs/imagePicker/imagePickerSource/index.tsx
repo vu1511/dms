@@ -117,22 +117,26 @@ const ImagePickerSource = ({ onLoad, onChange, onBlur, ...options }: ImagePicker
   return (
     <View style={styles.container} pointerEvents={sourceLoading ? 'none' : 'auto'}>
       <TouchableOpacity activeOpacity={0.5} style={styles.btnItem} onPress={() => handleSelect('library')}>
-        {sourceLoading === 'library' ? <Loading /> : <PhotoIcon size={28} fill={Colors.gray70} />}
+        {sourceLoading === 'library' ? (
+          <View style={BaseStyles.p2}>
+            <ActivityIndicator size={24} color={Colors.gray70} />
+          </View>
+        ) : (
+          <PhotoIcon size={28} fill={Colors.gray70} />
+        )}
         <Text style={styles.btnItemText}>Thư viện</Text>
       </TouchableOpacity>
       <View style={styles.separator} />
       <TouchableOpacity activeOpacity={0.5} style={styles.btnItem} onPress={() => handleSelect('camera')}>
-        {sourceLoading === 'camera' ? <Loading /> : <CameraIcon size={32} fill={Colors.gray70} />}
+        {sourceLoading === 'camera' ? (
+          <View style={BaseStyles.p4}>
+            <ActivityIndicator size={24} color={Colors.gray70} />
+          </View>
+        ) : (
+          <CameraIcon size={32} fill={Colors.gray70} />
+        )}
         <Text style={styles.btnItemText}>Chụp ảnh</Text>
       </TouchableOpacity>
-    </View>
-  )
-}
-
-const Loading = () => {
-  return (
-    <View style={BaseStyles.p4}>
-      <ActivityIndicator size={24} color={Colors.gray70} />
     </View>
   )
 }
