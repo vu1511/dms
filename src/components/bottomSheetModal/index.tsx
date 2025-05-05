@@ -56,7 +56,7 @@ const BottomSheetModal = forwardRef<VisibleAction, BottomSheetModalProps>(
       bottomSheetRef.current?.present()
     }, [])
 
-    useImperativeHandle(ref, () => ({ close, open }), [ref])
+    useImperativeHandle(ref, () => ({ close, open }), [close, open])
 
     useFocusEffect(
       useCallback(() => {
@@ -70,7 +70,7 @@ const BottomSheetModal = forwardRef<VisibleAction, BottomSheetModalProps>(
         }
         BackHandler.addEventListener('hardwareBackPress', onBackPress)
         return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress)
-      }, [bottomSheetRef, index])
+      }, [close, index])
     )
 
     const renderBackdrop = useCallback(
@@ -86,7 +86,7 @@ const BottomSheetModal = forwardRef<VisibleAction, BottomSheetModalProps>(
           />
         )
       },
-      [bottomInset]
+      [bottomInset, close]
     )
 
     const handleComponent = useCallback(
@@ -108,7 +108,15 @@ const BottomSheetModal = forwardRef<VisibleAction, BottomSheetModalProps>(
       [onShow]
     )
 
-    const renderChildren = typeof children === 'function' ? children({ visible: index > -1 }) : children
+    const RenderBottom = useMemo(
+      () => showBottomSpacing && <View style={{ height: bottom }} />,
+      [bottom, showBottomSpacing]
+    )
+
+    const RenderChildren = useMemo(
+      () => (typeof children === 'function' ? children({ visible: index > -1 }) : children),
+      [children, index]
+    )
 
     return (
       <RNBottomSheetModal
@@ -132,13 +140,13 @@ const BottomSheetModal = forwardRef<VisibleAction, BottomSheetModalProps>(
       >
         {enableDynamicSizing && dynamicSizingWithBottomSheetView ? (
           <BottomSheetView>
-            {renderChildren}
-            {showBottomSpacing ? <View style={{ height: bottom }} /> : null}
+            {RenderChildren}
+            {RenderBottom}
           </BottomSheetView>
         ) : (
           <>
-            {renderChildren}
-            {showBottomSpacing ? <View style={{ height: bottom }} /> : null}
+            {RenderChildren}
+            {RenderBottom}
           </>
         )}
       </RNBottomSheetModal>

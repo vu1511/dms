@@ -1,5 +1,5 @@
 import { Colors } from '@/theme'
-import { IdAndName, IdAndQty } from './core'
+import { ETimePeriod, IdAndName, IdAndQty } from './core'
 import { QueryList } from './http'
 import { ProductType } from './product'
 import { PromotionOrderRes } from './promotion'
@@ -297,7 +297,7 @@ export interface GetOrderHistoryListReq extends QueryList {
   booking_state?: string
   date_starting?: string
   date_ending?: string
-  date_type?: DateType
+  date_type?: ETimePeriod
   keyword?: string
   partner_id?: number
 }
@@ -409,9 +409,9 @@ export const OrderStateColor = {
 } as const
 
 export const BookingTypeLabel = {
-  state: 'Trạng thái',
-  delivery_status: 'Giao hàng',
-  paid_status: 'Thanh toán',
-  return_delivery_status: 'Trả hàng',
-  return_paid_status: 'Hoàn tiền',
+  state: 'Trạng thái đơn hàng',
+  delivery_status: 'Trạng thái giao hàng',
+  paid_status: 'Trạng thái thanh toán',
+  return_delivery_status: 'Trạng thái trả hàng',
+  return_paid_status: 'Trạng thái hoàn tiền',
 } as const

@@ -1,6 +1,6 @@
 import { Chip } from '@/components'
 import { useUserSlice } from '@/store'
-import { BaseStyles, Colors } from '@/theme'
+import { Colors } from '@/theme'
 import { OrderStateColor } from '@/types'
 import { formatMoneyVND } from '@/utils'
 import { Text, TouchableOpacity, View } from 'react-native'
@@ -40,15 +40,15 @@ export const OrderHistoryItem = ({
           </View>
           <Chip label={stateName} color={OrderStateColor?.[stateValue] || Colors.gray80} />
         </View>
-        <View style={[BaseStyles.cGap8, BaseStyles.flexRowSpaceBetween]}>
+        <View style={styles.lineItem}>
           <Text numberOfLines={1} style={styles.lineItemText}>
-            Tổng tiền: {formatMoneyVND(amountTotal)}
+            {formatMoneyVND(amountTotal)}
           </Text>
           <Text numberOfLines={1} style={styles.lineItemText}>
-            Ngày đặt: {createDate}
+            {createDate}
           </Text>
         </View>
-        <View style={[BaseStyles.cGap8, BaseStyles.flexRowSpaceBetween]}>
+        <View style={styles.lineItem}>
           {sellBy && accountType !== 'nvkd' && (
             <Text numberOfLines={1} style={styles.lineItemText}>
               Nhân viên: <Text style={styles.capitalize}>{sellBy}</Text>

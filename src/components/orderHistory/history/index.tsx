@@ -1,13 +1,15 @@
-import { List, ListItemSeparator, SearchInput } from '@/components'
-import { usePreviousRoute } from '@/hooks'
+import { CalendarIcon, FilterIcon } from '@/assets'
+import { BottomSheetModal, List, ListItemSeparator, SearchInput, SelectPeriodDate } from '@/components'
+import { usePreviousRoute, useVisibleRef } from '@/hooks'
 import { Navigation, Routes } from '@/routes'
-import { BaseStyles } from '@/theme'
+import { BaseStyles, Colors } from '@/theme'
 import { GetOrderHistoryListReq, OrderRes } from '@/types'
 import { formatMoneyVND } from '@/utils'
 import { useNavigation } from '@react-navigation/native'
 import { ListRenderItem } from '@shopify/flash-list'
 import { useCallback } from 'react'
-import { StyleProp, Text, View, ViewStyle } from 'react-native'
+import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { Filter } from '../filter'
 import { OrderHistoryItem } from '../item'
 import OrderHistoryListLoading from '../loading'
 import { useOrderHistories } from './hook'
@@ -20,8 +22,10 @@ export type OrderHistoryListProps = {
 
 const OrderHistoryList = ({ initialParams, headerStyle }: OrderHistoryListProps) => {
   const navigation = useNavigation<Navigation>()
+  const { ref, onClose, onOpen } = useVisibleRef()
 
-  const { data, isLoading, hasMore, summary, refresh, filter, getMore, mutate } = useOrderHistories(initialParams)
+  const { data, isLoading, hasMore, params, summary, refresh, filter, getMore, mutate } =
+    useOrderHistories(initialParams)
 
   usePreviousRoute(() => {
     mutate()
@@ -63,9 +67,34 @@ const OrderHistoryList = ({ initialParams, headerStyle }: OrderHistoryListProps)
             onChange={(keyword) => filter({ keyword })}
             style={styles.searchInput}
           />
-          {/* <TouchableOpacity activeOpacity={0.5} onPress={onOpen} style={styles.filterBtn}>
+          <SelectPeriodDate
+            defaultValue={{
+              periodDate: params.date_type,
+              dateRange:
+                params.date_starting && params.date_ending
+                  ? {
+                      fromDate: params.date_starting,
+                      toDate: params.date_ending,
+                    }
+                  : undefined,
+            }}
+            onChange={(val) => {
+              filter({
+                date_ending: val.dateRange?.toDate,
+                date_starting: val.dateRange?.fromDate,
+                date_type: val.periodDate,
+              })
+            }}
+          >
+            <TouchableOpacity activeOpacity={0.5} style={styles.filterBtn}>
+              <CalendarIcon size={16} fill={Colors.gray80} />
+              {!!((params.date_ending && params.date_starting) || params.date_type) && <View style={styles.dot} />}
+            </TouchableOpacity>
+          </SelectPeriodDate>
+          <TouchableOpacity onPress={onOpen} activeOpacity={0.5} style={styles.filterBtn}>
             <FilterIcon size={16} fill={Colors.gray80} />
-          </TouchableOpacity> */}
+            {!!(params.booking_state && params.booking_type) && <View style={styles.dot} />}
+          </TouchableOpacity>
         </View>
         {summary ? (
           <View style={styles.summary}>
@@ -87,12 +116,6 @@ const OrderHistoryList = ({ initialParams, headerStyle }: OrderHistoryListProps)
             </View>
           </View>
         ) : null}
-        {/* <BottomSheetModal ref={ref}>
-          <Header
-            title="Bộ lọc"
-            left={<IconButton onPress={onClose} icon={CloseIcon} size={20} color={Colors.gray80} />}
-          />
-        </BottomSheetModal> */}
       </View>
       <List
         data={data}
@@ -108,6 +131,9 @@ const OrderHistoryList = ({ initialParams, headerStyle }: OrderHistoryListProps)
         ItemSeparatorComponent={ListItemSeparator}
         ListLoadingComponent={<OrderHistoryListLoading />}
       />
+      <BottomSheetModal ref={ref} snapPoints={[600]}>
+        <Filter onClose={onClose} defaultValue={params} onChange={filter} />
+      </BottomSheetModal>
     </View>
   )
 }

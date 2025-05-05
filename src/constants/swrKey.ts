@@ -6,7 +6,7 @@ export const SwrKey = {
   category_majors: 'category_majors',
   customerDetail: (id: number) => `customer_detail?id=${id}`,
   orderHistories: 'order_histories',
-  getOrderStatus: 'get_order_satus',
+  orderStatuses: 'orderStatuses',
   orderHistoryDetail: (id: number) => `order_history_detail_${id}`,
   shareOrderFile: (id: number) => `share_order_file_${id}`,
 

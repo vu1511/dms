@@ -116,7 +116,7 @@ export const Report = ({ customerId, accountType }: { customerId: number; accoun
         )}
       </View>
 
-      <BottomSheetModal ref={ref}>
+      <BottomSheetModal ref={ref} enableDynamicSizing>
         <Header
           title="Chọn thời gian"
           right={<IconButton onPress={onClose} icon={CloseIcon} size={20} color={Colors.gray80} />}

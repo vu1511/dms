@@ -9,16 +9,30 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     columnGap: 8,
   },
+  content: {
+    flex: 1,
+    rowGap: 2,
+  },
   disabled: {
     opacity: 0.5,
   },
-  text: {
+  title: {
     ...Typography.body16Normal,
     lineHeight: 24,
-    flex: 1,
+    flexShrink: 1,
   },
-  textActive: {
+  subTitle: {
+    ...Typography.body14Normal,
+    color: Colors.gray60,
+    flexShrink: 1,
+  },
+  titleActive: {
     ...Typography.body16SemiBold,
     lineHeight: 24,
+  },
+  rightArea: {
+    columnGap: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 })

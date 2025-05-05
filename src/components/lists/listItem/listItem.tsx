@@ -7,8 +7,10 @@ import { styles } from './style'
 export type ListItemProps = {
   onPress?: () => void
   title: string | ReactNode
+  subTitle?: string | ReactNode
   numberOfLines?: number
   titleStyle?: StyleProp<TextStyle>
+  subTitleStyle?: StyleProp<TextStyle>
   active?: boolean
   disabled?: boolean
   readOnly?: boolean
@@ -21,6 +23,8 @@ const ListItem = ({
   onPress,
   style,
   title,
+  subTitle,
+  subTitleStyle,
   numberOfLines = 2,
   active,
   readOnly,
@@ -37,15 +41,25 @@ const ListItem = ({
     >
       <View style={[styles.container, disabled && styles.disabled, style]}>
         {left}
-        {typeof title === 'string' ? (
-          <Text numberOfLines={numberOfLines} style={[styles.text, titleStyle, active && styles.textActive]}>
-            {title}
-          </Text>
-        ) : (
-          title
-        )}
-        {right ??
-          (active ? (
+        <View style={styles.content}>
+          {typeof title === 'string' ? (
+            <Text numberOfLines={numberOfLines} style={[styles.title, titleStyle, active && styles.titleActive]}>
+              {title}
+            </Text>
+          ) : (
+            title
+          )}
+          {!!subTitle &&
+            (typeof subTitle === 'string' ? (
+              <Text numberOfLines={numberOfLines} style={[styles.subTitle, subTitleStyle]}>
+                {subTitle}
+              </Text>
+            ) : (
+              subTitle
+            ))}
+        </View>
+        <View style={styles.rightArea}>
+          {active && (
             <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
               <Path
                 fillRule="evenodd"
@@ -54,7 +68,9 @@ const ListItem = ({
                 fill={Colors.active}
               />
             </Svg>
-          ) : null)}
+          )}
+          {right}
+        </View>
       </View>
     </TouchableHighlight>
   )

@@ -3,6 +3,7 @@ import { orderAPI } from '@/services'
 import { GetOrderHistoryListReq, GetOrderHistoryRes, OrderRes } from '@/types'
 import { removeEmptyValueFromObject } from '@/utils'
 import { useCallback, useMemo, useState } from 'react'
+import useSWR from 'swr'
 import useSWRInfinite from 'swr/dist/infinite'
 
 const OFFSET = 0
@@ -18,6 +19,10 @@ export const useOrderHistories = (externalInitialParams?: Partial<GetOrderHistor
   const [initialParams] = useState<GetOrderHistoryListReq>({ limit: LIMIT, offset: OFFSET, ...externalInitialParams })
   const [params, setParams] = useState<GetOrderHistoryListReq>(initialParams)
   const [revalidatedAll, setRevalidatedAll] = useState<boolean>(false)
+
+  useSWR(SwrKey.orderStatuses, () => orderAPI.getStatusOrder().then((res) => res.result), {
+    dedupingInterval: 1000 * 60 * 10,
+  })
 
   const getKey = useCallback(
     (page: number, previousData: PreviousData | null): GetKeyResult | null => {
