@@ -46,4 +46,15 @@ export const styles = StyleSheet.create({
   summaryValue: {
     ...Typography.body14Medium,
   },
+  dot: {
+    width: 9,
+    height: 9,
+    borderRadius: 9 / 2,
+    borderColor: Colors.white,
+    borderWidth: 1,
+    backgroundColor: Colors.primary,
+    position: 'absolute',
+    right: 4,
+    top: 4,
+  },
 })

@@ -36,6 +36,9 @@ export const BaseStyles = StyleSheet.create({
   mb8: {
     marginBottom: 8,
   },
+  pl16: {
+    paddingLeft: 16,
+  },
   mb12: {
     marginBottom: 12,
   },
@@ -202,7 +205,7 @@ export const BaseStyles = StyleSheet.create({
 
   // Shadow
   shadowSm: {
-    shadowColor: Colors.gray50,
+    shadowColor: Colors.gray80,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -212,7 +215,7 @@ export const BaseStyles = StyleSheet.create({
     elevation: 2,
   },
   shadowMd: {
-    shadowColor: Colors.gray50,
+    shadowColor: Colors.gray80,
     shadowOffset: {
       width: 0,
       height: 3,
@@ -222,7 +225,7 @@ export const BaseStyles = StyleSheet.create({
     elevation: 4,
   },
   shadowLg: {
-    shadowColor: Colors.gray50,
+    shadowColor: Colors.gray80,
     shadowOffset: {
       width: 0,
       height: 6,
@@ -232,7 +235,7 @@ export const BaseStyles = StyleSheet.create({
     elevation: 8,
   },
   shadowXl: {
-    shadowColor: Colors.gray50,
+    shadowColor: Colors.gray80,
     shadowOffset: {
       width: 0,
       height: 10,

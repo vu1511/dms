@@ -1,6 +1,6 @@
-import { Colors } from '@/theme'
-import { ReactNode } from 'react'
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import { BaseStyles, Colors } from '@/theme'
+import { memo, ReactNode, useMemo } from 'react'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export type BottomAreaViewProps = {
@@ -10,38 +10,23 @@ export type BottomAreaViewProps = {
   style?: StyleProp<ViewStyle>
 }
 
-const BottomAreaView = ({ children, bgColor = Colors.white, style, shadowVisible = true }: BottomAreaViewProps) => {
-  const { bottom } = useSafeAreaInsets()
+const BottomAreaView = memo(
+  ({ children, bgColor = Colors.white, style, shadowVisible = true }: BottomAreaViewProps) => {
+    const { bottom } = useSafeAreaInsets()
 
-  return (
-    <View
-      style={[
+    const styles = useMemo(
+      () => [
         { backgroundColor: bgColor },
-        !!children && styles.p16,
+        !!children && BaseStyles.p16,
         bottom > 16 && { paddingBottom: bottom },
-        shadowVisible && styles.shadow,
+        shadowVisible && BaseStyles.shadowLg,
         style,
-      ]}
-    >
-      {children}
-    </View>
-  )
-}
+      ],
+      [bgColor, bottom, children, shadowVisible, style]
+    )
+
+    return <View style={styles}>{children}</View>
+  }
+)
 
 export default BottomAreaView
-
-const styles = StyleSheet.create({
-  p16: {
-    padding: 16,
-  },
-  shadow: {
-    shadowColor: '#212121',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 10,
-  },
-})

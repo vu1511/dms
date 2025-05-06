@@ -1,0 +1,189 @@
+import { ArrowLeftIcon, ArrowRightIcon, CloseIcon, ResetIcon } from '@/assets'
+import {
+  ActivityIndicator,
+  BottomAreaView,
+  Button,
+  Checkbox,
+  Chip,
+  Empty,
+  Header,
+  IconButton,
+  ListItem,
+  ListItemSeparator,
+  MovableScreen,
+} from '@/components'
+import { SwrKey } from '@/constants'
+import { BaseStyles, Colors } from '@/theme'
+import { BookingType, BookingTypeLabel, GetOrderHistoryListReq, GetStatusOrderRes, Option } from '@/types'
+import { removeEmptyValueFromObject } from '@/utils'
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
+import { Fragment, useMemo, useState } from 'react'
+import { View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import useSWR from 'swr'
+
+type FilterProps = {
+  onClose: () => void
+  onChange?: (val: GetOrderHistoryListReq) => void
+  defaultValue?: GetOrderHistoryListReq
+}
+
+type Params = Omit<GetOrderHistoryListReq, 'limit' | 'offset'>
+
+export const Filter = ({ onClose, onChange, defaultValue }: FilterProps) => {
+  const { bottom } = useSafeAreaInsets()
+
+  const { data, isLoading } = useSWR<GetStatusOrderRes>(SwrKey.orderStatuses)
+
+  const [currentIndex, setCurrentIndex] = useState<number | null>(null)
+  const [params, setParams] = useState<Params>(() => {
+    return removeEmptyValueFromObject({
+      booking_state: defaultValue?.booking_state,
+      booking_type: defaultValue?.booking_type,
+    })
+  })
+
+  const options = useMemo<(Option<BookingType> & { items: Option[] })[]>(() => {
+    return data
+      ? Object.entries(data).map(([key, value]) => ({
+          value: key as BookingType,
+          label: BookingTypeLabel?.[key as BookingType] ?? '',
+          items: Object.entries(value).map(([key, value]) => ({
+            value: key,
+            label: value as string,
+          })),
+        }))
+      : []
+  }, [data])
+
+  const isVisible = currentIndex !== null
+  const currentStatus = isVisible ? options[currentIndex] : null
+  const hasFilterValue = !!(params?.booking_state && params?.booking_type)
+
+  const RenderHeader = useMemo(() => {
+    return (
+      <Header
+        title="Bộ lọc"
+        right={<IconButton color={Colors.gray80} size={20} icon={CloseIcon} onPress={onClose} />}
+        left={
+          <IconButton
+            size={20}
+            icon={ResetIcon}
+            color={Colors.gray80}
+            disabled={!hasFilterValue}
+            onPress={() => setParams({ booking_state: undefined, booking_type: undefined })}
+          />
+        }
+      />
+    )
+  }, [hasFilterValue, onClose])
+
+  const goBack = () => {
+    setCurrentIndex(null)
+  }
+
+  const handleChange = () => {
+    onClose()
+    requestAnimationFrame(() => {
+      onChange?.(params)
+    })
+  }
+
+  if (isLoading) {
+    return (
+      <>
+        {RenderHeader}
+        <ActivityIndicator size={24} style={BaseStyles.pt72} />
+      </>
+    )
+  }
+
+  if (!options.length) {
+    return (
+      <>
+        {RenderHeader}
+        <Empty />
+      </>
+    )
+  }
+
+  return (
+    <MovableScreen
+      visible={isVisible}
+      movableScreen={
+        !!currentStatus && (
+          <>
+            <Header
+              title={currentStatus.label}
+              left={<IconButton color={Colors.gray80} size={20} icon={ArrowLeftIcon} onPress={goBack} />}
+              right={<IconButton color={Colors.gray80} size={20} icon={CloseIcon} onPress={onClose} />}
+            />
+            <BottomSheetScrollView contentContainerStyle={[BaseStyles.grow1, { paddingBottom: bottom }]}>
+              {currentStatus.items.map((i, _index) => {
+                const isActive = params?.booking_type === currentStatus.value && params?.booking_state === i.value
+                return (
+                  <Fragment key={i.value}>
+                    <ListItem
+                      title={i.label}
+                      style={BaseStyles.py16}
+                      onPress={() => {
+                        goBack()
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          booking_type: currentStatus.value,
+                          booking_state: i.value,
+                        }))
+                      }}
+                      left={<Checkbox readOnly size={20} type="radio" value={isActive} />}
+                    />
+                    {_index < currentStatus.items.length - 1 && <ListItemSeparator style={BaseStyles.pl16} />}
+                  </Fragment>
+                )
+              })}
+            </BottomSheetScrollView>
+          </>
+        )
+      }
+    >
+      {RenderHeader}
+      <BottomSheetScrollView contentContainerStyle={BaseStyles.grow1}>
+        {options.map((item, index) => {
+          const isActive = params?.booking_type === item.value
+          const subTitle = isActive ? item.items.find((i) => i.value === params?.booking_state)?.label : undefined
+          return (
+            <View key={item.value}>
+              <ListItem
+                title={item.label}
+                style={BaseStyles.py16}
+                disabled={!item.items?.length}
+                onPress={() => setCurrentIndex(index)}
+                right={<ArrowRightIcon size={20} fill={Colors.gray80} />}
+                left={<Checkbox readOnly size={20} type="radio" value={isActive} />}
+                subTitle={
+                  subTitle && (
+                    <Chip
+                      label={subTitle}
+                      color={Colors.primary}
+                      right={<CloseIcon size={14} fill={Colors.primary} />}
+                      onPress={() =>
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          booking_type: undefined,
+                          booking_state: undefined,
+                        }))
+                      }
+                    />
+                  )
+                }
+              />
+              {index < options.length - 1 && <ListItemSeparator style={BaseStyles.pl16} />}
+            </View>
+          )
+        })}
+      </BottomSheetScrollView>
+      <BottomAreaView shadowVisible={false}>
+        <Button title="Lưu" onPress={handleChange} />
+      </BottomAreaView>
+    </MovableScreen>
+  )
+}

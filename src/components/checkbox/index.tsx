@@ -99,7 +99,7 @@ const Checkbox = memo(
       } else {
         scale.value = withTiming(0, { duration: 150 })
       }
-    }, [checked])
+    }, [background, checked, opacity, scale])
 
     const toggleCheckbox = useCallback(() => {
       if (isControlled) {
@@ -123,19 +123,22 @@ const Checkbox = memo(
       opacity: opacity.value,
     }))
 
+    const sizeStyle = useMemo(() => ({ height: size, width: size }), [size])
+
+    const wrapperStyle = useMemo(() => [sizeStyle, disabled && BaseStyles.opacity50], [disabled, sizeStyle])
+
     const checkboxStyle = useMemo<StyleProp<ViewStyle>>(() => {
       return [
         animatedBackground,
+        sizeStyle,
         {
-          width: size,
-          height: size,
           borderWidth: 2,
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: type === 'checkbox' ? Spacings.xs : size / 2,
         },
       ]
-    }, [type, size, animatedBackground])
+    }, [animatedBackground, sizeStyle, type, size])
 
     const radioCheckIconStyle = useMemo(
       () => ({
@@ -144,16 +147,16 @@ const Checkbox = memo(
         backgroundColor: 'white',
         borderRadius: size / 2,
       }),
-      []
+      [size]
     )
 
     return (
       <Pressable
         hitSlop={hitSlop}
+        style={wrapperStyle}
         testID="checkbox-btn"
         onPress={toggleCheckbox}
         disabled={disabled || readOnly}
-        style={[BaseStyles.alignSelfStart, disabled && BaseStyles.opacity50]}
       >
         <Animated.View testID="checkbox-area" style={checkboxStyle}>
           <Animated.View testID="checkbox-icon-wrapper" style={checkmarkStyle}>

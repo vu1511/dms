@@ -25,7 +25,6 @@ import useSWR from 'swr'
 import { CartLoading } from './cartLoading'
 import { OrderProductItem } from './orderProductItem'
 import { PromotionsAppliedOnOrderView } from './promotionsAppliedOnOrderView'
-import { StatusOrder } from './statusOrder'
 import { styles } from './styles'
 
 const OrderDetail = () => {
@@ -98,10 +97,6 @@ const OrderDetail = () => {
         <Empty title="Không tìm thấy đơn hàng" />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
-          <View style={styles.section}>
-            <StatusOrder state={data.state} state_delivery={data.state_delivery} state_paid={data.state_paid} />
-          </View>
-
           <View style={styles.section}>
             <View style={BaseStyles.rGap2}>
               <View style={[BaseStyles.flexRowItemsCenter]}>

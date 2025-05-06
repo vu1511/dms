@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from '@/assets'
 import { BaseStyles, Colors } from '@/theme'
 import { useNavigation } from '@react-navigation/native'
-import { ReactNode } from 'react'
+import { ReactNode, useCallback, useMemo } from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { IconButton } from '../button'
@@ -30,19 +30,27 @@ const Container = ({
   const navigation = useNavigation()
   const { top } = useSafeAreaInsets()
 
-  const goBack = () => {
+  const headerStyles = useMemo(
+    () => [
+      { paddingTop: top, backgroundColor: headerBackground },
+      headerShadowVisible && { ...BaseStyles.shadowSm, zIndex: 10 },
+    ],
+    [headerBackground, headerShadowVisible, top]
+  )
+
+  const childrenStyle = useMemo(
+    () => [BaseStyles.flex1, { backgroundColor }, contentStyle],
+    [backgroundColor, contentStyle]
+  )
+
+  const goBack = useCallback(() => {
     navigation.goBack()
-  }
+  }, [navigation])
 
   return (
     <View style={BaseStyles.flex1}>
       {headerShown ? (
-        <View
-          style={[
-            { paddingTop: top, backgroundColor: headerBackground },
-            headerShadowVisible && { ...BaseStyles.shadowMd, zIndex: 10 },
-          ]}
-        >
+        <View style={headerStyles}>
           <Header
             left={<IconButton size={20} icon={ArrowLeftIcon} color={Colors.gray80} onPress={goBack} />}
             {...props}
@@ -50,7 +58,7 @@ const Container = ({
           {HeaderComponent}
         </View>
       ) : null}
-      <View style={[BaseStyles.flex1, { backgroundColor }, contentStyle]}>{children}</View>
+      <View style={childrenStyle}>{children}</View>
     </View>
   )
 }

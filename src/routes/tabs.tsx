@@ -1,8 +1,6 @@
 import {
   BagFillIcon,
   BagIcon,
-  ClockFillIcon,
-  ClockIcon,
   HomeFillIcon,
   HomeIcon,
   UserSquareFillIcon,
@@ -12,7 +10,7 @@ import {
 } from '@/assets'
 import { BottomTabs } from '@/components'
 import { RouteData, Tabs as RouteTabs } from '@/routes'
-import { Account, CustomersToCheckIn, Home } from '@/screens'
+import { Account, CustomersToCheckIn, Home, OrderTab } from '@/screens'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 const Tab = createBottomTabNavigator()
@@ -48,17 +46,17 @@ const bottomTabs: RouteData[] = [
   {
     route: RouteTabs.OrderTab,
     label: 'Đặt hàng',
-    Component: () => null,
+    Component: OrderTab,
     Icon: BagIcon,
     IconActive: BagFillIcon,
   },
-  {
-    route: RouteTabs.HistoryTab,
-    label: 'Lịch sử',
-    Component: () => null,
-    Icon: ClockIcon,
-    IconActive: ClockFillIcon,
-  },
+  // {
+  //   route: RouteTabs.HistoryTab,
+  //   label: 'Lịch sử',
+  //   Component: () => null,
+  //   Icon: ClockIcon,
+  //   IconActive: ClockFillIcon,
+  // },
   {
     route: RouteTabs.AccountTab,
     label: 'Cá nhân',

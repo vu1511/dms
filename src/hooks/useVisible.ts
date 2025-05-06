@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 
-export const useVisible = () => {
-  const [visible, setVisible] = useState<boolean>(false)
+export const useVisible = (initialState?: boolean | (() => boolean)) => {
+  const [visible, setVisible] = useState<boolean>(initialState ?? false)
 
   const onClose = useCallback(() => setVisible(false), [])
   const onOpen = useCallback(() => setVisible(true), [])
@@ -14,6 +14,6 @@ export const useVisible = () => {
       onOpen,
       toggle,
     }),
-    [visible]
+    [onClose, onOpen, toggle, visible]
   )
 }
