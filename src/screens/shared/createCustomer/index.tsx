@@ -1,14 +1,5 @@
 import { ArrowRightIcon } from '@/assets'
-import {
-  AvatarPicker,
-  BottomAreaView,
-  Button,
-  Container,
-  DateField,
-  PasswordField,
-  TextField,
-  TextInput,
-} from '@/components'
+import { AvatarPicker, Button, Container, DateField, PasswordField, TextField, TextInput } from '@/components'
 import { DEFAULT_COUNTRY_ID } from '@/constants'
 import { System } from '@/core'
 import { useAsync, useCurrentLocation, usePreventGoBack } from '@/hooks'
@@ -21,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import dayjs from 'dayjs'
 import { Controller, useForm } from 'react-hook-form'
-import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { CustomerGroupField } from './customerGroupField'
 import { RouteField } from './routeField'
@@ -41,7 +32,7 @@ const CreateCustomer = () => {
     control,
     handleSubmit,
     setFocus,
-    formState: { isDirty, isSubmitSuccessful },
+    formState: { isValid, isDirty, isSubmitSuccessful },
   } = useForm<CreateAccountForm>({
     resolver: yupResolver(createCustomerSchema),
     mode: 'onChange',
@@ -95,13 +86,25 @@ const CreateCustomer = () => {
   }
 
   return (
-    <Container backgroundColor={Colors.white} headerShadowVisible={false} title="Tạo khách hàng">
+    <Container
+      backgroundColor={Colors.white}
+      title="Tạo khách hàng"
+      right={
+        <Button
+          type="text"
+          disabled={!isValid}
+          onPress={onSubmitHandler}
+          loading={isLoadingLocation}
+          title={isLoadingLocation ? '' : 'Lưu'}
+        />
+      }
+    >
       <KeyboardAwareScrollView
+        bottomOffset={24}
         style={BaseStyles.flex1}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ rowGap: 24, padding: 16 }}
-        bottomOffset={64 + Math.max(bottom, 16) + 12}
+        contentContainerStyle={{ rowGap: 24, padding: 16, paddingBlock: Math.max(bottom, 16) }}
       >
         <Controller
           control={control}
@@ -185,16 +188,6 @@ const CreateCustomer = () => {
           onSubmitEditing={onSubmitHandler}
         />
       </KeyboardAwareScrollView>
-
-      <KeyboardStickyView offset={{ opened: Math.max(bottom - 16, 0) }}>
-        <BottomAreaView>
-          <Button
-            title={isLoadingLocation ? 'Đang lấy vị trí' : 'Xác nhận'}
-            loading={isLoadingLocation}
-            onPress={onSubmitHandler}
-          />
-        </BottomAreaView>
-      </KeyboardStickyView>
     </Container>
   )
 }

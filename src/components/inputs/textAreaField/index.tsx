@@ -33,7 +33,7 @@ const TextAreaField = <
         onBlur={onBlur}
         autoCorrect={false}
         autoCapitalize="none"
-        style={[styles.input, error?.message && styles.inputError]}
+        style={[styles.input, error && styles.inputError]}
         onChangeText={(text) => onChange(text)}
       />
       {error ? <Text style={BaseStyles.inputErrorMessage}>{error?.message || 'Vui lòng nhập trường này'}</Text> : null}
@@ -46,17 +46,20 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   input: {
+    ...Typography.body16Normal,
+    lineHeight: 24,
     padding: 12,
     minHeight: 56,
     maxHeight: 120,
     borderRadius: Spacings.sm,
     backgroundColor: Colors.inputBg,
     textAlignVertical: 'top',
-    ...Typography.body16Normal,
-    lineHeight: undefined,
+    borderWidth: 1,
+    borderColor: Colors.inputBg,
   },
   inputError: {
     borderColor: Colors.danger,
+    backgroundColor: Colors.dangerBg,
   },
 })
 

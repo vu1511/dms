@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   header: {
-    ...BaseStyles.shadowLg,
+    ...BaseStyles.shadowSm,
     paddingBottom: 12,
     paddingHorizontal: 16,
     backgroundColor: Colors.white,

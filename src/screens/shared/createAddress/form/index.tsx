@@ -82,6 +82,7 @@ export const CreateAddress = ({ defaultValues, onSubmit }: CreateAddressProps) =
 
   return (
     <Container
+      headerShadowVisible={false}
       backgroundColor={Colors.white}
       title={defaultValues ? 'Cập nhật địa chỉ' : 'Tạo địa chỉ'}
       right={<Button disabled={!isValid} type="text" title="Lưu" onPress={handleSubmit} />}

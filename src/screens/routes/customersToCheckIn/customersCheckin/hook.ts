@@ -288,7 +288,7 @@ export const useCustomersCheckin = () => {
   const onRate = useCallback(
     (item: SearchCustomerRouteRes) => {
       navigation.navigate(Routes.CreateRating, {
-        customerId: item.id,
+        defaultValues: { customer_id: { id: item.id, name: item.name } },
         onSuccess: goBack,
       })
     },

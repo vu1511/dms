@@ -4,7 +4,7 @@ import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 
 export type HeaderProps = {
   title?: ReactNode
-  edgeWidth?: number
+  asideWidth?: number
   children?: ReactNode
   left?: ReactNode
   leftStyle?: StyleProp<ViewStyle>
@@ -18,7 +18,7 @@ const Header = ({
   children,
   title,
   style,
-  edgeWidth = 40,
+  asideWidth = 40,
   containerStyle,
   left,
   right,
@@ -28,7 +28,7 @@ const Header = ({
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={[styles.header, !!children && styles.pb8, style]}>
-        <View style={[{ width: edgeWidth }, leftStyle]}>{left}</View>
+        <View style={[{ width: asideWidth }, leftStyle]}>{left}</View>
         <View style={styles.headerContent}>
           {!!title &&
             (typeof title === 'string' ? (
@@ -39,7 +39,7 @@ const Header = ({
               title
             ))}
         </View>
-        <View style={[styles.headerRight, { width: edgeWidth }, rightStyle]}>{right}</View>
+        <View style={[styles.headerRight, { width: asideWidth }, rightStyle]}>{right}</View>
       </View>
       {children}
     </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerTitle: {
-    ...Typography.body16SemiBold,
+    ...Typography.body18SemiBold,
     textAlign: 'center',
   },
 })

@@ -114,6 +114,9 @@ export const BaseStyles = StyleSheet.create({
   rGap16: {
     rowGap: 16,
   },
+  rGap24: {
+    rowGap: 24,
+  },
   cGap16: {
     columnGap: 16,
   },

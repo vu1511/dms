@@ -1,7 +1,7 @@
 import { ListRef } from '@/components'
 import { RouteProp, Routes } from '@/routes'
 import { ratingAPI } from '@/services'
-import { AllRatingType, AllRatingTypeOptions, ECustomerRatingType, RatingCommonData, RatingType } from '@/types'
+import { AllRatingType, AllRatingTypeOptions, isCustomerRatingType, RatingCommonData, RatingType } from '@/types'
 import { removeEmptyValueFromObject } from '@/utils'
 import { useRoute } from '@react-navigation/native'
 import { useCallback, useMemo, useRef, useState } from 'react'
@@ -151,16 +151,7 @@ export const useRatings = () => {
   }, [])
 
   return useMemo(
-    () => ({ data, isLoading, hasMore, ratingType, listRef, refresh, getMore, filter }),
-    [data, filter, getMore, hasMore, isLoading, ratingType, refresh]
-  )
-}
-
-const isCustomerRatingType = (type: AllRatingType): type is ECustomerRatingType => {
-  return (
-    type === ECustomerRatingType.Delivery ||
-    type === ECustomerRatingType.EmployeeAttitude ||
-    type === ECustomerRatingType.QualityProduct ||
-    type === ECustomerRatingType.QuantityProduct
+    () => ({ data, isLoading, hasMore, ratingType, listRef, customerId, refresh, getMore, filter, mutate }),
+    [data, customerId, filter, getMore, hasMore, isLoading, ratingType, refresh, mutate]
   )
 }

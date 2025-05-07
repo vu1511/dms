@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 100,
     left: 16,
-    ...BaseStyles.shadowLg,
+    ...BaseStyles.shadowMd,
   },
   currentLocationIcon: {
     position: 'absolute',

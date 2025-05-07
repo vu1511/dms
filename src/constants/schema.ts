@@ -1,4 +1,4 @@
-import { AttachmentUrlRes, IdAndName, IdAndUrl, ImagePickerResult, LngLat, StarRating } from '@/types'
+import { AttachmentUrlRes, IdAndName, IdAndUrl, ImagePickerResult, LngLat, Option, StarRating } from '@/types'
 import * as Yup from 'yup'
 import { Regex } from './regex'
 
@@ -11,6 +11,11 @@ export const idAndNameRequiredSchema: Yup.ObjectSchema<IdAndName> = Yup.object()
   id: Yup.number().required(),
   name: Yup.string().required(),
 })
+
+export const optionSchema: Yup.ObjectSchema<Option> = Yup.object().shape({
+  value: Yup.string(),
+  label: Yup.string(),
+}) as Yup.ObjectSchema<Option>
 
 export const idAndUrlSchema = Yup.object().shape({
   id: Yup.number(),

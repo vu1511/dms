@@ -38,7 +38,28 @@ export const CustomerCommentTypeLabel = {
 
 export type AllRatingType = RatingType | `${ECustomerRatingType}`
 
+export const isCustomerRatingType = (type: AllRatingType): type is ECustomerRatingType => {
+  return (
+    type === ECustomerRatingType.Delivery ||
+    type === ECustomerRatingType.EmployeeAttitude ||
+    type === ECustomerRatingType.QualityProduct ||
+    type === ECustomerRatingType.QuantityProduct
+  )
+}
+
 export const AllRatingTypeOptions: Option<AllRatingType>[] = [
+  {
+    label: RatingTypeLabel.product_store,
+    value: 'product_store',
+  },
+  {
+    label: RatingTypeLabel.product_product,
+    value: 'product_product',
+  },
+  {
+    label: RatingTypeLabel.product_damaged,
+    value: 'product_damaged',
+  },
   {
     label: 'Dịch vụ giao hàng',
     value: ECustomerRatingType.Delivery,
@@ -54,18 +75,6 @@ export const AllRatingTypeOptions: Option<AllRatingType>[] = [
   {
     label: 'Thái độ nhân viên',
     value: ECustomerRatingType.EmployeeAttitude,
-  },
-  {
-    label: RatingTypeLabel.product_store,
-    value: 'product_store',
-  },
-  {
-    label: RatingTypeLabel.product_product,
-    value: 'product_product',
-  },
-  {
-    label: RatingTypeLabel.product_damaged,
-    value: 'product_damaged',
   },
 ]
 
@@ -97,14 +106,11 @@ export interface CreateRatingPhotoReq {
 
 export interface CreateRatingForm {
   image: AttachmentUrlRes[]
+  customer_id: IdAndName
   rating_star: StarRating
   rating_tags: number[]
   rating_content: string
-}
-
-export type CreateRatingFormSubmit = Omit<CreateRatingForm, 'image'> & {
-  image: number[]
-  rating_type: RatingType
+  rating_type: Option<AllRatingType>
 }
 
 export interface CreateRatingPhotoRes {}
@@ -150,10 +156,13 @@ export interface GetCustomerCommentsReq extends QueryList {
 
 export interface CreateCustomerCommentReq {
   customer_id: number
-  comment_lines: (Omit<CreateRatingForm, 'image'> & {
+  comment_lines: {
+    rating_tags?: number[]
     rating_type: ECustomerRatingType
     attachment_images: number[]
-  })[]
+    rating_star: StarRating
+    rating_content: string
+  }[]
 }
 
 export interface CreateCustomerCommentRes {}

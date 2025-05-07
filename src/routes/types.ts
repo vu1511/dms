@@ -2,6 +2,7 @@ import { ScanBarcodeProps } from '@/components'
 import {
   AccountType,
   CreateAddressForm,
+  CreateRatingForm,
   CustomerRes,
   DebtRes,
   FilterProductReq,
@@ -122,8 +123,8 @@ export type StackParamsList = {
   }
   [Routes.ScanBarcode]: ScanBarcodeProps
   [Routes.CreateRating]: {
-    customerId: number
-    onSuccess?: () => void
+    defaultValues?: Partial<CreateRatingForm>
+    onSuccess?: (value: CreateRatingForm) => void
   }
   [Routes.CustomerDetail]: {
     customerId: number

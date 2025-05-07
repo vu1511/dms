@@ -87,6 +87,7 @@ const UpdateUserInfo = () => {
   return (
     <Container
       title="Cập nhật thông tin"
+      headerShadowVisible={false}
       backgroundColor={Colors.white}
       right={<Button disabled={!isValid || !isDirty} type="text" title="Lưu" onPress={onSubmitHandler} />}
     >

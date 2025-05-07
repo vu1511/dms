@@ -20,16 +20,6 @@ export const useAsyncV2 = <Params = any, Response = any>(
   fetcher: Fetcher<Params, Response>,
   options?: UseAsyncOptions<Response>
 ) => {
-  const {
-    onError,
-    onSuccess,
-    errorMsg,
-    successMsg,
-    toastOptions,
-    showErrorMsg = true,
-    showBackdrop = true,
-  } = options || {}
-
   const [isLoading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
@@ -39,7 +29,17 @@ export const useAsyncV2 = <Params = any, Response = any>(
   }, [])
 
   const trigger = useCallback(
-    async (params: Params): Promise<{ isSuccess: boolean }> => {
+    async (params: Params, triggerOptions?: UseAsyncOptions<Response>): Promise<{ isSuccess: boolean }> => {
+      const {
+        onError,
+        onSuccess,
+        errorMsg,
+        successMsg,
+        toastOptions,
+        showErrorMsg = true,
+        showBackdrop = true,
+      } = { ...options, ...triggerOptions }
+
       showBackdrop && System.showBackdrop()
       setLoading(true)
 
@@ -85,7 +85,7 @@ export const useAsyncV2 = <Params = any, Response = any>(
         showBackdrop && System.closeBackdrop()
       }
     },
-    [errorMsg, fetcher, onError, onSuccess, showBackdrop, showErrorMsg, successMsg, toastOptions]
+    [fetcher, options]
   )
 
   return useMemo(() => ({ isLoading, trigger }), [isLoading, trigger])
