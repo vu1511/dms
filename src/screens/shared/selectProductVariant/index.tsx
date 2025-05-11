@@ -234,7 +234,7 @@ const SelectProductVariant = () => {
       <BottomSheetModal ref={ref} enableDynamicSizing>
         <Header
           title="Sắp xếp theo"
-          right={<IconButton size={18} icon={CloseIcon} color={Colors.gray80} onPress={onClose} />}
+          right={<IconButton size={24} icon={CloseIcon} color={Colors.gray80} onPress={onClose} />}
         />
         {ProductFilterSortOptions.map((item, index) => {
           const isActive = params.sort_by ? params.sort_by === item.value : item.value === null

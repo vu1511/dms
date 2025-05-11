@@ -1,11 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { BarCodeIcon, CloseIcon } from '@/assets'
 import { IconButton } from '@/components/button'
 import { Navigation, Routes } from '@/routes'
 import { Colors } from '@/theme'
 import { useNavigation } from '@react-navigation/native'
 import debounce from 'lodash/debounce'
-import { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { forwardRef, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -71,6 +70,13 @@ export type SearchInputProps = Omit<TextInputProps, 'onChangeText' | 'onChange'>
   showBarcodeScan?: boolean
 
   /**
+   * Custom render function for the text input component.
+   * Allows customization of the input field.
+   * @param props - The properties to be passed to the custom TextInput.
+   */
+  renderTextInput?: (props: TextInputProps) => JSX.Element
+
+  /**
    * Callback fired when the clear (close) icon is pressed.
    */
   onClearValue?: () => void
@@ -98,6 +104,8 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
       searchIconColor = Colors.gray50,
       searchIconSize = 16,
       clearIconSize = 16,
+      showBarcodeScan,
+      renderTextInput,
       onChange: externalOnChange,
       onClearValue,
       onFocus,
@@ -121,6 +129,7 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
       if (externalValue !== valueRef.current) {
         handleSetValue(externalValue)
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [externalValue])
 
     const handleSetValue = useCallback((value: string | undefined) => {
@@ -128,6 +137,7 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
       valueRef.current = value
     }, [])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceFn = useCallback(
       debounce((value: string) => {
         externalOnChange?.(value)
@@ -154,14 +164,14 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
           handleSetValue(value)
         },
       })
-    }, [])
+    }, [handleSetValue, navigation])
 
     const handleFocus = useCallback(
       (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
         onFocus?.(e)
         isFocused.value = true
       },
-      [onFocus]
+      [isFocused, onFocus]
     )
 
     const handleBlur = useCallback(
@@ -169,13 +179,31 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
         onBlur?.(e)
         isFocused.value = false
       },
-      [onBlur]
+      [isFocused, onBlur]
     )
 
     const clearValue = useCallback(() => {
       handleChange('')
       onClearValue?.()
-    }, [onClearValue])
+    }, [handleChange, onClearValue])
+
+    const nextProps = useMemo<TextInputProps>(
+      () => ({
+        ref: ref,
+        value: value,
+        autoCorrect: false,
+        testID: 'search-input',
+        autoCapitalize: 'none',
+        placeholder: placeholder,
+        placeholderTextColor: Colors.gray50,
+        style: [styles.inputText, inputStyle],
+        onBlur: handleBlur,
+        onFocus: handleFocus,
+        onChangeText: handleChange,
+        ...attributes,
+      }),
+      [ref, value, placeholder, inputStyle, handleBlur, handleFocus, handleChange, attributes]
+    )
 
     return (
       <Animated.View style={[styles.inputContainer, borderAnimatedStyle, style]}>
@@ -189,23 +217,13 @@ const SearchInput = forwardRef<TextInput, SearchInputProps>(
             />
           </Svg>
         )}
-        <TextInput
-          ref={ref}
-          value={value}
-          autoCorrect={false}
-          testID="search-input"
-          autoCapitalize="none"
-          placeholder={placeholder}
-          placeholderTextColor={Colors.gray50}
-          style={[styles.inputText, inputStyle]}
-          onBlur={handleBlur}
-          onFocus={handleFocus}
-          onChangeText={handleChange}
-          {...attributes}
-        />
+        {renderTextInput ? renderTextInput(nextProps) : <TextInput {...nextProps} />}
         <View style={styles.inputRight}>
           {!!value && <IconButton onPress={clearValue} icon={CloseIcon} size={clearIconSize} color={Colors.gray50} />}
-          {right ?? <IconButton size={20} icon={BarCodeIcon} color={Colors.gray80} onPress={scanBarcode} />}
+          {right ??
+            (showBarcodeScan && (
+              <IconButton size={20} icon={BarCodeIcon} color={Colors.gray80} onPress={scanBarcode} />
+            ))}
         </View>
       </Animated.View>
     )

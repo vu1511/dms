@@ -1,3 +1,4 @@
+import { FilterIcon } from '@/assets'
 import {
   BaseMutateFetcherResponse,
   BaseQueryInfiniteList,
@@ -15,7 +16,7 @@ import { DebtRes, GetDebtsReq, GetDebtsRes, HTTPResponse } from '@/types'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { ListRenderItem } from '@shopify/flash-list'
 import { useCallback } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { DebtItem } from './debtItem'
 import { DebtsHeader } from './header'
 
@@ -28,7 +29,7 @@ type RenderQueryInfiniteComponent = BaseRenderQueryInfiniteComponent<
 
 const Debts = () => {
   const navigation = useNavigation<Navigation>()
-  const { params } = useRoute<RouteProp<Routes.Inventories>>()
+  const { params } = useRoute<RouteProp<Routes.Debts>>()
 
   const renderItem: ListRenderItem<DebtRes> = useCallback(
     ({ item }) => {
@@ -39,6 +40,7 @@ const Debts = () => {
           amountResidual={item.amount_residual}
           amountTotal={item.amount_total}
           createDate={item.create_date}
+          customerName={item.partner?.name}
           state={item.payment_state?.value}
           stateLabel={item.payment_state?.name}
           onPress={() => {
@@ -53,10 +55,30 @@ const Debts = () => {
   const renderStickyHeader: RenderQueryInfiniteComponent = useCallback(
     ({ filter, params }) => (
       <View style={styles.header}>
-        <SearchInput value={params?.keyword} onChange={(keyword) => filter({ keyword })} />
+        <SearchInput
+          showBarcodeScan
+          value={params?.keyword}
+          onChange={(keyword) => filter({ keyword })}
+          style={styles.searchInput}
+        />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={styles.filterBtn}
+          onPress={() =>
+            navigation.navigate(Routes.DebtsFilter, {
+              defaultValues: params,
+              onChange: (value) => {
+                filter(value)
+                navigation.goBack()
+              },
+            })
+          }
+        >
+          <FilterIcon fill={Colors.gray80} size={16} />
+        </TouchableOpacity>
       </View>
     ),
-    []
+    [navigation]
   )
 
   const renderHeader: RenderQueryInfiniteComponent = useCallback(
@@ -101,12 +123,28 @@ const Debts = () => {
   )
 }
 
+const SIZE = 36
+
 const styles = StyleSheet.create({
   header: {
-    paddingVertical: 8,
+    ...BaseStyles.borderBottom,
+    paddingBottom: 8,
     paddingHorizontal: 16,
     backgroundColor: Colors.white,
-    ...BaseStyles.borderBottom,
+    ...BaseStyles.flexRowItemsCenter,
+    columnGap: 12,
+  },
+  searchInput: {
+    flex: 1,
+    height: SIZE,
+    backgroundColor: Colors.inputBg,
+  },
+  filterBtn: {
+    ...BaseStyles.flexCenter,
+    height: SIZE,
+    width: SIZE,
+    borderRadius: 8,
+    backgroundColor: Colors.inputBg,
   },
 })
 

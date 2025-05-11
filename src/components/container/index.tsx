@@ -11,6 +11,7 @@ type ContainerProps = Partial<HeaderProps> & {
   backgroundColor?: string
   children?: ReactNode
   headerShown?: boolean
+  headerStyle?: StyleProp<ViewStyle>
   headerBackground?: string
   headerShadowVisible?: boolean
   HeaderComponent?: ReactNode
@@ -19,6 +20,7 @@ type ContainerProps = Partial<HeaderProps> & {
 
 const Container = ({
   children,
+  headerStyle,
   headerShown = true,
   headerShadowVisible = true,
   headerBackground = Colors.white,
@@ -34,8 +36,9 @@ const Container = ({
     () => [
       { paddingTop: top, backgroundColor: headerBackground },
       headerShadowVisible && { ...BaseStyles.shadowSm, zIndex: 10 },
+      headerStyle,
     ],
-    [headerBackground, headerShadowVisible, top]
+    [headerBackground, headerShadowVisible, top, headerStyle]
   )
 
   const childrenStyle = useMemo(
@@ -52,7 +55,7 @@ const Container = ({
       {headerShown ? (
         <View style={headerStyles}>
           <Header
-            left={<IconButton size={20} icon={ArrowLeftIcon} color={Colors.gray80} onPress={goBack} />}
+            left={<IconButton size={24} icon={ArrowLeftIcon} color={Colors.gray80} onPress={goBack} />}
             {...props}
           />
           {HeaderComponent}

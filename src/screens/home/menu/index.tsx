@@ -88,7 +88,7 @@ export const Menu = () => {
         color: '#D180ED',
         label: 'Công nợ',
         // icon: MoneyBagFillIcon,
-        onPress: () => navigation.navigate(Routes.Debts),
+        onPress: () => navigation.navigate(Routes.Debts, {}),
       },
       {
         color: '#1A82F0',

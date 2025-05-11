@@ -64,7 +64,7 @@ export const Filter = ({ onClose, onChange, defaultValue }: FilterProps) => {
     return (
       <Header
         title="Bộ lọc"
-        right={<IconButton color={Colors.gray80} size={20} icon={CloseIcon} onPress={onClose} />}
+        right={<IconButton color={Colors.gray80} size={24} icon={CloseIcon} onPress={onClose} />}
         left={
           <IconButton
             size={20}
@@ -115,8 +115,8 @@ export const Filter = ({ onClose, onChange, defaultValue }: FilterProps) => {
           <>
             <Header
               title={currentStatus.label}
-              left={<IconButton color={Colors.gray80} size={20} icon={ArrowLeftIcon} onPress={goBack} />}
-              right={<IconButton color={Colors.gray80} size={20} icon={CloseIcon} onPress={onClose} />}
+              left={<IconButton color={Colors.gray80} size={24} icon={ArrowLeftIcon} onPress={goBack} />}
+              right={<IconButton color={Colors.gray80} size={24} icon={CloseIcon} onPress={onClose} />}
             />
             <BottomSheetScrollView contentContainerStyle={[BaseStyles.grow1, { paddingBottom: bottom }]}>
               {currentStatus.items.map((i, _index) => {

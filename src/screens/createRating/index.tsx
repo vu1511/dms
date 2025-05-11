@@ -198,7 +198,7 @@ const CreateRating = () => {
                 <BottomSheetModal ref={ref} enableDynamicSizing>
                   <Header
                     title="Loại đánh giá"
-                    right={<IconButton onPress={onClose} icon={CloseIcon} size={20} color={Colors.gray80} />}
+                    right={<IconButton onPress={onClose} icon={CloseIcon} size={24} color={Colors.gray80} />}
                   />
                   {AllRatingTypeOptions.map((item) => (
                     <ListItem

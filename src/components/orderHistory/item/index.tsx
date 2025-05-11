@@ -33,19 +33,17 @@ export const OrderHistoryItem = ({
     <TouchableOpacity activeOpacity={0.5} onPress={() => onPress?.()}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <View style={styles.nameArea}>
-            <Text numberOfLines={1} style={styles.name}>
-              #{orderName}
-            </Text>
-          </View>
-          <Chip label={stateName} color={OrderStateColor?.[stateValue] || Colors.gray80} />
-        </View>
-        <View style={styles.lineItem}>
-          <Text numberOfLines={1} style={styles.lineItemText}>
-            {formatMoneyVND(amountTotal)}
+          <Text numberOfLines={1} style={styles.name}>
+            #{orderName}
           </Text>
           <Text numberOfLines={1} style={styles.lineItemText}>
             {createDate}
+          </Text>
+        </View>
+        <View style={styles.lineItem}>
+          <Chip label={stateName} color={OrderStateColor?.[stateValue] || Colors.gray80} />
+          <Text numberOfLines={1} style={styles.amountText}>
+            {formatMoneyVND(amountTotal)}
           </Text>
         </View>
         <View style={styles.lineItem}>

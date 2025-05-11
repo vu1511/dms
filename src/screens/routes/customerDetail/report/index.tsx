@@ -119,7 +119,7 @@ export const Report = ({ customerId, accountType }: { customerId: number; accoun
       <BottomSheetModal ref={ref} enableDynamicSizing>
         <Header
           title="Chọn thời gian"
-          right={<IconButton onPress={onClose} icon={CloseIcon} size={20} color={Colors.gray80} />}
+          right={<IconButton onPress={onClose} icon={CloseIcon} size={24} color={Colors.gray80} />}
         />
         {timePeriodOptions.map((i) => (
           <ListItem

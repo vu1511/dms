@@ -10,7 +10,7 @@ import { Calendar, DateData, LocaleConfig } from 'react-native-calendars'
 LocaleConfig.locales.vi = {
   monthNames: [
     'Tháng 1',
-    'Tháng 2.',
+    'Tháng 2',
     'Tháng 3',
     'Tháng 4',
     'Tháng 5',
@@ -24,14 +24,14 @@ LocaleConfig.locales.vi = {
   ],
   monthNamesShort: [
     'Thg 1',
-    'Thg 2.',
+    'Thg 2',
     'Thg 3',
     'Thg 4',
     'Thg 5',
     'Thg 6',
     'Thg 7',
     'Thg 8',
-    'Thg 9.',
+    'Thg 9',
     'Thg 10',
     'Thg 11',
     'Thg 12',
@@ -50,6 +50,8 @@ type Theme = {
 
 export type SelectDateRangeProps = {
   theme?: Theme
+  minDate?: string
+  maxDate?: string
   defaultValue?: Partial<DateRange<string>>
   onChange?: (date: DateRange<string>) => void
 }
@@ -64,6 +66,8 @@ type MarkedDates = {
 }
 
 const SelectDateRange = ({
+  minDate,
+  maxDate = new Date().toString(),
   defaultValue,
   theme = { markColor: Colors.primary, markTextColor: Colors.white },
   onChange,
@@ -170,6 +174,8 @@ const SelectDateRange = ({
     <View style={styles.container}>
       <View style={BaseStyles.flex1}>
         <Calendar
+          minDate={minDate}
+          maxDate={maxDate}
           enableSwipeMonths
           marking={{ dotColor: Colors.white }}
           renderArrow={(direction) =>

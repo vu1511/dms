@@ -15,7 +15,6 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
   },
   indicatorWrapper: {
-    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     height: 24,

@@ -261,7 +261,7 @@ const UpdateRoute = () => {
       <BottomSheetModal ref={ref} showBottomSpacing={false} snapPoints={['85%']}>
         <Header
           title="Thêm khách hàng"
-          right={<IconButton onPress={onClose} icon={CloseIcon} size={20} color={Colors.gray80} />}
+          right={<IconButton onPress={onClose} icon={CloseIcon} size={24} color={Colors.gray80} />}
         />
         <Customers onChange={addCustomers} />
       </BottomSheetModal>

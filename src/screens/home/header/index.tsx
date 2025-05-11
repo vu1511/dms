@@ -77,7 +77,7 @@ export const HomeHeader = () => {
       <BottomSheetModal ref={ref} snapPoints={[400]}>
         <Header
           title="Chọn công ty"
-          right={<IconButton color={Colors.gray80} size={20} icon={CloseIcon} onPress={onClose} />}
+          right={<IconButton color={Colors.gray80} size={24} icon={CloseIcon} onPress={onClose} />}
         />
         <BottomSheetFlatList
           data={companies}

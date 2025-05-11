@@ -7,7 +7,9 @@ type ListProvider = 'FlatList' | 'FlashList' | 'BottomSheetFlashList' | 'BottomS
 
 type ListProviderProps<Data = any, Provider extends ListProvider = 'FlatList'> = Provider extends 'FlatList'
   ? FlatListProps<Data>
-  : PickRequired<FlashListProps<Data>, 'estimatedItemSize'>
+  : Provider extends 'BottomSheetFlatList'
+    ? FlatListProps<Data>
+    : PickRequired<FlashListProps<Data>, 'estimatedItemSize'>
 
 type ListElement =
   | React.ComponentType<any>

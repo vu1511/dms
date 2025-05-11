@@ -159,7 +159,7 @@ const ImagePicker = memo(
         <BottomSheetModal ref={ref} enableDynamicSizing>
           <Header
             title={title}
-            right={<IconButton color={Colors.gray80} size={20} icon={CloseIcon} onPress={onClose} />}
+            right={<IconButton color={Colors.gray80} size={24} icon={CloseIcon} onPress={onClose} />}
           />
           <ImagePickerSource
             onBlur={onBlur}

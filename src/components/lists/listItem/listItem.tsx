@@ -15,6 +15,7 @@ export type ListItemProps = {
   disabled?: boolean
   readOnly?: boolean
   style?: StyleProp<ViewStyle>
+  contentStyle?: StyleProp<ViewStyle>
   left?: string | ReactNode
   right?: string | ReactNode
 }
@@ -22,6 +23,7 @@ export type ListItemProps = {
 const ListItem = ({
   onPress,
   style,
+  contentStyle,
   title,
   subTitle,
   subTitleStyle,
@@ -41,7 +43,7 @@ const ListItem = ({
     >
       <View style={[styles.container, disabled && styles.disabled, style]}>
         {left}
-        <View style={styles.content}>
+        <View style={[styles.content, contentStyle]}>
           {typeof title === 'string' ? (
             <Text numberOfLines={numberOfLines} style={[styles.title, titleStyle, active && styles.titleActive]}>
               {title}

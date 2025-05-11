@@ -53,6 +53,7 @@ export enum Routes {
   Inventories = 'Inventories',
   CheckinHistories = 'CheckinHistories',
   Debts = 'Debts',
+  DebtsFilter = 'DebtsFilter',
   OrderHistories = 'OrderHistories',
   RatingHistories = 'RatingHistories',
   LoyaltyHistories = 'LoyaltyHistories',
@@ -153,6 +154,10 @@ export type StackParamsList = {
   }
   [Routes.Debts]: {
     initialParams?: Partial<GetDebtsReq>
+  }
+  [Routes.DebtsFilter]: {
+    defaultValues?: GetDebtsReq
+    onChange?(data: GetDebtsReq): void
   }
   [Routes.RatingHistories]: {
     customerId?: number

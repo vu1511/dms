@@ -1,4 +1,3 @@
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
@@ -67,12 +66,10 @@ export default function App() {
       <SafeAreaProvider>
         <GestureHandlerRootView style={BaseStyles.flex1}>
           <Host>
-            <BottomSheetModalProvider>
-              <KeyboardProvider statusBarTranslucent>
-                <Providers />
-                <AppNavigator />
-              </KeyboardProvider>
-            </BottomSheetModalProvider>
+            <KeyboardProvider statusBarTranslucent>
+              <Providers />
+              <AppNavigator />
+            </KeyboardProvider>
           </Host>
         </GestureHandlerRootView>
       </SafeAreaProvider>

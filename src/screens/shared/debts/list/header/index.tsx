@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
     ...BaseStyles.flexRowSpaceBetween,
   },
   value: {
-    ...Typography.body12Medium,
+    ...Typography.body14Medium,
     flexShrink: 1,
   },
   label: {
-    ...Typography.body12Normal,
+    ...Typography.body14Normal,
     color: Colors.gray60,
     flexShrink: 1,
   },

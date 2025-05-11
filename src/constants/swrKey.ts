@@ -27,6 +27,7 @@ export const SwrKey = {
   // cartSummaryLoading: `cart_summary_loading`,
   userInfo: 'userInfo',
   debts: 'debts',
+  debtsFilter: 'debtsFilter',
   debtDetail: (id: number) => `debt_detail?id=${id}`,
 
   get_customers: 'get_customers',
@@ -57,7 +58,6 @@ export const SwrKey = {
   filter_categories: 'filter_categories',
   notifications: 'notifications',
   notification_count: 'notification_count',
-  debts_filter: 'debts_filter',
   customerDebts: (id: number) => `customer_debts_${id}`,
   order_return_deliveries: (id: number) => `order_return_deliveries_${id}`,
   order_return_products: 'order_return_products',

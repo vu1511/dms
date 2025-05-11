@@ -1,10 +1,9 @@
 import { ArrowLeftIcon, ArrowRightIcon, CloseIcon, ResetIcon } from '@/assets'
-import { BottomAreaView, BottomSheetModal, IconButton, ListItem } from '@/components'
-import Header from '@/components/header'
+import { BottomAreaView, BottomSheetModal, Header, IconButton, ListItem } from '@/components'
 import { useVisible, useVisibleRef } from '@/hooks'
 import { Colors } from '@/theme'
 import { DateRange, ETimePeriod, timePeriodOptions } from '@/types'
-import dayjs from 'dayjs'
+import { getDateRangeLabel } from '@/utils'
 import { cloneElement, ReactElement, useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import SelectDateRange from '../selectDateRange'
@@ -53,13 +52,13 @@ const Content = ({
     <>
       <Header
         title={dateRangeVisible ? 'Chọn khoảng thời gian' : 'Chọn thời gian'}
-        right={<IconButton onPress={onClose} icon={CloseIcon} size={20} color={Colors.gray80} />}
+        right={<IconButton onPress={onClose} icon={CloseIcon} size={24} color={Colors.gray80} />}
         left={
           dateRangeVisible ? (
-            <IconButton size={20} icon={ArrowLeftIcon} color={Colors.gray80} onPress={onCloseDateRange} />
+            <IconButton size={24} icon={ArrowLeftIcon} color={Colors.gray80} onPress={onCloseDateRange} />
           ) : (
             <IconButton
-              size={20}
+              size={24}
               icon={ResetIcon}
               color={Colors.gray80}
               disabled={!hasDateRangeValue && !hasPeriodDateValue}
@@ -105,11 +104,7 @@ const Content = ({
             active={hasDateRangeValue}
             title="Trong khoảng thời gian"
             right={<ArrowRightIcon size={20} fill={Colors.gray80} />}
-            subTitle={
-              hasDateRangeValue
-                ? `${dayjs(defaultValue.dateRange?.fromDate).format('DD/MM/YYYY')} -> ${dayjs(defaultValue.dateRange?.toDate).format('DD/MM/YYYY')}`
-                : undefined
-            }
+            subTitle={hasDateRangeValue ? getDateRangeLabel(defaultValue?.dateRange as DateRange) : undefined}
           />
           <BottomAreaView shadowVisible={false} />
         </>

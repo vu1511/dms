@@ -67,6 +67,7 @@ const CustomersCheckin = () => {
           <SearchInput
             delay={600}
             value={keyword}
+            showBarcodeScan
             style={styles.searchInput}
             placeholder="Tìm kiếm khách hàng"
             onChange={(keyword) => filter({ keyword })}

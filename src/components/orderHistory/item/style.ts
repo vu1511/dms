@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   },
   name: {
     ...Typography.body14Medium,
-    flex: 1,
+    flexShrink: 1,
   },
   footer: {
     flexDirection: 'row',
@@ -36,6 +36,10 @@ export const styles = StyleSheet.create({
   lineItemText: {
     ...Typography.body12Normal,
     color: Colors.gray70,
+    flexShrink: 1,
+  },
+  amountText: {
+    ...Typography.body12Medium,
     flexShrink: 1,
   },
   capitalize: {

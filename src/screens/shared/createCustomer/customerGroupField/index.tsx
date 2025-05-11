@@ -51,7 +51,7 @@ export const CustomerGroupField = ({ control }: CustomerGroupFieldProps) => {
       <BottomSheetModal ref={bottomSheetRef} snapPoints={['60%']}>
         <Header
           title="Chọn nhóm khách hàng"
-          right={<IconButton onPress={onClose} icon={CloseIcon} size={20} color={Colors.gray80} />}
+          right={<IconButton onPress={onClose} icon={CloseIcon} size={24} color={Colors.gray80} />}
         />
         <BottomSheetFlatList
           data={data}

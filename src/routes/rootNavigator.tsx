@@ -10,6 +10,7 @@ import {
   customerDetail,
   DebtDetail,
   Debts,
+  DebtsFilter,
   Inventories,
   LoyaltyHistories,
   MapViewSelectCoordinate,
@@ -57,6 +58,7 @@ export const RootNavigator = () => {
         <Stack.Screen name={Routes.Inventories} component={Inventories} />
         <Stack.Screen name={Routes.CheckinHistories} component={CheckinHistories} />
         <Stack.Screen name={Routes.Debts} component={Debts} />
+        <Stack.Screen name={Routes.DebtsFilter} component={DebtsFilter} options={{ animation: 'slide_from_bottom' }} />
         <Stack.Screen name={Routes.RatingHistories} component={RatingHistories} />
         <Stack.Screen name={Routes.OrderHistories} component={OrderHistories} />
         <Stack.Screen name={Routes.LoyaltyHistories} component={LoyaltyHistories} />
